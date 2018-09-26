@@ -1,29 +1,6 @@
-#Dear Mahdie
-#Please put comments before each code and specify what you whant to do otherwise I wont understand 
-#what is the purpos of the codes!
 
-
-<<<<<<< HEAD
-str(MSHM)
-str(OTU)
-
-MSHM1 <- read.csv("MSHM.csv", stringsAsFactors = FALSE)
-str(MSHM1)
-
-OTU1 <- read.csv("OTU.csv", stringsAsFactors = FALSE)
-str(OTU1)
-
-summary(MSHM) 
-summary(OTU)
-=======
-#I changed the names of the datasets so they would be meaningfull.
-# this is a good start keep going on...
-# I commented out the codes you wrote becuse they are not relly helpfull... I suggest you delete them all
-# instead: try writing the codes to install the neccesary packages that we need... like vegan and mvabund...
-# go on step by step on my Rscript and ask if you have problems...
 ###################################
 ###################################
-
 ## Pakages we need for the analysis
 library(mvabund)
 library(vegan)
@@ -103,148 +80,10 @@ MetaData = cbind(MetaData, IR = isolationRate)
 
 
 
-
-
 ##############################################################
 ##### Diversity Indices
 ##############################################################
 
-
-
-<<<<<<< HEAD
 metaDATA <- read.csv("MSHM.csv")
 OTUabund <- read.csv("OTU.csv")
->>>>>>> f150812809de455a3f981bc9aa47915baa111858
 
-
-str(MSHM)
-str(OTU)
-
-<<<<<<< HEAD
-head(OTU1)
-head(OTU1, n = 10)
-tail(OTU1)
-tail(OTU1, n = 10)
-names(OTU1)
-nrow(OTU1)
-ncol(OTU1)
-dim(OTU1)
-
-MSHM$Soil.Types
-OTU$Sample.ID.ORIGINAL
-MSHM$Soil.Types
-OTU$Sample.ID.ORIGINAL
-
-
-subset(OTU,TPEsh28.Humicola.fuscoatra > 0)
-subset(OTU,TPEsh28.Humicola.fuscoatra > 1)
-subset(OTU,TPEsh28.Humicola.fuscoatra > 2)
-
-subset(OTU,TPEsh28.Humicola.fuscoatra > 3)
-View(subset(OTU, TPEsh28.Humicola.fuscoatra > 2))
-TPEsh28.Humicola.fuscoatra <-subset(OTU,TPEsh28.Humicola.fuscoatra > 0)
-nrow(TPEsh28.Humicola.fuscoatra)
-
-subset(MSHM, Soil.Types == "Gypsum Soil")
-View(subset(MSHM, Soil.Types == "Gypsum Soil"))
-GypsumSoil <- subset(MSHM, Soil.Types == "Gypsum Soil")
-
-subset(MSHM, Soil.Types == "Gypsum Soil" & Plant.segments == "Root")
-subset(MSHM, Soil.Types == "Gypsum Soil" & Plant.segments == "Root")
-subset(MSHM, Soil.Types %in% c("Gypsum Soil","Arid soil") & Plant.segments == "Root")
-
-table(MSHM$Soil.Types)
-summary(MSHM$Soil.Types)
-table (MSHM$Soil.Types , MSHM$Plant.segments)
-
-
-median(OTU$TPEsh28.Humicola.fuscoatra)
-sd(OTU$TPEsh28.Humicola.fuscoatra)
-range(OTU$TPEsh28.Humicola.fuscoatra)
-sum(OTU$TPEsh28.Humicola.fuscoatra)
-mean(OTU$TPEsh28.Humicola.fuscoatra)
-
-
-table(MSHM$Soil.Types)
-Soiltable <-table(MSHM$Soil.Types)
-prop.table(Soiltable, margin = 1)
-prop.table(Soiltable, margin = 1)
-
-aggregate(ZEE.se11.Periconia.macrospinosa ~ TPEsh28.Humicola.fuscoatra, data=OTU, median)
-
-table (OTU$ZEE.se11.Periconia.macrospinosa)
-table (OTU$TPEsh28.Humicola.fuscoatra)
-table (OTU$TPEsh28.Humicola.fuscoatra + OTU$ZEE.se11.Periconia.macrospinosa)
-
-
-plot(x = MSHM$Soil.Types, y = MSHM$ Host.plant.species)
-plot(Host.plant.species ~ Soil.Types, data=MSHM)
-
-plot(Host.plant.species ~ Soil.Types, data=MSHM, 
-     main = "Frist plot",
-     ylab = "Host plant species",
-     xlab = "Soil Types")
-
-
-hist(OTU$ZEE.se11.Periconia.macrospinosa) 
-hist(log(OTU$ZEE.se11.Periconia.macrospinosa)) 
-hist(log(OTU$ZEE.se11.Periconia.macrospinosa), prob=TRUE) 
-hist(log(OTU$ZEE.se11.Periconia.macrospinosa), prob=TRUE, breaks=20) 
-
-
-boxplot(Temperature ~ Soil.Types , data=MSHM, 
-        main="boxplot1",
-        ylab = "Host plant species",
-        xlab = "Soil Types")
-
-library(ggplot2)
-=======
-#you want the string to be saved as factors. so you dont need the rest of the codes... DELETE them
-#MSHM1 <- read.csv("MSHM.csv", stringsAsFactors = FALSE)
-# str(MSHM1)
-# 
-# OTU1 <- read.csv("OTU.csv", stringsAsFactors = FALSE)
-# str(OTU1)
-# summary(MSHM) 
-# summary(OTU)
-# summary(MSHM1) 
-# summary(OTU1)
-# 
-# head(MSHM)
-# head(MSHM, n = 10)
-# tail(MSHM)
-# tail(MSHM, n = 10)
-# names(MSHM)
-# nrow(MSHM)
-# ncol(MSHM)
-# dim(MSHM)
-# 
-# head(MSHM1)
-# head(MSHM1, n = 10)
-# tail(MSHM1)
-# tail(MSHM1, n = 10)
-# names(MSHM1)
-# nrow(MSHM1)
-# ncol(MSHM1)
-# dim(MSHM1)
-# 
-# head(OTU)
-# head(OTU, n = 10)
-# tail(OTU)
-# tail(OTU, n = 10)
-# names(OTU)
-# nrow(OTU)
-# ncol(OTU)
-# dim(OTU)
-# 
-# head(OTU1)
-# head(OTU1, n = 10)
-# tail(OTU1)
-# tail(OTU1, n = 10)
-# names(OTU1)
-# nrow(OTU1)
-# ncol(OTU1)
-# dim(OTU1)
->>>>>>> f150812809de455a3f981bc9aa47915baa111858
-=======
->>>>>>> 824a45db65c6ca42b85ab44cceacfb8ae75e6c7b
