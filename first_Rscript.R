@@ -21,6 +21,7 @@ str(data)
 str(otu)
 summary(otu)
 summary(data)
+
 # Temperature as fector:
 data$TEMP<-as.factor(data$TEMP)
 ######## MERG the OTU abundance data by 4
@@ -28,10 +29,10 @@ S1<-seq(1,121920,4)
 S2<-seq(4,121920,4)
 O1<-matrix(0,length(S1),133)
 for (i in 1:length(S1)) {
-  
 O1[i,]<-colSums(otu[S1[i]:S2[i],])}
 
 #now convert to data frame and rename the columns
+
 OTUabund<-data.frame(O1)
 class(OTUabund)
 colnames(OTUabund)=colnames(otu)
@@ -74,8 +75,6 @@ MetaData = cbind(MetaData, IR = isolationRate)
 ##############################################
 ##### IR histograms for each variable/factor
 ##############################################
-
-
 
 
 
