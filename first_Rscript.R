@@ -76,8 +76,18 @@ MetaData = cbind(MetaData, IR = isolationRate)
 ##### IR histograms for each variable/factor
 ##############################################
 
+hist(MetaData $ IR) 
+hist(log(MetaData $ IR))
+hist(log(MetaData $ IR), prob=TRUE)
+hist(log(MetaData $ IR), prob=TRUE, breaks=20)
 
-
+boxplot(log(IR) ~ SITE, data = MetaData)
+boxplot(log(IR) ~ SOIL, data = MetaData)
+boxplot(log(IR) ~ TIME, data = MetaData)
+boxplot(log(IR) ~ HOST, data = MetaData)
+boxplot(log(IR) ~ TISSU, data = MetaData)
+boxplot(log(IR) ~ TEMP, data = MetaData)
+boxplot(log(IR) ~ MEDIA, data = MetaData)
 
 ##############################################################
 ##### Diversity Indices
