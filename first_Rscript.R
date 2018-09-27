@@ -81,13 +81,13 @@ hist(log(MetaData $ IR))
 hist(log(MetaData $ IR), prob=TRUE)
 hist(log(MetaData $ IR), prob=TRUE, breaks=20)
 
-boxplot(log(IR) ~ SITE, data = MetaData)
-boxplot(log(IR) ~ SOIL, data = MetaData)
-boxplot(log(IR) ~ TIME, data = MetaData)
-boxplot(log(IR) ~ HOST, data = MetaData)
-boxplot(log(IR) ~ TISSU, data = MetaData)
-boxplot(log(IR) ~ TEMP, data = MetaData)
-boxplot(log(IR) ~ MEDIA, data = MetaData)
+boxplot(IR ~ SITE, data = MetaData)
+boxplot(IR ~ SOIL, data = MetaData)
+boxplot(IR ~ TIME, data = MetaData)
+boxplot(IR ~ HOST, data = MetaData)
+boxplot(IR ~ TISSUE, data = MetaData)
+boxplot(IR ~ TEMP, data = MetaData)
+boxplot(IR ~ MEDIA, data = MetaData)
 
 ##############################################################
 ##### Diversity Indices
