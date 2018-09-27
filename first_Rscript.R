@@ -93,6 +93,4 @@ boxplot(log(IR) ~ MEDIA, data = MetaData)
 ##### Diversity Indices
 ##############################################################
 
-metaDATA <- read.csv("MSHM.csv")
-OTUabund <- read.csv("OTU.csv")
 
