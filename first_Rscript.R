@@ -85,7 +85,7 @@ boxplot(log(IR) ~ SITE, data = MetaData)
 boxplot(log(IR) ~ SOIL, data = MetaData)
 boxplot(log(IR) ~ TIME, data = MetaData)
 boxplot(log(IR) ~ HOST, data = MetaData)
-boxplot(log(IR) ~ TISSU, data = MetaData)
+boxplot(log(IR) ~ TISSUE, data = MetaData)
 boxplot(log(IR) ~ TEMP, data = MetaData)
 boxplot(log(IR) ~ MEDIA, data = MetaData)
 
