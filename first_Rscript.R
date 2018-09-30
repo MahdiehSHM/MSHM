@@ -93,14 +93,14 @@ boxplot(IR ~ MEDIA, data = MetaData)
 ##############################################################
 ##### Diversity Indices
 ##############################################################
-SITE=factor(MetaData$SITE)
-SOIL=factor(MetaData$SOIL)
-TIME=factor(MetaData$TIME)
-TEMP=factor(MetaData$TEMP)
-HOST=factor(MetaData$HOST)
-TISSUE=factor(MetaData$TISSUE)
-MEDIA=factor(MetaData$MEDIA)
-#### Richness (Species number) model
+##Fixing Time levels:
+levels(MetaData$TIME)<- list("W2015"=c("2015-winter","2015-Winter"),"S2016"="2016-Summer",
+                             "W2016"="2016-Winter","S2017"="2017-Summer")
+#Check and see if it worked?
+summary(MetaData)
+
+
+############## Richness (Species number)#################
 # Richness is the nmber of culture observations in the samples. 
 # Some samples had more, than one observed species.
 hist(isolationRate)
@@ -119,7 +119,7 @@ hist(log(Richness))
 # Remove the samples with zero observation from the metadata
 MetaRich = MetaData[NotZero,]
 
-### Shannon and Simpson models.
+########### Shannon and Simpson indices####################
 # Keep only samples with at least two OTUs
 RichNotOne = Richness > 1
 AbundNotOne=AbundNotZero[RichNotOne,]
@@ -135,4 +135,20 @@ hist(shannon)
 hist(simpson)
 hist(log(shannon))
 hist(log(simpson))
+
+#################################################
+####MODELS
+#################################################
+#Step 1: Write your reserach questions here:
+
+
+
+#Step 2: Find the right kind of model (lm or glm) for your data:
+# you may need to subset your data based on your questions and goals!!
+
+
+
+#Step 3: Choose the best model based on model diagnstics plots and AIC(read your workshop scripts) 
+
+
 
