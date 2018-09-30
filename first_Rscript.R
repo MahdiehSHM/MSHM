@@ -81,16 +81,58 @@ hist(log(MetaData $ IR))
 hist(log(MetaData $ IR), prob=TRUE)
 hist(log(MetaData $ IR), prob=TRUE, breaks=20)
 
-boxplot(log(IR) ~ SITE, data = MetaData)
-boxplot(log(IR) ~ SOIL, data = MetaData)
-boxplot(log(IR) ~ TIME, data = MetaData)
-boxplot(log(IR) ~ HOST, data = MetaData)
-boxplot(log(IR) ~ TISSUE, data = MetaData)
-boxplot(log(IR) ~ TEMP, data = MetaData)
-boxplot(log(IR) ~ MEDIA, data = MetaData)
+boxplot(IR ~ SITE, data = MetaData)
+boxplot(IR ~ SOIL, data = MetaData)
+boxplot(IR ~ TIME, data = MetaData)
+boxplot(IR ~ HOST, data = MetaData)
+boxplot(IR ~ TISSUE, data = MetaData)
+boxplot(IR ~ TEMP, data = MetaData)
+boxplot(IR ~ MEDIA, data = MetaData)
+
 
 ##############################################################
 ##### Diversity Indices
 ##############################################################
+SITE=factor(MetaData$SITE)
+SOIL=factor(MetaData$SOIL)
+TIME=factor(MetaData$TIME)
+TEMP=factor(MetaData$TEMP)
+HOST=factor(MetaData$HOST)
+TISSUE=factor(MetaData$TISSUE)
+MEDIA=factor(MetaData$MEDIA)
+#### Richness (Species number) model
+# Richness is the nmber of culture observations in the samples. 
+# Some samples had more, than one observed species.
+hist(isolationRate)
 
+# For the evaluation of richness we need to remove the samples with zero observations.
+NotZero = isolationRate > 0 #filter for zero-observation samples
+
+# Keep only the samples with at least one observed species
+AbundNotZero=OTUabund[NotZero,]
+
+# Richness in the samples
+Richness = specnumber(AbundNotZero)
+hist(Richness)
+hist(log(Richness))
+
+# Remove the samples with zero observation from the metadata
+MetaRich = MetaData[NotZero,]
+
+### Shannon and Simpson models.
+# Keep only samples with at least two OTUs
+RichNotOne = Richness > 1
+AbundNotOne=AbundNotZero[RichNotOne,]
+
+# This keeps observations with at least two OTUs
+MetaNotOne = MetaRich[RichNotOne,] 
+
+# Calculate diversity indices
+shannon = diversity(AbundNotOne,index = "shannon")
+simpson = diversity(AbundNotOne,index = "simpson")
+
+hist(shannon)
+hist(simpson)
+hist(log(shannon))
+hist(log(simpson))
 
