@@ -173,5 +173,18 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TIME, data = MetaData,
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TEMP, data = MetaData, sum)
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData, sum)
 
+subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                              "Launaea acunthodes",
+                              "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                              "Tamrix hispida"))
 
+View(subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                   "Launaea acunthodes",
+                                   "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                   "Tamrix hispida")))
+
+Article1= subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                        "Launaea acunthodes",
+                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                        "Tamrix hispida"))
 
