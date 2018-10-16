@@ -183,8 +183,23 @@ View(subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Halo
                                    "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                    "Tamrix hispida")))
 
-Article1= subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+Article1Meta= subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                         "Launaea acunthodes",
                                         "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                         "Tamrix hispida"))
+subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                              "Launaea acunthodes",
+                              "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                              "Tamrix hispida"))
+
+View(subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                   "Launaea acunthodes",
+                                   "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                   "Tamrix hispida")))
+
+Article1OTU = subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                               "Launaea acunthodes",
+                                               "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                               "Tamrix hispida"))
+
 
