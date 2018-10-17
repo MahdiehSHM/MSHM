@@ -1,6 +1,4 @@
-
-###################################
-###################################
+##################################
 ## Pakages we need for the analysis
 library(mvabund)
 library(vegan)
@@ -11,7 +9,7 @@ library(effects)
 library(MASS)
 library(reshape)
 library(jpeg)
-##################################
+
 ##################################
 ## DATA Input
 
@@ -22,7 +20,7 @@ str(otu)
 summary(otu)
 summary(data)
 
-# Temperature as fector:
+######## Temperature as fector:
 data$TEMP<-as.factor(data$TEMP)
 ######## MERG the OTU abundance data by 4
 S1<-seq(1,121920,4)
@@ -31,21 +29,16 @@ O1<-matrix(0,length(S1),133)
 for (i in 1:length(S1)) {
 O1[i,]<-colSums(otu[S1[i]:S2[i],])}
 
-#now convert to data frame and rename the columns
-
+########now convert to data frame and rename the columns
 OTUabund<-data.frame(O1)
 class(OTUabund)
 colnames(OTUabund)=colnames(otu)
 name<- row.names(data)
 row.names(OTUabund)<- name[1:30480]
 summary(OTUabund)
-# the abundance data is now saved under object name: OTUabund
+########the abundance data is now saved under object name: OTUabund
 
-# one OTU has 0 in all obs "APE.se5.Staphylotrichum.coccosporum". check this
-# if you want to delet this OTU in OTUabund run the code below:
-#OTUabund$APE.se5.Staphylotrichum.coccosporum<-NULL
-
-## Merging METADATA
+######## Merging METADATA
 S1<-seq(1,121920,4)
 S2<-seq(4,121920,4)
 D<-matrix(0,length(S1),7)
@@ -58,19 +51,17 @@ for (i in 1:length(S1)) {
   D[i,6]<-noquote(paste(data[S2[i],6]))
   D[i,7]<-noquote(paste(data[S2[i],7]))
   }
-
 MetaData<-data.frame(D)
 class(MetaData)
 colnames(MetaData)=colnames(data)
 row.names(MetaData)<- name[1:30480]
 summary(MetaData)
-# the merged metadata is now saved under object named: MetaData
+######## the merged metadata is now saved under object named: MetaData
 
-# calculating Isolation Rate for each sample, We need this for diversity estimations
+######## calculating Isolation Rate for each sample, We need this for diversity estimations
 isolationRate= apply(OTUabund,1, sum)
 MetaData = cbind(MetaData, IR = isolationRate)
-# now check the MetaData object to see that a new variable is added "IR"
-
+######## now check the MetaData object to see that a new variable is added "IR"
 
 ##############################################
 ##### IR histograms for each variable/factor
@@ -90,63 +81,51 @@ boxplot(IR ~ TEMP, data = MetaData)
 boxplot(IR ~ MEDIA, data = MetaData)
 
 
-##############################################################
+##############################################
 ##### Diversity Indices
-##############################################################
-##Fixing Time levels:
+##############################################
+########Fixing Time levels:
 levels(MetaData$TIME)<- list("W2015"=c("2015-winter","2015-Winter"),"S2016"="2016-Summer",
                              "W2016"="2016-Winter","S2017"="2017-Summer")
 #Check and see if it worked?
 summary(MetaData)
 
-
-############## Richness (Species number)#################
-# Richness is the nmber of culture observations in the samples. 
-# Some samples had more, than one observed species.
+######## Richness (Species number)#################
+######## Richness is the nmber of culture observations in the samples. 
+######## Some samples had more than one observed species.
 hist(isolationRate)
 
-# For the evaluation of richness we need to remove the samples with zero observations.
-NotZero = isolationRate > 0 #filter for zero-observation samples
-
-# Keep only the samples with at least one observed species
+########  For the evaluation of richness we need to remove the samples with zero observations.
+NotZero = isolationRate > 0 
+########filter for zero-observation samples
+######## Keep only the samples with at least one observed species
 AbundNotZero=OTUabund[NotZero,]
 
-# Richness in the samples
+######## Richness in the samples
 Richness = specnumber(AbundNotZero)
 hist(Richness)
 hist(log(Richness))
 
-# Remove the samples with zero observation from the metadata
+######## Remove the samples with zero observation from the metadata
 MetaRich = MetaData[NotZero,]
 
-########### Shannon and Simpson indices####################
-# Keep only samples with at least two OTUs
+######## Shannon and Simpson indices####################
+######## Keep only samples with at least two OTUs
 RichNotOne = Richness > 1
 AbundNotOne=AbundNotZero[RichNotOne,]
 
-# This keeps observations with at least two OTUs
+######## This keeps observations with at least two OTUs
 MetaNotOne = MetaRich[RichNotOne,] 
 
-# Calculate diversity indices
+######## Calculate diversity indices
 shannon = diversity(AbundNotOne,index = "shannon")
 simpson = diversity(AbundNotOne,index = "simpson")
-
 hist(shannon)
 hist(simpson)
 hist(log(shannon))
 hist(log(simpson))
 
-#################################################
-####MODELS
-#################################################
-#Step 1: Write your reserach questions here:
-
-#Step 2: Find the right kind of model (lm or glm) for your data:
-
-# you may need to subset your data based on your questions and goals!!
-
-#Step 3: Choose the best model based on model diagnstics plots and AIC(read your workshop scripts) 
-
+######## Aggregate of 3 Fungi(Periconia macrospinosa,Neocamarosporium chichastianum and Neocamarosporium.goegapense)
 aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~HOST, data = MetaData, sum)
 aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~TISSUE, data = MetaData, sum)
 aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~SOIL, data = MetaData, sum)
@@ -173,21 +152,63 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TIME, data = MetaData,
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TEMP, data = MetaData, sum)
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData, sum)
 
+#################################################
+####MODELS
+#################################################
 
+########Step 1: Write your reserach questions here:
+#Do the environmental factors (Soil Chemical Properties, Average annual precipitation, Average annual temperature, Seasen (Sampling Temperature)) have any effecte on aboundance and diversity of endophytic fungi isolated from desert plant? (Which effect?)
+#Do the experimental factors (Temperature and Media) have any effecte on aboundance and diversity of endophytic fungi isolated from desert plant? (Which effect?)
+#Effect of identification techniques on aboundance and diversity of endophytic fungi?
+#Which of the factors have the greatest effect on aboundance and diversity of fungal endophytes?
+#Which effect do host and tissue have on aboundance and diversity of endophytic fungi isolated from desert plant?
+#Host specificity in OUT?
+#Dominant species in every site, soil (Aride and Saline) and Host?
+#Dominant orders in every site, soil (Aride and Saline) and Host?
 
-Article1Meta= subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                        "Launaea acunthodes",
-                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                        "Tamrix hispida"))
-
+########Step 2: We can do these analyses
+# Number of Plant samples
+# Perecentage of root pieces yielding at least one fungal colony
+# Perecentage of leaf pieces yielding at least one fungal colony
+# Perecentage of branch pieces yielding at least one fungal colony
+# Yield endophytic fungal growth
+# Overal colonization perecentage 
+# An averaged colonization per population 
+# Observed richness  : (Overall observed OTU richness and Mean observed OTU richness across plant individuals)
+#Estimated richness: (Bootstrap incidence-based richness estimator and Unbiased Chao abundance-based richness estimator
+#Diversity indices: (Shannon’s diversity index and Pielou’s evenness index)
+#Accumulation curves for the entire study showing the effect of different sequence similarity thresholds for OTU definition
+#Accumulation curves for individual species populations
+#Taxonomic classification of isolates 
+#Most represented orders (Number of OTUs and frequency of counts)
+#Proportion of isolates belonging to the most frequent fungal orders 
+#Proportion of isolates belonging to the most frequent OTUs
+#Relative proportion of dominant OTUs across plant populations
+#Relationship between ecological factor in each population with OTU richness, OTU abundance, Community structure    
+  
+######## you may need to subset your data based on your questions and goals!!
+Article1Meta = subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                            "Launaea acunthodes",
+                                            "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                            "Tamrix hispida"))
 
 Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                               "Launaea acunthodes",
-                                               "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                               "Tamrix hispida"))
-# check to see if it worked 
+                                                     "Launaea acunthodes",
+                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                                     "Tamrix hispida"))
+######## check to see if it worked 
 rownames(Article1OTU)==rownames(Article1Meta)
 class(Article1Meta)
 class(Article1OTU)
 View(Article1OTU)
 View(Article1Meta)
+
+######## Step 3: Find the right kind of model (lm or glm) for your data:
+
+######## Step 4: Choose the best model based on model diagnstics plots and AIC(read your workshop scripts) 
+
+
+
+
+
+ 
