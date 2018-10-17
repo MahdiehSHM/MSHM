@@ -153,18 +153,12 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TEMP, data = MetaData,
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData, sum)
 
 #################################################
-####MODELS
+#### Article 1
 #################################################
 
-########Step 1: Write your reserach questions here:
-#Do the environmental factors (Soil Chemical Properties, Average annual precipitation, Average annual temperature, Seasen (Sampling Temperature)) have any effecte on aboundance and diversity of endophytic fungi isolated from desert plant? (Which effect?)
-#Do the experimental factors (Temperature and Media) have any effecte on aboundance and diversity of endophytic fungi isolated from desert plant? (Which effect?)
-#Effect of identification techniques on aboundance and diversity of endophytic fungi?
-#Which of the factors have the greatest effect on aboundance and diversity of fungal endophytes?
-#Which effect do host and tissue have on aboundance and diversity of endophytic fungi isolated from desert plant?
-#Host specificity in OUT?
-#Dominant species in every site, soil (Aride and Saline) and Host?
-#Dominant orders in every site, soil (Aride and Saline) and Host?
+########Step 1: Write your reserach questions for the first article here:
+
+
 
 ########Step 2: We can do these analyses
 # Number of Plant samples
@@ -186,7 +180,7 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 #Relative proportion of dominant OTUs across plant populations
 #Relationship between ecological factor in each population with OTU richness, OTU abundance, Community structure    
   
-######## you may need to subset your data based on your questions and goals!!
+######## Subsetting the data for ARTICLE1
 Article1Meta = subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                             "Launaea acunthodes",
                                             "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
@@ -196,16 +190,23 @@ Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemis
                                                      "Launaea acunthodes",
                                                      "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                                      "Tamrix hispida"))
-######## check to see if it worked 
+# check to see if it worked 
 rownames(Article1OTU)==rownames(Article1Meta)
 class(Article1Meta)
 class(Article1OTU)
 View(Article1OTU)
 View(Article1Meta)
+#FROM NOW ON: WE ONLY USE THESE TWO DATA FRAMES FOR ARTICLE 1: Article1OTU & Article1Meta
 
-######## Step 3: Find the right kind of model (lm or glm) for your data:
 
-######## Step 4: Choose the best model based on model diagnstics plots and AIC(read your workshop scripts) 
+######## Step 3: Find the right kind of analysis for each research questions:
+
+
+
+
+
+
+######## Step 4: Choose the best way to visualize the results
 
 
 
