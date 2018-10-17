@@ -173,33 +173,21 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TIME, data = MetaData,
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TEMP, data = MetaData, sum)
 aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData, sum)
 
-subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                              "Launaea acunthodes",
-                              "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                              "Tamrix hispida"))
 
-View(subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                   "Launaea acunthodes",
-                                   "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                   "Tamrix hispida")))
 
 Article1Meta= subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                         "Launaea acunthodes",
                                         "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                         "Tamrix hispida"))
-subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                              "Launaea acunthodes",
-                              "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                              "Tamrix hispida"))
 
-View(subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                   "Launaea acunthodes",
-                                   "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                   "Tamrix hispida")))
 
-Article1OTU = subset (OTUabund, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                                "Launaea acunthodes",
                                                "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                                "Tamrix hispida"))
-
-
+# check to see if it worked 
+rownames(Article1OTU)==rownames(Article1Meta)
+class(Article1Meta)
+class(Article1OTU)
+View(Article1OTU)
+View(Article1Meta)
