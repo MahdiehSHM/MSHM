@@ -169,7 +169,7 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 # Overal colonization perecentage 
 # An averaged colonization per population 
 # OTU richness, frequency, diversity and Community structure (VEGAN v2.2-1 (Oksanenet al., 2015)) across every Hosts, soils and climate parameters
-# Investigating general patterns of variation in the endophytic fungi impact on model plants growth across abiotic conditions 
+# Investigating general patterns of variation in the endophytic fungi impact on model plants growth across abiotic conditionsfactor levels using the Kruskal–Wallis rank sum test
 # Taxonomic classification of isolates
 
   
