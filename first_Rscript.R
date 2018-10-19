@@ -158,29 +158,22 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 
 ########Step 1: Write your reserach questions for the first article here:
 
-
+# What is the effect of saline and arid soil on root endophyte communities in contrast to the type of host plant?
+# The effects of climate parameters on diversity of root endophytes in different soils?
+# Do dominant endophytes in saline and arid soils can induce salinity and drought resistance in model plants?
 
 ########Step 2: We can do these analyses
-# Number of Plant samples
-# Perecentage of root pieces yielding at least one fungal colony
-# Perecentage of leaf pieces yielding at least one fungal colony
-# Perecentage of branch pieces yielding at least one fungal colony
-# Yield endophytic fungal growth
+
+# Perecentage of root pieces yielding 
+# Yield root endophytic fungal growth
 # Overal colonization perecentage 
 # An averaged colonization per population 
-# Observed richness  : (Overall observed OTU richness and Mean observed OTU richness across plant individuals)
-#Estimated richness: (Bootstrap incidence-based richness estimator and Unbiased Chao abundance-based richness estimator
-#Diversity indices: (Shannon’s diversity index and Pielou’s evenness index)
-#Accumulation curves for the entire study showing the effect of different sequence similarity thresholds for OTU definition
-#Accumulation curves for individual species populations
-#Taxonomic classification of isolates 
-#Most represented orders (Number of OTUs and frequency of counts)
-#Proportion of isolates belonging to the most frequent fungal orders 
-#Proportion of isolates belonging to the most frequent OTUs
-#Relative proportion of dominant OTUs across plant populations
-#Relationship between ecological factor in each population with OTU richness, OTU abundance, Community structure    
+# OTU richness, frequency, diversity and Community structure (VEGAN v2.2-1 (Oksanenet al., 2015)) across every Hosts, soils and climate parameters
+# Investigating general patterns of variation in the endophytic fungi impact on model plants growth across abiotic conditions 
+# Taxonomic classification of isolates
+
   
-######## Subsetting the data for ARTICLE1
+####### Subsetting the data for ARTICLE1
 Article1Meta = subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                             "Launaea acunthodes",
                                             "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
