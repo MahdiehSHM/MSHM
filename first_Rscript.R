@@ -189,20 +189,14 @@ class(Article1Meta)
 class(Article1OTU)
 View(Article1OTU)
 View(Article1Meta)
+colnames(Article1OTU)
 #FROM NOW ON: WE ONLY USE THESE TWO DATA FRAMES FOR ARTICLE 1: Article1OTU & Article1Meta
 
 
 ######## Step 3: Find the right kind of analysis for each research questions:
 
 
-
-
-
-
 ######## Step 4: Choose the best way to visualize the results
-
-
-
 
 
  
