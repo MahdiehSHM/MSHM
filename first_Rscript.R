@@ -158,9 +158,11 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 
 ########Step 1: Write your reserach questions for the first article here:
 
-# What is the effect of saline and arid soil on root endophyte communities in contrast to the type of host plant?
+# What is the effect of saline and arid soil on root endophyte communities in contrast 
+#to the type of host plant?
 # The effects of climate parameters on diversity of root endophytes in different soils?
-# Do dominant endophytes in saline and arid soils can induce salinity and drought resistance in model plants?
+# Do dominant endophytes in saline and arid soils can induce salinity and 
+#drought resistance in model plants?
 
 ########Step 2: We can do these analyses
 
