@@ -170,17 +170,40 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 # Yield root endophytic fungal growth
 # Overal colonization perecentage 
 # An averaged colonization per population 
-# OTU richness, frequency, diversity and Community structure (VEGAN v2.2-1 (Oksanenet al., 2015)) across every Hosts, soils and climate parameters
-# Investigating general patterns of variation in the endophytic fungi impact on model plants growth across abiotic conditionsfactor levels using the Kruskal–Wallis rank sum test
+# OTU richness, frequency, diversity and Community structure 
+#(VEGAN v2.2-1 (Oksanenet al., 2015)) across every Hosts, soils and climate parameters
+# Investigating general patterns of variation in the endophytic fungi 
+#impact on model plants growth across abiotic conditionsfactor levels using 
+#the Kruskal–Wallis rank sum test
 # Taxonomic classification of isolates
 
   
 ####### Subsetting the data for ARTICLE1
-Article1Meta = subset (MetaData, HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+Article1Meta = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
                                             "Launaea acunthodes",
                                             "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                             "Tamrix hispida"))
+# some how this still shows the 40 hists!! I am trying another way to fix it!
+write.csv(Article1Meta, file = "testmetadata.csv")
 
+Article1Meta<-read.csv("testmetadata.csv",header = T, row.names = 1)
+levels(Article1Meta$HOST)
+
+# remane the long variable levels
+levels(Article1Meta$SITE)
+levels(Article1Meta$SITE)<- list("Garmsar"="Garmsar","HajAli"="Haj Ali Gholi Lake",
+                             "Hoze"="Hoze Soltan Lake","Rig"="Rig-Boland Desert", "Sorkhe"="Sorkhe")
+
+levels(Article1Meta$HOST)
+levels(Article1Meta$HOST)<- list("A.pers"="Alhagi persarum","A.sieb"="Artemisia sieberi",
+                                 "H.ammo"="Haloxylon ammodendron","L.acun"="Launaea acunthodes",
+                                 "P.step"="Prosopis stephaniana","S.inca"="Salsola incanescens",
+                                 "S.rosm"="Seidlitzia rosmarinus","T.hisp"="Tamrix hispida")
+
+levels(Article1Meta$SOIL)<-list("Arid"="Arid soil","Saline"="Saline Soil")
+levels(Article1Meta$TISSUE)
+levels(Article1Meta$MEDIA)<-list("PDA"= "PDA", "PDA+Plant"="PDA+Plant extract")
+## Subset OTU frequency dataframe
 Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                                      "Launaea acunthodes",
                                                      "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
@@ -194,10 +217,140 @@ View(Article1Meta)
 colnames(Article1OTU)
 #FROM NOW ON: WE ONLY USE THESE TWO DATA FRAMES FOR ARTICLE 1: Article1OTU & Article1Meta
 
+# What OTUs are in this project?
 
+OTUsINarticl1<-colSums(Article1OTU)
+Article1OTU<-Article1OTU[, colSums(Article1OTU != 0) > 0]
+# OTU frequencies Article 1
+colSums(Article1OTU)
+#OTU list Article 1
+colnames(Article1OTU)
+
+aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$HOST, Article1OTU, sum)
+aggregate(SREwh19.Neocamarosporium.goegapense ~ Article1Meta$HOST, Article1OTU, sum)
+
+#############################################################################
 ######## Step 3: Find the right kind of analysis for each research questions:
 
+#########################################################
+#########################################################
+##### Diversity indices
+#For diversity we are using model based aproaches:
+## I am using the codes that we wrote earlier:
+## first delete the IR in metadata.not sure if it is ok
+Article1Meta$IR<-NULL
 
+IR.art1= apply(Article1OTU,1, sum)
+Article1Meta = cbind(Article1Meta, IR = IR.art1)
+
+######## Richness (Species number)#################
+
+hist(IR.art1)
+
+########  For the evaluation of richness we need to remove the samples with zero observations.
+NotZero.art1= IR.art1 > 0 
+########filter for zero-observation samples
+######## Keep only the samples with at least one observed species
+AbundNotZero.art1=Article1OTU[NotZero.art1,]
+
+######## Richness in the samples
+Richness.art1 = specnumber(AbundNotZero.art1)
+hist(Richness.art1)
+hist(log(Richness.art1))
+
+######## Remove the samples with zero observation from the metadata
+MetaRich.ART1 = Article1Meta[NotZero.art1,]
+
+######## Shannon and Simpson indices####################
+######## Keep only samples with at least two OTUs
+RichNotOne.art1 = Richness.art1 > 1
+AbundNotOne.art1=AbundNotZero.art1[RichNotOne.art1,]
+
+######## This keeps observations with at least two OTUs
+MetaNotOne.art1 = MetaRich.ART1[RichNotOne.art1,] 
+
+######## Calculate diversity indices
+shannon.art1 = diversity(AbundNotOne.art1,index = "shannon")
+simpson.art1 = diversity(AbundNotOne.art1,index = "simpson")
+hist(shannon.art1)
+hist(simpson.art1)
+hist(log(shannon.art1))
+hist(log(simpson.art1))
+
+#Diversity index objects: shannon.art1 & simpson.art1 & Richness.art1
+
+# Richness model
+hist(Richness.art1)
+hist(sqrt(Richness.art1))
+hist(log10(Richness.art1))
+mean(Richness.art1)
+var(Richness.art1)
+# Since variance is lower than mean: We use poisson model instead of negbin
+# poisson model
+r.m<-glm(formula =Richness.art1~SOIL*TISSUE+ SOIL*HOST+ TIME+ SITE,data = MetaRich.ART1,
+         family=poisson(link = "log"))
+summary(r.m) ##NA??
+AIC(r.m)
+par(mfrow=c(2,2))
+plot(r.m)
+######
+r.m1<-glm(formula =Richness.art1~SOIL*TISSUE*HOST+ TIME+ SITE,data = MetaRich.ART1,
+         family=poisson(link = "log"))
+summary(r.m1)
+plot(r.m1)
+AIC(r.m1)
+#####
+r.m2<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+          family=poisson(link = "log"))
+summary(r.m2)
+plot(r.m2)
+AIC(r.m2)
+####
+r.m3<-glm(formula =Richness.art1~SOIL+TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+          family=poisson(link = "log"))
+summary(r.m3)
+plot(r.m3)
+AIC(r.m3)
+#########
+r.m4<-glm(formula =Richness.art1~SOIL*HOST+TISSUE+ TIME+ SITE,data = MetaRich.ART1,
+          family=poisson(link = "log"))
+summary(r.m4)
+plot(r.m4)
+AIC(r.m4)
+
+# negbin models
+r.m5<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+          family=negative.binomial(theta = 0.5))
+summary(r.m5)
+plot(r.m5)
+AIC(r.m5)
+dev.off()
+
+### 
+
+r.m6<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+          family=negative.binomial(theta = 0.2))
+summary(r.m6)
+plot(r.m6)
+AIC(r.m6)
+
+
+r.m7<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+          family=negative.binomial(theta = 10000))
+summary(r.m7)
+plot(r.m7)
+AIC(r.m7)
+
+r.m.nb<-glm.nb(formula =Richness.art1~SOIL*TISSUE+ HOST+ TIME+ SITE,data = MetaRich.ART1,link = "log")
+
+summary(r.m.nb)
+anova(r.m.nb)
+AIC(r.m.nb)
+
+plot(r.m.nb)
+## model comparison with anova test
+aa.m<-anova(r.m, r.m1, r.m2,r.m3,r.m4,r.m5,r.m6,r.m7,r.m.nb)
+summary(aa.m)
 ######## Step 4: Choose the best way to visualize the results
 
 
