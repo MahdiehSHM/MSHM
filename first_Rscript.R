@@ -62,7 +62,10 @@ summary(MetaData)
 isolationRate= apply(OTUabund,1, sum)
 MetaData = cbind(MetaData, IR = isolationRate)
 ######## now check the MetaData object to see that a new variable is added "IR"
+###Exporting as csv files
 
+write.csv(MetaData,file="MataDataMerg.csv")
+write.csv(OTUabund, file="OTUabundMerg.csv")
 ##############################################
 ##### IR histograms for each variable/factor
 ##############################################
