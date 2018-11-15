@@ -7,8 +7,7 @@ library(rjags)
 library(boral)
 library(effects)
 library(MASS)
-library(reshape)
-library(jpeg)
+
 
 ##################################
 ## DATA Input
@@ -281,8 +280,9 @@ hist(log(shannon.art1))
 hist(log(simpson.art1))
 
 #Diversity index objects: shannon.art1 & simpson.art1 & Richness.art1
-
+###################
 # Richness model
+###################
 hist(Richness.art1)
 hist(sqrt(Richness.art1))
 hist(log10(Richness.art1))
@@ -290,70 +290,96 @@ mean(Richness.art1)
 var(Richness.art1)
 # Since variance is lower than mean: We use poisson model instead of negbin
 # poisson model
-r.m<-glm(formula =Richness.art1~SOIL*TISSUE+ SOIL*HOST+ TIME+ SITE,data = MetaRich.ART1,
-         family=poisson(link = "log"))
-summary(r.m) ##NA??
-AIC(r.m)
-par(mfrow=c(2,2))
-plot(r.m)
-######
-r.m1<-glm(formula =Richness.art1~SOIL*TISSUE*HOST+ TIME+ SITE,data = MetaRich.ART1,
-         family=poisson(link = "log"))
-summary(r.m1)
-plot(r.m1)
-AIC(r.m1)
-#####
-r.m2<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
-          family=poisson(link = "log"))
-summary(r.m2)
-plot(r.m2)
-AIC(r.m2)
-####
-r.m3<-glm(formula =Richness.art1~SOIL+TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
-          family=poisson(link = "log"))
-summary(r.m3)
-plot(r.m3)
-AIC(r.m3)
-#########
-r.m4<-glm(formula =Richness.art1~SOIL*HOST+TISSUE+ TIME+ SITE,data = MetaRich.ART1,
-          family=poisson(link = "log"))
-summary(r.m4)
-plot(r.m4)
-AIC(r.m4)
+# r.m<-glm(formula =Richness.art1~SOIL*TISSUE+ SOIL*HOST+ TIME+ SITE,data = MetaRich.ART1,
+#          family=poisson(link = "log"))
+# summary(r.m) ##NA??
+# AIC(r.m)
+# par(mfrow=c(2,2))
+# plot(r.m)
+# ######
+# r.m1<-glm(formula =Richness.art1~SOIL*TISSUE*HOST+ TIME+ SITE,data = MetaRich.ART1,
+#          family=poisson(link = "log"))
+# summary(r.m1)
+# plot(r.m1)
+# AIC(r.m1)
+# #####
+# r.m2<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+#           family=poisson(link = "log"))
+# summary(r.m2)
+# plot(r.m2)
+# AIC(r.m2)
+# ####
+# r.m3<-glm(formula =Richness.art1~SOIL+TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+#           family=poisson(link = "log"))
+# summary(r.m3)
+# plot(r.m3)
+# AIC(r.m3)
+# #########
+# r.m4<-glm(formula =Richness.art1~SOIL*HOST+TISSUE+ TIME+ SITE,data = MetaRich.ART1,
+#           family=poisson(link = "log"))
+# summary(r.m4)
+# plot(r.m4)
+# AIC(r.m4)
+# 
+# # negbin models
+# r.m5<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+#           family=negative.binomial(theta = 0.5))
+# summary(r.m5)
+# plot(r.m5)
+# AIC(r.m5)
+# dev.off()
+# 
+# ### 
+# 
+# r.m6<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+#           family=negative.binomial(theta = 0.2))
+# summary(r.m6)
+# plot(r.m6)
+# AIC(r.m6)
+# r.m7<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+#           family=negative.binomial(theta =10000 ))
+# summary(r.m7)
+# anova(r.m7, test = "Chisq")
+# plot(r.m7)
+# AIC(r.m7)
+# r.m.nb<-glm.nb(formula =Richness.art1~SOIL*TISSUE+ HOST+ TIME+
+#                  SITE,data = MetaRich.ART1,link = "log")
+# summary(r.m.nb)
+# anova(r.m.nb,test = "Chisq")
+# AIC(r.m.nb)
+# 
+# plot(r.m.nb)
+# ## model comparison with anova test
+# aa.m<-anova(r.m, r.m1, r.m2,r.m3,r.m4,r.m5,r.m6,r.m7,r.m.nb, test = "Chisq")
+# summary(aa.m)
 
-# negbin models
-r.m5<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
-          family=negative.binomial(theta = 0.5))
-summary(r.m5)
-plot(r.m5)
-AIC(r.m5)
+### model with all variables
+R.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE+MEDIA+TEMP ,data = MetaRich.ART1,
+        family=poisson(link = "log"))
+
+stepAIC(R.m,direction="backward")
+# try couple of interactions
+# R.m1<-glm(formula =Richness.art1~SOIL*HOST+TISSUE+TIME+SITE,data = MetaRich.ART1,
+#          family=poisson(link = "log"))
+# summary(R.m1)
+# anova(R.m1, test = "Chisq")
+# AIC(R.m1)
+# R.m2<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+TIME+SITE,data = MetaRich.ART1,
+#           family=poisson(link = "log"))
+# summary(R.m2)
+# anova(R.m2, test = "Chisq")
+# AIC(R.m2)
+################################
+# SELECTED MODEL FOR RICHNESS
+################################
+Richness.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE,data = MetaRich.ART1,
+                family=poisson(link = "log"))
+summary(Richness.m)
+anova(Richness.m, test = "Chisq")
+AIC(Richness.m)
+par(mfrow=(c(2,2)))
+plot(Richness.m)
 dev.off()
-
-### 
-
-r.m6<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
-          family=negative.binomial(theta = 0.2))
-summary(r.m6)
-plot(r.m6)
-AIC(r.m6)
-
-
-r.m7<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
-          family=negative.binomial(theta = 10000))
-summary(r.m7)
-plot(r.m7)
-AIC(r.m7)
-
-r.m.nb<-glm.nb(formula =Richness.art1~SOIL*TISSUE+ HOST+ TIME+ SITE,data = MetaRich.ART1,link = "log")
-
-summary(r.m.nb)
-anova(r.m.nb)
-AIC(r.m.nb)
-
-plot(r.m.nb)
-## model comparison with anova test
-aa.m<-anova(r.m, r.m1, r.m2,r.m3,r.m4,r.m5,r.m6,r.m7,r.m.nb)
-summary(aa.m)
 ######## Step 4: Choose the best way to visualize the results
 
 
