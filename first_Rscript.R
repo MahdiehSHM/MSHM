@@ -320,18 +320,14 @@ var(Richness.art1)
 # summary(r.m4)
 # plot(r.m4)
 # AIC(r.m4)
-# 
-# # negbin models
+# # # negbin models
 # r.m5<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
 #           family=negative.binomial(theta = 0.5))
 # summary(r.m5)
 # plot(r.m5)
 # AIC(r.m5)
 # dev.off()
-# 
-# ### 
-# 
-# r.m6<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
+# # r.m6<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+ TIME+ SITE,data = MetaRich.ART1,
 #           family=negative.binomial(theta = 0.2))
 # summary(r.m6)
 # plot(r.m6)
@@ -353,7 +349,7 @@ var(Richness.art1)
 # aa.m<-anova(r.m, r.m1, r.m2,r.m3,r.m4,r.m5,r.m6,r.m7,r.m.nb, test = "Chisq")
 # summary(aa.m)
 
-### model with all variables
+### stepwise model selection with all variables
 R.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE+MEDIA+TEMP ,data = MetaRich.ART1,
         family=poisson(link = "log"))
 
@@ -374,12 +370,33 @@ stepAIC(R.m,direction="backward")
 ################################
 Richness.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE,data = MetaRich.ART1,
                 family=poisson(link = "log"))
-summary(Richness.m)
-anova(Richness.m, test = "Chisq")
+Rich.summ<-summary(Richness.m)
+Rich.anova<-anova(Richness.m, test = "Chisq")
 AIC(Richness.m)
 par(mfrow=(c(2,2)))
 plot(Richness.m)
 dev.off()
+
+################
+# SHANNON MODEL
+################
+
+sh.m<-lm(formula =log(shannon.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
+shannon.sum<-summary(sh.m)
+shannon.anov<-anova(sh.m, test="F")
+AIC(sh.m)
+
+###############
+#SIMPSON MODEL
+###############
+simp.m<-lm(formula =log(simpson.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
+simp.sum<-summary(simp.m)
+simp.anov<-anova(simp.m, test="F")
+AIC(simp.m)
+
+
+
+
 ######## Step 4: Choose the best way to visualize the results
 
 
