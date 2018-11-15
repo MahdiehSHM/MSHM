@@ -370,7 +370,9 @@ stepAIC(R.m,direction="backward")
 ################################
 Richness.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE,data = MetaRich.ART1,
                 family=poisson(link = "log"))
+#MODEL SUMMARY FOR REACHNESS
 Rich.summ<-summary(Richness.m)
+#ANOVA RESULTS FOR RICHNESS
 Rich.anova<-anova(Richness.m, test = "Chisq")
 AIC(Richness.m)
 par(mfrow=(c(2,2)))
@@ -382,7 +384,9 @@ dev.off()
 ################
 
 sh.m<-lm(formula =log(shannon.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
+#MODEL SUMMARY FOR SHANNON
 shannon.sum<-summary(sh.m)
+#ANOVA RESULS FOR SHANON
 shannon.anov<-anova(sh.m, test="F")
 AIC(sh.m)
 
@@ -390,7 +394,9 @@ AIC(sh.m)
 #SIMPSON MODEL
 ###############
 simp.m<-lm(formula =log(simpson.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
+#MODEL SUMMARY FOR SIMPSON
 simp.sum<-summary(simp.m)
+#ANOVA RESULTS FOR SIMPSON
 simp.anov<-anova(simp.m, test="F")
 AIC(simp.m)
 
