@@ -3,6 +3,7 @@
 library(mvabund)
 library(vegan)
 library(coda)
+library(jags)
 library(rjags)
 library(boral)
 library(effects)
