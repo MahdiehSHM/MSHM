@@ -8,7 +8,7 @@ library(rjags)
 library(boral)
 library(effects)
 library(MASS)
-
+library(ggplot2)
 
 ##################################
 ## DATA Input
@@ -401,10 +401,176 @@ simp.sum<-summary(simp.m)
 simp.anov<-anova(simp.m, test="F")
 AIC(simp.m)
 
-
-
-
 ######## Step 4: Choose the best way to visualize the results
 
 
- 
+
+
+
+
+
+
+####################################################
+####################################################
+# COMMUNITY COMPOSITION ANALYSIS
+####################################################
+####################################################
+
+# for this we are using Permutational multivariate analysis of variance (PERMANOVA)
+#this function from vegan does it
+
+comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
+       permutations = 999, method = "bray",by=NULL)
+# if you get an error about the memory allocation run the following lines:
+# memory.limit()
+# memory.limit(size=30000)
+
+## Coefficients
+comm.anova.coef = as.data.frame(comm.anova$coefficients)
+
+## which OTUs significantly affected by any variables:
+#####################
+####### NMDS PLOTS 
+#####################
+# first I am computing an NMDS matrix for all of the OTUs
+nmds.art1<-metaMDS(AbundNotZero.art1, distance = "bray", k= 2, trymax = 20)
+
+plot(nmds.art1)
+# red + are species and black dots are sites (samples)
+dev.off()
+###########################################
+#this is the base of our plots: 
+NM.pl<-ordiplot(nmds.art1,type = "none")
+# you can show species ot samples or both
+# points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
+points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
+###########################################
+# show soil communities:
+ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+         draw="line", col= "grey20",
+         lwd = 2, lty = 2,
+         show.groups=(c("Arid")))#Arid soil endophyte community
+ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+         draw="line", col= "grey20",
+         lwd = 2,lty = 9,
+         show.groups=(c("Saline")))# Saline soil endophyte community
+# show different sampling sites:
+ordibar(nmds.art1, MetaRich.ART1$SITE,
+            col= "green",lwd = 2,
+            kind="se", conf=0.99,
+            show.groups=(c("Garmsar")))
+ordibar(nmds.art1, MetaRich.ART1$SITE,
+             col= "blue",lwd = 2,
+            kind="se", conf=0.99,
+            show.groups=(c("Haj Ali Gholi Lake")))
+ordibar(nmds.art1, MetaRich.ART1$SITE,
+            col= "red",lwd = 2,
+           kind="se", conf=0.99,
+            show.groups=(c("Hoze Soltan Lake")))
+ordibar(nmds.art1, MetaRich.ART1$SITE,
+             col= "yellow",lwd = 2,
+             kind="se", conf=0.99,
+            show.groups=(c("Maranjab Desert")))
+ordibar(nmds.art1, MetaRich.ART1$SITE,
+        col= "violetred4",lwd = 2,
+         kind="se", conf=0.99, 
+        show.groups=(c("Rig-Boland Desert")))
+pl.legend = legend("topleft", c("Arid soil","Saline soil","Garmsar", "Haj Ali Gholi Lake",
+                                "Hoze Soltan Lake","Maranjab Desert","Rig-Boland Desert"), 
+                  col=c("grey20","grey20","green","blue","red","yellow","violetred4"),
+                  lty = c(2,9,1,1,1,1,1), border="white", bty="n")
+#or:
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
+            draw="polygon", col= "green",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Garmsar")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "blue",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Haj Ali Gholi Lake")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
+            draw="polygon", col= "red",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Hoze Soltan Lake")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "yellow",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Maranjab Desert")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "violetred4",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Rig-Boland Desert")))
+
+?legend
+?points
+?ordiellipse
+?ordiplot
+?ordibar
+# in case we  decided to show the data in other shapes:
+# try a new plot for sites with different x & y limites
+dev.off()
+site.pl<-ordiplot(nmds.art1,type = "none", xlim = c(-8,8), ylim = c(-4,4))
+points(site.pl,"species",pch = 2, col= "grey20", cex= 0.6)
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
+            draw="polygon", col= "green",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Garmsar")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "blue",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Haj Ali Gholi Lake")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
+            draw="polygon", col= "red",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Hoze Soltan Lake")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "yellow",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Maranjab Desert")))
+ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
+            draw="polygon", col= "violetred4",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Rig-Boland Desert")))
+
+dev.off()
+?points
+levels(MetaRich.ART1$SITE)
+#################
+#plot organ and soil toghether:
+dev.off()
+NM.pl<-ordiplot(nmds.art1,type = "none")
+# points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
+points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
+# show soil communities:
+ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+         draw="line", col= "grey20",
+         lwd = 2, lty = 2,
+         show.groups=(c("Arid")))#Arid soil endophyte community
+ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+         draw="line", col= "grey20",
+         lwd = 2,lty = 9,
+         show.groups=(c("Saline")))# Saline soil endophyte community
+# show different organs: leaf, twig and root:
+
+ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
+            draw="polygon", col= "green",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Leaf")))
+ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1.5,
+            draw="polygon", col= "blue",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Branch")))
+ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
+            draw="polygon", col= "red",
+            alpha=200, kind="se", conf=0.99,
+            show.groups=(c("Root")))
+legend("topleft", c("Arid soil","Saline soil","Leaf", "Branch",
+                    "Root"), 
+       col=c("grey20","grey20","green","blue","red"),
+       lty = c(2,9,1,1,1), border="white", bty="n")
+
+
+levels(MetaRich.ART1$TISSUE)
+
+
+
