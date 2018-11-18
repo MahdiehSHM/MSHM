@@ -572,5 +572,29 @@ legend("topleft", c("Arid soil","Saline soil","Leaf", "Branch",
 
 levels(MetaRich.ART1$TISSUE)
 
+####use glm.nb for each OTU to figur out each of their frequency recation to every variables
+# example: first OTU
+
+OTU1.model<-glm.nb(formula =Article1OTU$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
+                           SITE,data = Article1Meta,link = "log")
+OTU1.anov<-anova(OTU1.model,test = "Chisq")
+#this one was affected by soil, tissue and host
+# do the same for all of them
+
+
+
+##############################################
+##############################################
+#soil data analysis
+
+
+
+
+
+
+
+
+
+
 
 
