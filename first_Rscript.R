@@ -229,8 +229,13 @@ colSums(Article1OTU)
 #OTU list Article 1
 colnames(Article1OTU)
 
+### chosen OTU for other experiments:LREwh64..Neocamarosporium.chichastianum
+# isolated from?
+aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$SOIL, Article1OTU, sum)
 aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$HOST, Article1OTU, sum)
-aggregate(SREwh19.Neocamarosporium.goegapense ~ Article1Meta$HOST, Article1OTU, sum)
+aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TISSUE, Article1OTU, sum)
+aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TIME, Article1OTU, sum)
+
 
 #############################################################################
 ######## Step 3: Find the right kind of analysis for each research questions:
@@ -586,15 +591,29 @@ OTU1.anov<-anova(OTU1.model,test = "Chisq")
 ##############################################
 ##############################################
 #soil data analysis
+# data input
+env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
 
+#subset for this article:
+env.data.art1<- subset (env.data, MetaData$HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
+                                           "Launaea acunthodes",
+                                           "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                           "Tamrix hispida"))
+row.names(env.data.art1)==row.names(Article1Meta)
 
+# remove thesamples with zero obs for PCA
+env.Rich.ART1 = env.data.art1[NotZero.art1,]
+row.names(env.Rich.ART1)==row.names(MetaRich.ART1)
+#remove soil and site variables
+env.Rich.ART1$SITE<-NULL
+env.Rich.ART1$SOIL<-NULL
+env.Rich.ART1$Cle<-as.numeric(env.Rich.ART1$Cle)
+##### PCA (Principal Components Analysis) analysis 
+#use rda fun in vegan for PCA:
+?rda()
 
+rda.art1<-rda(AbundNotZero.art1~.,data =env.Rich.ART1)
+head(summary(rda.art1))
+biplot(rda.art1,choices = c(1, 2))
 
-
-
-
-
-
-
-
-
+plot(rda.art1)
