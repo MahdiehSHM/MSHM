@@ -614,6 +614,32 @@ env.Rich.ART1$Cle<-as.numeric(env.Rich.ART1$Cle)
 
 rda.art1<-rda(AbundNotZero.art1~.,data =env.Rich.ART1)
 head(summary(rda.art1))
-biplot(rda.art1,choices = c(1, 2))
 
-plot(rda.art1)
+#Plot PCA results
+plot(rda.art1, xlim=c(-2,2), ylim=c(-1,2.5))# this is a simple plot with both sites and species
+
+#coloring:
+soilfactor<-factor(MetaRich.ART1$SOIL)
+colvec <-  c("red","blue")
+cols<-colvec[soilfactor]
+#scors:
+rda.scores <- scores(rda.art1, display = 'bp')
+mul <- ordiArrowMul(rda.scores, fill = 0.75)
+ 
+?scores()
+dev.off()
+plot(rda.art1, type = "n")
+points(rda.art1, display = "sites", col = colvec[soilfactor], 
+       pch = (16:17)[soilfactor],cex=0.85)#salin=blue
+#points(rda.art1, display = "species", pch = "+")
+arrows(0, 0, mul * rda.scores[,1], mul * rda.scores[,2],
+       length = 0.05, col ="black", lwd=2)
+labs <- rownames(rda.scores)
+# labs<-c("Ece","EC","Cle","pHe")
+text(ordiArrowTextXY(mul * rda.scores, labs), labs)
+legend("topleft", c("Arid soil","Saline soil"), 
+             col=c("red","blue"),
+       pch = c(16,17), border="white", bty="n")
+?arrows
+?legend
+?points()
