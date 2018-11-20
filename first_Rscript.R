@@ -588,6 +588,27 @@ OTU1.anov<-anova(OTU1.model,test = "Chisq")
 
 
 
+##################################
+# Variation partitioning
+##################################
+
+?varpart
+var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
+                  Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
+plot(var.art1)
+
+# >0 samles only
+var.art2<-varpart(AbundNotZero.art1,MetaRich.ART1$SOIL,
+                  MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$TISSUE, 
+                  transfo="hellinger")
+plot(var.art2)
+#without soil
+var.art3<-varpart(AbundNotZero.art1,MetaRich.ART1$TIME,
+                  MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$SOIL, 
+                  transfo="hellinger")
+plot(var.art3)
+
+
 ##############################################
 ##############################################
 #soil data analysis
