@@ -812,6 +812,9 @@ var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
 plot(var.art1)
 
 row.names(AbundNotZero.art1)==row.names(MetaRich.ART1)
+
+View(AbundNotZero.art1)
+View(MetaRich.ART1)
 # >0 samles only
 var.art2<-varpart(AbundNotZero.art1,MetaRich.ART1$SOIL,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$TISSUE, 
