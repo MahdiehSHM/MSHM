@@ -423,12 +423,11 @@ AIC(simp.m)
 
 # for this we are using Permutational multivariate analysis of variance (PERMANOVA)
 #this function from vegan does it
-
+memory.limit()
+memory.limit(size=4200)
 comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
        permutations = 999, method = "bray",by=NULL)
 # if you get an error about the memory allocation run the following lines:
-# memory.limit()
-# memory.limit(size=30000)
 
 ## Coefficients
 comm.anova.coef = as.data.frame(comm.anova$coefficients)
@@ -583,10 +582,225 @@ levels(MetaRich.ART1$TISSUE)
 OTU1.model<-glm.nb(formula =Article1OTU$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
                            SITE,data = Article1Meta,link = "log")
 OTU1.anov<-anova(OTU1.model,test = "Chisq")
+
+OTU2.model<-glm.nb(formula =Article1OTU$TPEsh28.Humicola.fuscoatra~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU2.anov<-anova(OTU2.model,test = "Chisq")
+
+OTU3.model<-glm.nb(formula =Article1OTU$PFE.sh7..Rosellinia.limonispora~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU3.anov<-anova(OTU3.model,test = "Chisq")
+
+OTU4.model<-glm.nb(formula =Article1OTU$LREwh64..Neocamarosporium.chichastianum~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU4.anov<-anova(OTU4.model,test = "Chisq")
+
+OTU5.model<-glm.nb(formula =Article1OTU$SREwh22.Preussia.minimoides~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU5.anov<-anova(OTU5.model,test = "Chisq")
+
+OTU6.model<-glm.nb(formula =Article1OTU$THE.we10..Aporospora.terricola~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU6.anov<-anova(OTU6.model,test = "Chisq")
+
+OTU7.model<-glm.nb(formula =Article1OTU$THE.ss3.Fusarium.sp.~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU7.anov<-anova(OTU7.model,test = "Chisq")
+
+OTU8.model<-glm.nb(formula =Article1OTU$SIE.sh1.Briansuttonomyces.eucalypti~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU8.anov<-anova(OTU8.model,test = "Chisq")
+
+OTU9.model<-glm.nb(formula =Article1OTU$RAE.sh12.Acrocalymma.vagum~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU9.anov<-anova(OTU9.model,test = "Chisq")
+
+OTU10.model<-glm.nb(formula =Article1OTU$PSE.wh14.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+                     SITE,data = Article1Meta,link = "log")
+OTU10.anov<-anova(OTU10.model,test = "Chisq")
+
+OTU11.model<-glm.nb(formula =Article1OTU$PSE.wh40.Dimorphosporicola.tragani~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU11.anov<-anova(OTU11.model,test = "Chisq")
+
+OTU12.model<-glm.nb(formula =Article1OTU$PSE.wh66.Comoclathris.italica~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU12.anov<-anova(OTU12.model,test = "Chisq")
+
+OTU13.model<-glm.nb(formula =Article1OTU$PSE.ss7.Penicillium.sp.~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU13.anov<-anova(OTU13.model,test = "Chisq")
+
+OTU14.model<-glm(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU14.anov<-anova(OTU14.model,test = "Chisq")
+
+OTU15.model<-glm(formula =AbundNotZero.art1$PSE.se8.Podospora.minicauda~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU15.anov<-anova(OTU15.model,test = "Chisq")
+
+OTU16.model<-glm(formula =AbundNotZero.art1$PSE.we8.Alternaria.chlamydospora~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU16.anov<-anova(OTU16.model,test = "Chisq")
+
+OTU17.model<-glm(formula =AbundNotZero.art1$LDE.se7.Coniothyrium.aleuritis~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU17.anov<-anova(OTU17.model,test = "Chisq")
+
+OTU18.model<-glm.nb(formula =Article1OTU$LAE.se5.Sordaria.humana~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU18.anov<-anova(OTU18.model,test = "Chisq")
+
+OTU19.model<-glm.nb(formula =Article1OTU$HAE.se5.Camarosporomyces.flavigenus~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU19.anov<-anova(OTU19.model,test = "Chisq")
+
+OTU20.model<-glm.nb(formula =Article1OTU$HAE.ss4.Cytospora.chrysosperma~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU20.anov<-anova(OTU20.model,test = "Chisq")
+
+OTU21.model<-glm(formula =AbundNotZero.art1$HAE.we5.Coniolariella.sp.~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU21.anov<-anova(OTU21.model,test = "Chisq")
+
+OTU22.model<-glm.nb(formula =Article1OTU$HAE.wh26.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU22.anov<-anova(OTU22.model,test = "Chisq")
+
+OTU23.model<-glm.nb(formula =Article1OTU$HAE.wh10.Raffaelea.montetyi~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU23.anov<-anova(OTU23.model,test = "Chisq")
+
+OTU24.model<-glm.nb(formula =Article1OTU$HAE.wh65.Coniophora.marmorata~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU24.anov<-anova(OTU24.model,test = "Chisq")
+
+OTU25.model<-glm(formula =AbundNotZero.art1$HAE.se9.Chaetomium.nigricolor~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU25.anov<-anova(OTU25.model,test = "Chisq")
+
+OTU26.model<-glm(formula =AbundNotZero.art1$HAE.se1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU26.anov<-anova(OTU26.model,test = "Chisq")
+
+OTU27.model<-glm.nb(formula =Article1OTU$SREwh19.Neocamarosporium.goegapense~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU27.anov<-anova(OTU27.model,test = "Chisq")
+
+OTU28.model<-glm.nb(formula =Article1OTU$APEsh6.Dictyosporium.digitatum~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU28.anov<-anova(OTU28.model,test = "Chisq")
+
+OTU29.model<-glm.nb(formula =Article1OTU$APE.sh8.Pestalotiopsis.vismiae~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU29.anov<-anova(OTU29.model,test = "Chisq")
+
+OTU30.model<-glm.nb(formula =Article1OTU$APE.se3.Dactylonectria.macrodidyma~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU30.anov<-anova(OTU30.model,test = "Chisq")
+
+OTU31.model<-glm.nb(formula =Article1OTU$APE.sh5.Nigrospora.sphaerica~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU31.anov<-anova(OTU31.model,test = "Chisq")
+
+OTU32.model<-glm.nb(formula =Article1OTU$SREwh18...Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU32.anov<-anova(OTU32.model,test = "Chisq")
+
+OTU33.model<-glm.nb(formula =Article1OTU$LAEsh5.Coniolariella.ershadii~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU33.anov<-anova(OTU33.model,test = "Chisq")
+
+OTU34.model<-glm(formula =AbundNotZero.art1$LAE.se3.Neosetophoma.lunariae~SOIL*TISSUE+ HOST+ TIME+
+                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU34.anov<-anova(OTU34.model,test = "Chisq")
+
+OTU35.model<-glm.nb(formula =Article1OTU$LAE.SH.7.Muriphaeosphaeria.viburni~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU35.anov<-anova(OTU35.model,test = "Chisq")
+
+OTU36.model<-glm.nb(formula =Article1OTU$LAE.sh1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU36.anov<-anova(OTU36.model,test = "Chisq")
+
+OTU37.model<-glm.nb(formula =Article1OTU$SRE.sh30..Preussia.grandispora~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU37.anov<-anova(OTU37.model,test = "Chisq")
+
+OTU38.model<-glm.nb(formula =Article1OTU$SRE.ss.4.Neocamarosporium.sp.~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU38.anov<-anova(OTU38.model,test = "Chisq")
+
+OTU39.model<-glm.nb(formula =Article1OTU$SRE.ws8.Botryotrichum.murorum~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU39.anov<-anova(OTU39.model,test = "Chisq")
+
+OTU40.model<-glm.nb(formula =Article1OTU$SRE.ws10.Sarocladium.kiliense~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU40.anov<-anova(OTU40.model,test = "Chisq")
+
+OTU41.model<-glm.nb(formula =Article1OTU$SRE.wh16.Paracamarosporium.hawaiiense~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU41.anov<-anova(OTU41.model,test = "Chisq")
+
+OTU42.model<-glm.nb(formula =Article1OTU$SRE.wh13.Ovatospora.senegalensis~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU42.anov<-anova(OTU42.model,test = "Chisq")
+
+OTU43.model<-glm.nb(formula =Article1OTU$SRE.we6.Fusariella.sinensis~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU43.anov<-anova(OTU43.model,test = "Chisq")
+
+OTU44.model<-glm.nb(formula =Article1OTU$SRE.we.10.pichia.kudriavzevii~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU44.anov<-anova(OTU44.model,test = "Chisq")
+
+OTU45.model<-glm.nb(formula =Article1OTU$SRE.sh7.Chaetomium.cucumericola~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU45.anov<-anova(OTU45.model,test = "Chisq")
+
+OTU46.model<-glm.nb(formula =Article1OTU$SRE.sh5.Fusarium.redolens~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU46.anov<-anova(OTU46.model,test = "Chisq")
+
+OTU47.model<-glm.nb(formula =Article1OTU$SRE.sh9.Preussia.intermedia~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU47.anov<-anova(OTU47.model,test = "Chisq")
+
+OTU48.model<-glm.nb(formula =Article1OTU$SRE.sh4.Penicillium.vinaceum~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU48.anov<-anova(OTU48.model,test = "Chisq")
+
+OTU49.model<-glm.nb(formula =Article1OTU$SRE.sh3.Trichoderma.rifaii~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = Article1Meta,link = "log")
+OTU49.anov<-anova(OTU49.model,test = "Chisq")
+
+
+########## SOIL 
+# OTU1-OTU2-OTU3-OTU4-OTU5-OTU6-OTU7-OTU8-OTU9-OTU10-OTU11-OTU12-OTU13-OTU18-OTU19-OTU20-OTU22-OTU23-OTU24-OTU27-
+# OTU28-OTU29-OTU30-OTU31-OTU32-OTU33-OTU35-OTU36-OTU37-OTU38-OTU39-OTU40-OTU41-OTU42-OTU43-OTU44-OTU45-OTU46-
+# OTU47-OTU48-OTU49
+
+########## Tissue
+# OTU1-OTU2-OTU3-OTU4-OTU5-OTU6-OTU7-OTU9-OTU10-OTU11-OTU12-OTU13-OTU18-OTU19-OTU20-OTU22-OTU24-OTU27-
+# OTU28-OTU29-OTU30-OTU31-OTU32-OTU33-OTU35-OTU36-OTU37-OTU39-OTU40-OTU41-OTU42-OTU43-OTU45-OTU46-OTU47-OTU48-OTU49
+
+########## HOST
+# OTU1-OTU2-OTU3-OTU4-OTU5-OTU6-OTU7-OTU8-OTU9-OTU10-OTU11-OTU12-OTU13-OTU18-OTU19-OTU20-OTU22-OTU23-OTU24-OTU27-OTU28-
+# OTU29-OTU30-OTU31-OTU32-OTU33-OTU35-OTU36-OTU37-OTU38-OTU39-OTU40-OTU41-OTU43-OTU44-OTU45-OTU46-OTU47-OTU48-OTU49
+
+########## TIME
+# OTU2-OTU3-OTU4-OTU5-OTU7-OTU8-OTU9-OTU11-OTU12-OTU13-OTU20-OTU22-OTU23-OTU24-OTU27-OTU32-OTU33-OTU37-
+# OTU38-OTU39-OTU40-OTU44-OTU45-OTU46-OTU47-OTU48-OTU49
+
+########## SITE
+#OTU2-OTU3-OTU4-OTU33-OTU38-OTU39-OTU40-OTU44-OTU45-OTU46-OTU47-OTU48-OTU49
+
+########## SITE:Tissue
+#OTU2
+
 #this one was affected by soil, tissue and host
 # do the same for all of them
-
-
 
 ##################################
 # Variation partitioning
