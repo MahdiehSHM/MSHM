@@ -424,7 +424,7 @@ AIC(simp.m)
 # for this we are using Permutational multivariate analysis of variance (PERMANOVA)
 #this function from vegan does it
 memory.limit()
-memory.limit(size=4200)
+memory.limit(size=2047)
 comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
        permutations = 999, method = "bray",by=NULL)
 # if you get an error about the memory allocation run the following lines:
@@ -808,9 +808,10 @@ OTU49.anov<-anova(OTU49.model,test = "Chisq")
 
 ?varpart
 var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
-                  Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
+                 Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
 plot(var.art1)
 
+row.names(AbundNotZero.art1)==row.names(MetaRich.ART1)
 # >0 samles only
 var.art2<-varpart(AbundNotZero.art1,MetaRich.ART1$SOIL,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$TISSUE, 
@@ -878,3 +879,4 @@ legend("topleft", c("Arid soil","Saline soil"),
 ?arrows
 ?legend
 ?points()
+
