@@ -578,8 +578,8 @@ levels(MetaRich.ART1$TISSUE)
 ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
 # example: first OTU
 
-OTU1.model<-glm.nb(formula =Article1OTU$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
-                           SITE,data = Article1Meta,link = "log")
+OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
+                           SITE,data = MetaRich.ART1,link = "log")
 OTU1.anov<-anova(OTU1.model,test = "Chisq")
 
 OTU2.model<-glm.nb(formula =Article1OTU$TPEsh28.Humicola.fuscoatra~SOIL*TISSUE+ HOST+ TIME+
@@ -630,8 +630,8 @@ OTU13.model<-glm.nb(formula =Article1OTU$PSE.ss7.Penicillium.sp.~SOIL*TISSUE+ HO
                       SITE,data = Article1Meta,link = "log")
 OTU13.anov<-anova(OTU13.model,test = "Chisq")
 
-OTU14.model<-glm(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+OTU14.model<-glm.nb(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = MetaRich.ART1)
 OTU14.anov<-anova(OTU14.model,test = "Chisq")
 
 OTU15.model<-glm(formula =AbundNotZero.art1$PSE.se8.Podospora.minicauda~SOIL*TISSUE+ HOST+ TIME+
@@ -798,12 +798,11 @@ OTU49.anov<-anova(OTU49.model,test = "Chisq")
 ########## SITE:Tissue
 #OTU2
 
-#this one was affected by soil, tissue and host
-# do the same for all of them
-
-##################################
+##############################################
+##############################################
 # Variation partitioning
-##################################
+##############################################
+##############################################
 
 ?varpart
 var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
@@ -829,6 +828,8 @@ plot(var.art3)
 ##############################################
 ##############################################
 #soil data analysis
+##############################################
+##############################################
 # data input
 env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
 
@@ -881,4 +882,48 @@ legend("topleft", c("Arid soil","Saline soil"),
 ?arrows
 ?legend
 ?points()
+
+
+##############################################
+##############################################
+# Greenhouse data analysis
+##############################################
+##############################################
+# data input
+GH.data<-read.csv("Green house data.csv", header = T, row.names = 1)
+# factors: Fungi, Drought, Salinity
+
+?aov
+GH.1<-aov(Lshoot~Fungi*Drought*Salinity,data = GH.data)
+summary(GH.1)
+par(mfrow = c(2, 3))
+plot(GH.1)
+hist(GH.data$Wshoot)
+hist(GH.data$Lshoot)
+hist(GH.data$DWshoot)
+hist(GH.data$Lroot)
+hist(GH.data$Wroot)
+hist(GH.data$DWroot)
+boxplot(GH.data$DWshoot)
+boxplot(GH.data$Lshoot)
+
+#outlier fixed
+dev.off()
+# try GLM
+glm.Lshoot<-glm(Lshoot~Fungi*Drought*Salinity,data = GH.data, family =poisson(link = "log"))
+summary(glm.Lshoot)
+anova(glm.Lshoot, test = "Chisq")
+par(mfrow = c(2, 2))
+plot(glm.Lshoot)
+
+# how to show this?
+
+ggplot(GH.data, aes(x=Drought,y=Lshoot, fill=Salinity)) + 
+facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
+# please try to make the lables presentable for the paper. you can find the right codes in workshop ggplot2 script
+# do the same for the rest of variables 
+
+
+
+
 
