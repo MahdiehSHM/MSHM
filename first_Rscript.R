@@ -182,21 +182,20 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 
   
 ####### Subsetting the data for ARTICLE1
-Article1Meta = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
+Article1M = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
                                             "Launaea acunthodes",
                                             "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                             "Tamrix hispida"))
 # some how this still shows the 40 hists!! I am trying another way to fix it!
-write.csv(Article1Meta, file = "testmetadata.csv")
+levels(Article1M$SITE)
+levels(Article1M$HOST)
+write.csv(Article1M, file = "testmetadata.csv")
 
 Article1Meta<-read.csv("testmetadata.csv",header = T, row.names = 1)
-levels(Article1Meta$HOST)
+
 
 # remane the long variable levels
 levels(Article1Meta$SITE)
-levels(Article1Meta$SITE)<- list("Garmsar"="Garmsar","HajAli"="Haj Ali Gholi Lake",
-                             "Hoze"="Hoze Soltan Lake","Rig"="Rig-Boland Desert", "Sorkhe"="Sorkhe")
-
 levels(Article1Meta$HOST)
 levels(Article1Meta$HOST)<- list("A.pers"="Alhagi persarum","A.sieb"="Artemisia sieberi",
                                  "H.ammo"="Haloxylon ammodendron","L.acun"="Launaea acunthodes",
@@ -268,7 +267,7 @@ hist(log(Richness.art1))
 
 ######## Remove the samples with zero observation from the metadata
 MetaRich.ART1 = Article1Meta[NotZero.art1,]
-
+row.names(AbundNotZero.art1)==row.names(MetaRich.ART1)
 ######## Shannon and Simpson indices####################
 ######## Keep only samples with at least two OTUs
 RichNotOne.art1 = Richness.art1 > 1
@@ -424,7 +423,7 @@ AIC(simp.m)
 # for this we are using Permutational multivariate analysis of variance (PERMANOVA)
 #this function from vegan does it
 memory.limit()
-memory.limit(size=2047)
+memory.limit(size=30000)
 comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
        permutations = 999, method = "bray",by=NULL)
 # if you get an error about the memory allocation run the following lines:
