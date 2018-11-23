@@ -365,11 +365,11 @@ stepAIC(R.m,direction="backward")
 # summary(R.m1)
 # anova(R.m1, test = "Chisq")
 # AIC(R.m1)
-# R.m2<-glm(formula =Richness.art1~SOIL*TISSUE+HOST+TIME+SITE,data = MetaRich.ART1,
-#           family=poisson(link = "log"))
-# summary(R.m2)
-# anova(R.m2, test = "Chisq")
-# AIC(R.m2)
+R.m2<-glm(formula =Richness.art1~SOIL*HOST+TISSUE+TIME+SITE,data = MetaRich.ART1,
+          family=poisson(link = "log"))
+summary(R.m2)
+anova(R.m2, test = "Chisq")
+AIC(R.m2)
 ################################
 # SELECTED MODEL FOR RICHNESS
 ################################
