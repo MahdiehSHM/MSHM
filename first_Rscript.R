@@ -428,6 +428,7 @@ comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= M
        permutations = 999, method = "bray",by=NULL)
 # if you get an error about the memory allocation run the following lines:
 
+
 ## Coefficients
 comm.anova.coef = as.data.frame(comm.anova$coefficients)
 
