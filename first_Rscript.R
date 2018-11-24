@@ -922,21 +922,6 @@ GH.data$Biomass<-GH.data$DWshoot+GH.data$DWroot
 ?aov
 GH.1<-aov(Lshoot~Fungi*Drought*Salinity,data = GH.data)
 summary(GH.1)
-GH.2<-aov(Wshoot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.2)
-GH.3<-aov(DWshoot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.3)
-GH.4<-aov(Lroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.4)
-GH.5<-aov(Wroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.5)
-GH.6<-aov(DWroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.6)
-GH.7<-aov(Photosyntesis~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.7)
-GH.8<-aov(Biomass~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.8)
-
 
 par(mfrow = c(2, 3))
 plot(GH.1)
