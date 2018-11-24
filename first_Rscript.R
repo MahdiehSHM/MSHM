@@ -922,21 +922,6 @@ GH.data$Biomass<-GH.data$DWshoot+GH.data$DWroot
 ?aov
 GH.1<-aov(Lshoot~Fungi*Drought*Salinity,data = GH.data)
 summary(GH.1)
-GH.2<-aov(Wshoot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.2)
-GH.3<-aov(DWshoot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.3)
-GH.4<-aov(Lroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.4)
-GH.5<-aov(Wroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.5)
-GH.6<-aov(DWroot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.6)
-GH.7<-aov(Photosyntesis~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.7)
-GH.8<-aov(Biomass~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.8)
-
 
 par(mfrow = c(2, 3))
 plot(GH.1)
@@ -1048,7 +1033,68 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
   facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
 
 
+##############################################
+##############################################
+# Antibacterial test
+##############################################
+##############################################
+# data input
+Antibacterial.data<-read.csv("Anibacterial.csv", header = T, row.names = 1)
 
+View(Antibacterial.data)
+
+
+# factors: Fungi, Pathogen, Crude extract, MIC/MBC
+?aov
+Antibacterial.data1<-aov(Data ~ MIC.MBC*Pathogen*Crude.Extract,data = Antibacterial.data)
+summary(Antibacterial.data1)
+
+par(mfrow = c(2, 3))
+plot(Antibacterial.data1)
+hist(Antibacterial.data$Data)
+boxplot(Antibacterial.data$Data)
+
+
+#outlier fixed
+dev.off()
+# try GLM
+glm.Data<-glm(Data ~ MIC.MBC*Pathogen*Crude.Extract, data = Antibacterial.data, family =poisson(link = "log"))
+summary(glm.Data)
+anova(glm.Data, test = "Chisq")
+par(mfrow = c(2, 2))
+plot(glm.Data)
+
+##############################################
+##############################################
+# Antifungal test
+##############################################
+##############################################
+# data input
+Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
+
+View(Antifungal.data)
+
+
+# factors: Fungi, Pathogen
+?aov
+Antifungal.data1<-aov(Growth~Fungi*Pathogen,data = Antifungal.data)
+summary(Antifungal.data1)
+
+par(mfrow = c(2, 3))
+plot(Antifungal.data)
+hist(Antifungal.data$Growth)
+
+boxplot(Antifungal.data$Growth)
+
+
+#outlier fixed
+dev.off()
+# try GLM
+glm.Growth<-glm(Growth~Fungi*Pathogen, data = Antifungal.data, family =poisson(link = "log"))
+summary(glm.Growth)
+anova(glm.Growth, test = "Chisq")
+par(mfrow = c(2, 2))
+plot(glm.Growth)
 
 
 
