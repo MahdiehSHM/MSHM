@@ -1032,7 +1032,7 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
 ##############################################
 # data input
 #########
-# Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
+Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
 # View(Antifungal.data)
 # 
 # boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
@@ -1049,13 +1049,12 @@ t.test(Growth ~ Fungi,data = Antifungal.PO.data)
 ggplot(Antifungal.PO.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.PO.data)
-hist(Antifungal.PO.data$Growth)
-boxplot(Antifungal.PO.data$Growth)
-
-plot(Growth ~ Fungi, data=Antifungal.PO.data)
-Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.PO.data)
+# hist(Antifungal.PO.data$Growth)
+# boxplot(Antifungal.PO.data$Growth)
+# plot(Growth ~ Fungi, data=Antifungal.PO.data)
+# Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
 
 # A.conoides
 Antifungal.AC.data<-read.csv("Antifungal.AC.csv", header = T, row.names = 1)
@@ -1065,10 +1064,10 @@ t.test(Growth ~ Fungi,data = Antifungal.AC.data)
 ggplot(Antifungal.AC.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.AC.data)
-hist(Antifungal.AC.data$Growth)
-boxplot(Antifungal.AC.data$Growth)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.AC.data)
+# hist(Antifungal.AC.data$Growth)
+# boxplot(Antifungal.AC.data$Growth)
 
 # P. graminea
 Antifungal.PG.data<-read.csv("Antifungal.PG.csv", header = T, row.names = 1)
@@ -1078,22 +1077,16 @@ t.test(Growth ~ Fungi,data = Antifungal.PG.data)
 ggplot(Antifungal.PG.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.PG.data)
-hist(Antifungal.PG.data$Growth)
-boxplot(Antifungal.PG.data$Growth)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.PG.data)
+# hist(Antifungal.PG.data$Growth)
+# boxplot(Antifungal.PG.data$Growth)
 
-## DATA Input
+## Order DATA Input
 
-data <- read.csv("MSHM.csv",header = T, row.names = 1)
-otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
-str(data)
-str(otu)
-summary(otu)
-summary(data)
+# otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
 
-######## Temperature as fector:
-data$TEMP<-as.factor(data$TEMP)
+
 ######## MERG the OTU abundance data by 4
 S1<-seq(1,121920,4)
 S2<-seq(4,121920,4)
