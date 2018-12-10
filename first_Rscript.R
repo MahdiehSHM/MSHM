@@ -1070,33 +1070,58 @@ plot(glm.Data)
 ##############################################
 ##############################################
 # data input
+#########
 Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
-
 View(Antifungal.data)
 
+boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
 
-# factors: Fungi, Pathogen
-?aov
-Antifungal.data1<-aov(Growth~Fungi*Pathogen,data = Antifungal.data)
-summary(Antifungal.data1)
+interaction.plot(x.factor = Antifungal.data$Fungi,
+                 trace.factor = Antifungal.data$Pathogen,
+                 response = Antifungal.data$Growth)
+
+# P. oryzea
+Antifungal.PO.data<-read.csv("Antifungal.PO.csv", header = T, row.names = 1)
+View(Antifungal.PO.data)
+
+t.test(Growth ~ Fungi,data = Antifungal.PO.data)
+ggplot(Antifungal.PO.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
 
 par(mfrow = c(2, 3))
-plot(Antifungal.data)
-hist(Antifungal.data$Growth)
+plot(Antifungal.PO.data)
+hist(Antifungal.PO.data$Growth)
+boxplot(Antifungal.PO.data$Growth)
 
-boxplot(Antifungal.data$Growth)
-.
+plot(Growth ~ Fungi, data=Antifungal.PO.data)
+Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
 
-#outlier fixed
-dev.off()
-# try GLM
-glm.Growth<-glm(Growth~Fungi*Pathogen, data = Antifungal.data, family =poisson(link = "log"))
-summary(glm.Growth)
-anova(glm.Growth, test = "Chisq")
-par(mfrow = c(2, 2))
-plot(glm.Growth)
+# A.conoides
+Antifungal.AC.data<-read.csv("Antifungal.AC.csv", header = T, row.names = 1)
+View(Antifungal.AC.data)
 
-.
+t.test(Growth ~ Fungi,data = Antifungal.AC.data)
+ggplot(Antifungal.AC.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
+
+par(mfrow = c(2, 3))
+plot(Antifungal.AC.data)
+hist(Antifungal.AC.data$Growth)
+boxplot(Antifungal.AC.data$Growth)
+
+# P. graminea
+Antifungal.PG.data<-read.csv("Antifungal.PG.csv", header = T, row.names = 1)
+View(Antifungal.PG.data)
+
+t.test(Growth ~ Fungi,data = Antifungal.PG.data)
+ggplot(Antifungal.PG.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
+
+par(mfrow = c(2, 3))
+plot(Antifungal.PG.data)
+hist(Antifungal.PG.data$Growth)
+boxplot(Antifungal.PG.data$Growth)
+
 
 
 

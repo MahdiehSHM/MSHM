@@ -1,19 +1,19 @@
 R,Fungi,Pathogen,Growth
-A1,N. chichastianum,P. oryzae,18
-A2,N. chichastianum,P. oryzae,17
-A3,N. chichastianum,P. oryzae,15
-A4,N. chichastianum,P. graminea,23
-A5,N. chichastianum,P. graminea,21
-A6,N. chichastianum,P. graminea,21
-A7,N. chichastianum,A. conoides,28
-A8,N. chichastianum,A. conoides,26
-A9,N. chichastianum,A. conoides,27
-A10,Control,P. oryzae,45
-A11,Control,P. oryzae,45
-A12,Control,P. oryzae,45
-A13,Control,P. graminea,45
-A14,Control,P. graminea,45
-A15,Control,P. graminea,45
-A16,Control,A. conoides,45
-A17,Control,A. conoides,45
-A18,Control,A. conoides,45
+A1,N. chichastianum,A. conoides,28
+A2,N. chichastianum,A. conoides,26
+A3,N. chichastianum,A. conoides,27
+A4,Control,A. conoides,45
+A5,Control,A. conoides,45
+A6,Control,A. conoides,45
+A7,N. chichastianum,P. graminea,23
+A8,N. chichastianum,P. graminea,21
+A9,N. chichastianum,P. graminea,21
+A10,Control,P. graminea,45
+A11,Control,P. graminea,45
+A12,Control,P. graminea,45
+A13,N. chichastianum,P. oryzae,18
+A14,N. chichastianum,P. oryzae,17
+A15,N. chichastianum,P. oryzae,15
+A16,Control,P. oryzae,45
+A17,Control,P. oryzae,45
+A18,Control,P. oryzae,45
