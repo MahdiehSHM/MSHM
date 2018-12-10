@@ -1025,10 +1025,89 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
   facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
 
 
+#############################################
+##############################################
+# Antifungal test
+##############################################
+##############################################
+# data input
+#########
+Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
+View(Antifungal.data)
 
+boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
 
+interaction.plot(x.factor = Antifungal.data$Fungi,
+                 trace.factor = Antifungal.data$Pathogen,
+                 response = Antifungal.data$Growth)
 
+# P. oryzea
+Antifungal.PO.data<-read.csv("Antifungal.PO.csv", header = T, row.names = 1)
+View(Antifungal.PO.data)
 
+t.test(Growth ~ Fungi,data = Antifungal.PO.data)
+ggplot(Antifungal.PO.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
+
+par(mfrow = c(2, 3))
+plot(Antifungal.PO.data)
+hist(Antifungal.PO.data$Growth)
+boxplot(Antifungal.PO.data$Growth)
+
+plot(Growth ~ Fungi, data=Antifungal.PO.data)
+Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
+
+# A.conoides
+Antifungal.AC.data<-read.csv("Antifungal.AC.csv", header = T, row.names = 1)
+View(Antifungal.AC.data)
+
+t.test(Growth ~ Fungi,data = Antifungal.AC.data)
+ggplot(Antifungal.AC.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
+
+par(mfrow = c(2, 3))
+plot(Antifungal.AC.data)
+hist(Antifungal.AC.data$Growth)
+boxplot(Antifungal.AC.data$Growth)
+
+# P. graminea
+Antifungal.PG.data<-read.csv("Antifungal.PG.csv", header = T, row.names = 1)
+View(Antifungal.PG.data)
+
+t.test(Growth ~ Fungi,data = Antifungal.PG.data)
+ggplot(Antifungal.PG.data, aes(x = Fungi, y = Growth)) + 
+  geom_boxplot() 
+
+par(mfrow = c(2, 3))
+plot(Antifungal.PG.data)
+hist(Antifungal.PG.data$Growth)
+boxplot(Antifungal.PG.data$Growth)
+
+## DATA Input
+
+data <- read.csv("MSHM.csv",header = T, row.names = 1)
+otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
+str(data)
+str(otu)
+summary(otu)
+summary(data)
+
+######## Temperature as fector:
+data$TEMP<-as.factor(data$TEMP)
+######## MERG the OTU abundance data by 4
+S1<-seq(1,121920,4)
+S2<-seq(4,121920,4)
+O1<-matrix(0,length(S1),133)
+for (i in 1:length(S1)) {
+  O1[i,]<-colSums(otu[S1[i]:S2[i],])}
+
+########now convert to data frame and rename the columns
+OTUabund<-data.frame(O1)
+class(OTUabund)
+colnames(OTUabund)=colnames(otu)
+name<- row.names(data)
+row.names(OTUabund)<- name[1:30480]
+summary(OTUabund)
 
 
 
