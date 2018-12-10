@@ -1033,38 +1033,7 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
   facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
 
 
-##############################################
-##############################################
-# Antibacterial test
-##############################################
-##############################################
-# data input
-Antibacterial.data<-read.csv("Anibacterial.csv", header = T, row.names = 1)
-
-View(Antibacterial.data)
-
-
-# factors: Fungi, Pathogen, Crude extract, MIC/MBC
-?aov
-Antibacterial.data1<-aov(Data ~ MIC.MBC*Pathogen*Crude.Extract,data = Antibacterial.data)
-summary(Antibacterial.data1)
-
-par(mfrow = c(2, 3))
-plot(Antibacterial.data1)
-hist(Antibacterial.data$Data)
-boxplot(Antibacterial.data$Data)
-
-
-#outlier fixed
-dev.off()
-# try GLM
-glm.Data<-glm(Data ~ MIC.MBC*Pathogen*Crude.Extract, data = Antibacterial.data, family =poisson(link = "log"))
-summary(glm.Data)
-anova(glm.Data, test = "Chisq")
-par(mfrow = c(2, 2))
-plot(glm.Data)
-
-##############################################
+#############################################
 ##############################################
 # Antifungal test
 ##############################################
@@ -1122,7 +1091,31 @@ plot(Antifungal.PG.data)
 hist(Antifungal.PG.data$Growth)
 boxplot(Antifungal.PG.data$Growth)
 
+## DATA Input
 
+data <- read.csv("MSHM.csv",header = T, row.names = 1)
+otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
+str(data)
+str(otu)
+summary(otu)
+summary(data)
+
+######## Temperature as fector:
+data$TEMP<-as.factor(data$TEMP)
+######## MERG the OTU abundance data by 4
+S1<-seq(1,121920,4)
+S2<-seq(4,121920,4)
+O1<-matrix(0,length(S1),133)
+for (i in 1:length(S1)) {
+  O1[i,]<-colSums(otu[S1[i]:S2[i],])}
+
+########now convert to data frame and rename the columns
+OTUabund<-data.frame(O1)
+class(OTUabund)
+colnames(OTUabund)=colnames(otu)
+name<- row.names(data)
+row.names(OTUabund)<- name[1:30480]
+summary(OTUabund)
 
 
 
