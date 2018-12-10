@@ -1032,14 +1032,14 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
 ##############################################
 # data input
 #########
-Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
-View(Antifungal.data)
-
-boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
-
-interaction.plot(x.factor = Antifungal.data$Fungi,
-                 trace.factor = Antifungal.data$Pathogen,
-                 response = Antifungal.data$Growth)
+# Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
+# View(Antifungal.data)
+# 
+# boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
+# 
+# interaction.plot(x.factor = Antifungal.data$Fungi,
+#                  trace.factor = Antifungal.data$Pathogen,
+#                  response = Antifungal.data$Growth)
 
 # P. oryzea
 Antifungal.PO.data<-read.csv("Antifungal.PO.csv", header = T, row.names = 1)
