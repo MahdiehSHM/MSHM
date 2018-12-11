@@ -449,9 +449,12 @@ AIC(simp.m3)
 #this function from vegan does it
 memory.limit()
 memory.limit(size=30000)
-comm.anova<-adonis(formula=AbundNotZero.art1~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
+# data transformation:
+tran.abund.notzero<-decostand(AbundNotZero.art1,method="hellinger")
+#PERMANOVA
+comm.anova<-adonis(formula=tran.abund.notzero~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
        permutations = 999, method = "bray",by=NULL)
-# if you get an error about the memory allocation run the following lines:
+# if you get an error about the memory allocation run the above lines:memory.limit
 
 
 ## Coefficients
@@ -463,32 +466,33 @@ comm.anova.coef = as.data.frame(comm.anova$coefficients)
 #####################
 # first I am computing an NMDS matrix for all of the OTUs
 nmds.art1<-metaMDS(AbundNotZero.art1, distance = "bray", k= 2, trymax = 20)
-
+#NMDS with square root transformed data:
+nmds.art2<-metaMDS(tran.abund.notzero, distance = "bray", k= 2, trymax = 20)
 plot(nmds.art1)
 # red + are species and black dots are sites (samples)
 dev.off()
 ###########################################
 #this is the base of our plots: 
-NM.pl<-ordiplot(nmds.art1,type = "none")
+NM.pl<-ordiplot(nmds.art2,type = "none")
 # you can show species ot samples or both
 # points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
 points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
 ###########################################
 # show soil communities:
-ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+ordihull(nmds.art2, MetaRich.ART1$SOIL,cex=1.5,
          draw="line", col= "grey20",
          lwd = 2, lty = 2,
          show.groups=(c("Arid")))#Arid soil endophyte community
-ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+ordihull(nmds.art2, MetaRich.ART1$SOIL,cex=1.5,
          draw="line", col= "grey20",
          lwd = 2,lty = 9,
          show.groups=(c("Saline")))# Saline soil endophyte community
 # show different sampling sites:
-ordibar(nmds.art1, MetaRich.ART1$SITE,
+ordibar(nmds.art2, MetaRich.ART1$SITE,
             col= "green",lwd = 2,
             kind="se", conf=0.99,
             show.groups=(c("Garmsar")))
-ordibar(nmds.art1, MetaRich.ART1$SITE,
+ordibar(nmds.art2, MetaRich.ART1$SITE,
              col= "blue",lwd = 2,
             kind="se", conf=0.99,
             show.groups=(c("Haj Ali Gholi Lake")))
@@ -919,21 +923,9 @@ View(GH.data)
 GH.data$Biomass<-GH.data$DWshoot+GH.data$DWroot
 
 # factors: Fungi, Drought, Salinity
-?aov
-GH.1<-aov(Lshoot~Fungi*Drought*Salinity,data = GH.data)
-summary(GH.1)
-
-par(mfrow = c(2, 3))
-plot(GH.1)
-plot(GH.2)
-plot(GH.3)
-plot(GH.4)
-plot(GH.5)
-plot(GH.6)
-plot(GH.7)
-plot(GH.8)
-
-
+# ?aov
+# GH.1<-aov(Lshoot~Fungi*Drought*Salinity,data = GH.data)
+# summary(GH.1)
 hist(GH.data$Lshoot)
 hist(GH.data$Wshoot)
 hist(GH.data$DWshoot)
@@ -1042,13 +1034,13 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
 # data input
 #########
 Antifungal.data<-read.csv("Antifungal.csv", header = T, row.names = 1)
-View(Antifungal.data)
-
-boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
-
-interaction.plot(x.factor = Antifungal.data$Fungi,
-                 trace.factor = Antifungal.data$Pathogen,
-                 response = Antifungal.data$Growth)
+# View(Antifungal.data)
+# 
+# boxplot(Growth ~ Pathogen *Fungi , data=Antifungal.data)
+# 
+# interaction.plot(x.factor = Antifungal.data$Fungi,
+#                  trace.factor = Antifungal.data$Pathogen,
+#                  response = Antifungal.data$Growth)
 
 # P. oryzea
 Antifungal.PO.data<-read.csv("Antifungal.PO.csv", header = T, row.names = 1)
@@ -1058,13 +1050,12 @@ t.test(Growth ~ Fungi,data = Antifungal.PO.data)
 ggplot(Antifungal.PO.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.PO.data)
-hist(Antifungal.PO.data$Growth)
-boxplot(Antifungal.PO.data$Growth)
-
-plot(Growth ~ Fungi, data=Antifungal.PO.data)
-Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.PO.data)
+# hist(Antifungal.PO.data$Growth)
+# boxplot(Antifungal.PO.data$Growth)
+# plot(Growth ~ Fungi, data=Antifungal.PO.data)
+# Antifungal.PO.lm <- lm(Growth ~ Fungi, data=Antifungal.PO.data)
 
 # A.conoides
 Antifungal.AC.data<-read.csv("Antifungal.AC.csv", header = T, row.names = 1)
@@ -1074,10 +1065,10 @@ t.test(Growth ~ Fungi,data = Antifungal.AC.data)
 ggplot(Antifungal.AC.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.AC.data)
-hist(Antifungal.AC.data$Growth)
-boxplot(Antifungal.AC.data$Growth)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.AC.data)
+# hist(Antifungal.AC.data$Growth)
+# boxplot(Antifungal.AC.data$Growth)
 
 # P. graminea
 Antifungal.PG.data<-read.csv("Antifungal.PG.csv", header = T, row.names = 1)
@@ -1087,16 +1078,21 @@ t.test(Growth ~ Fungi,data = Antifungal.PG.data)
 ggplot(Antifungal.PG.data, aes(x = Fungi, y = Growth)) + 
   geom_boxplot() 
 
-par(mfrow = c(2, 3))
-plot(Antifungal.PG.data)
-hist(Antifungal.PG.data$Growth)
-boxplot(Antifungal.PG.data$Growth)
+# par(mfrow = c(2, 3))
+# plot(Antifungal.PG.data)
+# hist(Antifungal.PG.data$Growth)
+# boxplot(Antifungal.PG.data$Growth)
 
-## DATA Input
+## Order DATA Input
 
+# otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
+
+<<<<<<< HEAD
 Order <- read.csv(file="OrderArticle.csv",header = T )
 str(Order)
 summary(Order)
+=======
+>>>>>>> f07a95d6869e8e0403d43520ad2ccfaf56e0227b
 
 ######## MERG the OTU abundance data by 4
 S1<-seq(1,121920,4)
