@@ -1033,7 +1033,8 @@ ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) +
   facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
 
 
-#############################################
+
+##############################################
 ##############################################
 # Antifungal test
 ##############################################
@@ -1093,29 +1094,23 @@ boxplot(Antifungal.PG.data$Growth)
 
 ## DATA Input
 
-data <- read.csv("MSHM.csv",header = T, row.names = 1)
-otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
-str(data)
-str(otu)
-summary(otu)
-summary(data)
+Order <- read.csv(file="OrderArticle.csv",header = T )
+str(Order)
+summary(Order)
 
-######## Temperature as fector:
-data$TEMP<-as.factor(data$TEMP)
 ######## MERG the OTU abundance data by 4
 S1<-seq(1,121920,4)
 S2<-seq(4,121920,4)
-O1<-matrix(0,length(S1),133)
-for (i in 1:length(S1)) {
-  O1[i,]<-colSums(otu[S1[i]:S2[i],])}
+OR1<-matrix(0,length(S1),133)
+for (i in 1:length(S1)) {OR1[i,]<-colSums(Order[S1[i]:S2[i],])}
 
 ########now convert to data frame and rename the columns
-OTUabund<-data.frame(O1)
-class(OTUabund)
-colnames(OTUabund)=colnames(otu)
+Orderabund<-data.frame(OR1)
+class(Orderabund)
+colnames(Orderabund)=colnames(Order)
 name<- row.names(data)
-row.names(OTUabund)<- name[1:30480]
-summary(OTUabund)
+row.names(Orderabund)<- name[1:30480]
+summary(Orderabund)
 
 
 
