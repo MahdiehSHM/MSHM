@@ -1086,27 +1086,28 @@ ggplot(Antifungal.PG.data, aes(x = Fungi, y = Growth)) +
 ## Order DATA Input
 
 # otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
-
-<<<<<<< HEAD
-Order <- read.csv(file="OrderArticle.csv",header = T )
+Order <- read.csv(file="OrderArticle.csv",header = T, row.names = 1)
 str(Order)
 summary(Order)
-=======
->>>>>>> f07a95d6869e8e0403d43520ad2ccfaf56e0227b
 
-######## MERG the OTU abundance data by 4
+
+######## MERG the ORDER abundance data by 4
 S1<-seq(1,121920,4)
 S2<-seq(4,121920,4)
-OR1<-matrix(0,length(S1),133)
-for (i in 1:length(S1)) {OR1[i,]<-colSums(Order[S1[i]:S2[i],])}
+Order1<-matrix(0,length(S1),11)
+for (i in 1:length(S1)) {
+  Order1[i,]<-colSums(Order[S1[i]:S2[i],])}
 
-########now convert to data frame and rename the columns
-Orderabund<-data.frame(OR1)
-class(Orderabund)
-colnames(Orderabund)=colnames(Order)
+########now convert to data frame and rename the columns and rows
+orderabund<-data.frame(Order1)
+class(orderabund)
+colnames(orderabund)=colnames(Order)
 name<- row.names(data)
-row.names(Orderabund)<- name[1:30480]
-summary(Orderabund)
+row.names(orderabund)<- name[1:30480]
+summary(orderabund)
+
+###### subset for this article (keep only 8 hosts)
+
 
 
 
