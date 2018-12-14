@@ -1108,6 +1108,31 @@ summary(orderabund)
 
 ###### subset for this article (keep only 8 hosts)
 
+####### Subsetting the data for ARTICLE1
+ArticleO = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
+                                        "Launaea acunthodes",
+                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                        "Tamrix hispida"))
+View (ArticleO) 
 
+## Subset Order frequency dataframe
+Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                                     "Launaea acunthodes",
+                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                                     "Tamrix hispida"))
 
+View (Article1Order) 
+
+#open taxonomy data
+taxonomy<-read.csv("OrderArticle.csv",sep=";")
+
+#by order
+bio.Article1Order<-data.frame(1:length (rownames(Article1Order))) 
+rownames(Article1Order)<-rownames(Article1Order)
+for(i in c(1:length(levels(taxonomy$order)))){x<-Article1Order[,taxonomy$order==levels(taxonomy$order)[i]]
+if(length(colnames(data.frame(x)))==1) bio.Article1Order[,i]<-Article1Order[,taxonomy$order==levels(taxonomy$order)[i]]
+else bio.Article1Order[,i]<-apply(x,1,sum)
+rm(x,i)}
+
+colnames(bio.fragm.order)<-levels(taxonomy$order)
 
