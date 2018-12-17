@@ -1105,31 +1105,7 @@ name<- row.names(data)
 row.names(orderabund)<- name[1:30480]
 summary(orderabund)
 
-###### subset for this article (keep only 8 hosts)
-####### Subsetting the data for ARTICLE1 (Order)
-Article1M = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
-                                        "Launaea acunthodes",
-                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                        "Tamrix hispida"))
-# some how this still shows the 40 hists!! I am trying another way to fix it!
-levels(Article1M$SITE)
-levels(Article1M$HOST)
-write.csv(Article1M, file = "testmetadata.csv")
-
-Article1Meta<-read.csv("testmetadata.csv",header = T, row.names = 1)
-
-# remane the long variable levels
-levels(Article1Meta$SITE)
-levels(Article1Meta$HOST)
-levels(Article1Meta$HOST)<- list("A.pers"="Alhagi persarum","A.sieb"="Artemisia sieberi",
-                                 "H.ammo"="Haloxylon ammodendron","L.acun"="Launaea acunthodes",
-                                 "P.step"="Prosopis stephaniana","S.inca"="Salsola incanescens",
-                                 "S.rosm"="Seidlitzia rosmarinus","T.hisp"="Tamrix hispida")
-
-levels(Article1Meta$SOIL)<-list("Arid"="Arid soil","Saline"="Saline Soil")
-levels(Article1Meta$TISSUE)
-levels(Article1Meta$MEDIA)<-list("PDA"= "PDA", "PDA+Plant"="PDA+Plant extract")
-## Subset OTU frequency dataframe
+####### Subsetting the Order abundance data for ARTICLE1(keep only 8 hosts)
 Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                                      "Launaea acunthodes",
                                                      "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
@@ -1137,37 +1113,30 @@ Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Art
 # check to see if it worked 
 rownames(Article1Order)==rownames(Article1Meta)
 class(Article1Order)
-class(Article1Order)
-View(Article1Order)
-View(Article1Order)
 colnames(Article1Order)
 
-
-## Eurotiales
-
-aggregate(.~Article1M$HOST,Article1Order, sum)
-
-colSums(Article1Order)
-
 # creat a Pie chart 
-L.slic<- c(265,170,589,301,89,1300,443,4944,88,1736,741)  #get the valus from family.sum and remove the zeros
+order.colsum<-colSums(Article1Order)
+order.slic<- c(265,170,589,301,1300,443,4944,88,1736,89,741)  #get the valus from order.colsum
+order.lbls<- c("Eurotiales","Diaporthales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
+           "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
 
-L.lbls<- c("Eurotiales","Diaporthales","Ophiostomatales","Boletales",
-           "Amphisphaeriales","Xylariales","Hypocreales"," Pleosporales",
-           "Saccharomycetales","Sordariales ","Unknown ")
-
-L.Percent<-round(L.slic/sum(L.slic)*100, digits=2)
-L.lbls <- paste(L.lbls, L.Percent)
-L.lbls<-paste(L.lbls,"%",sep="")
-pie(L.slic,labels =L.lbls, col = c("firebrick","indianred1","skyblue1","magenta",
+order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
+order.lbls <- paste(order.lbls, order.Percent)
+order.lbls<-paste(order.lbls,"%",sep="")
+pie(order.slic,labels =order.lbls, col = c("firebrick","indianred1","skyblue1","magenta",
                                    "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                   "yellow", "springgreen2") , main = "Order", cex=1.2,border = NA,cex.main= 1.5, radius = 0.7)
+                                   "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+
+# aggregate the Order abundance for all variables
+aggregateHOST = aggregate(.~Article1Meta$HOST,Article1Order, sum)
+aggregateSITE = aggregate (.~Article1Meta$SITE,Article1Order, sum)
+aggregateSOIL = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
+aggregateTIME = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
+aggregateTISSUE = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
 
 
-
-
-aggregateHOST = aggregate(.~Article1M$HOST,Article1Order, sum)
-
+# plot porpotion of each order 
 dat <- read.table(text = "    A.persarum A.sieberi  H.ammodendron L.acunthodes P.stephaniana S.incanescens S.rosmarinus T.hispida
                   Eurotiales  0 0  170 0 95 0 0 0
                   Diaporthales   0 0 170 0 0 0 0 0 
@@ -1192,19 +1161,6 @@ ggplot(datm,aes(x = variable, y = value,fill = ind)) +
   scale_y_continuous(labels = percent_format())
 
 
-aggregateSITE = aggregate (.~Article1M$SITE,Article1Order, sum)
-
-
-
-aggregateSOIL = aggregate (.~Article1M$SOIL,Article1Order, sum)
-
-
-
-aggregateTIME = aggregate (.~Article1M$SOIL,Article1Order, sum)
-
-
-
-aggregateTISSUE = aggregate (.~Article1M$SOIL,Article1Order, sum)
 
 
 
