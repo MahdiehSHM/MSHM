@@ -1164,7 +1164,7 @@ pie(L.slic,labels =L.lbls, col = c("firebrick","indianred1","skyblue1","magenta"
                                    "yellow", "springgreen2") , main = "Order", cex=1.2,border = NA,cex.main= 1.5, radius = 0.7)
 
 
-aggregate (.~Article1M$HOST,Article1Order, sum)
+
 
 aggregateHOST = aggregate(.~Article1M$HOST,Article1Order, sum)
 
@@ -1191,20 +1191,18 @@ ggplot(datm,aes(x = variable, y = value,fill = ind)) +
   # geom_bar(position = position_fill(), stat = "identity") 
   scale_y_continuous(labels = percent_format())
 
-aggregate (.~Article1M$SITE,Article1Order, sum)
 
 aggregateSITE = aggregate (.~Article1M$SITE,Article1Order, sum)
 
-aggregate (.~Article1M$SOIL,Article1Order, sum)
+
 
 aggregateSOIL = aggregate (.~Article1M$SOIL,Article1Order, sum)
 
-aggregate (.~Article1M$TIME,Article1Order, sum)
+
 
 aggregateTIME = aggregate (.~Article1M$SOIL,Article1Order, sum)
 
 
-aggregate (.~Article1M$TISSUE,Article1Order, sum)
 
 aggregateTISSUE = aggregate (.~Article1M$SOIL,Article1Order, sum)
 
