@@ -1106,6 +1106,43 @@ row.names(orderabund)<- name[1:30480]
 summary(orderabund)
 
 ####### Subsetting the Order abundance data for ARTICLE1(keep only 8 hosts)
+####### Subsetting the data for ARTICLE1
+Article1M = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
+                                        "Launaea acunthodes",
+                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                        "Tamrix hispida"))
+# some how this still shows the 40 hists!! I am trying another way to fix it!
+levels(Article1M$SITE)
+levels(Article1M$HOST)
+write.csv(Article1M, file = "testmetadata.csv")
+
+Article1Meta<-read.csv("testmetadata.csv",header = T, row.names = 1)
+
+# remane the long variable levels
+levels(Article1Meta$SITE)
+levels(Article1Meta$HOST)
+levels(Article1Meta$HOST)<- list("A.pers"="Alhagi persarum","A.sieb"="Artemisia sieberi",
+                                 "H.ammo"="Haloxylon ammodendron","L.acun"="Launaea acunthodes",
+                                 "P.step"="Prosopis stephaniana","S.inca"="Salsola incanescens",
+                                 "S.rosm"="Seidlitzia rosmarinus","T.hisp"="Tamrix hispida")
+
+levels(Article1Meta$SOIL)<-list("Arid"="Arid soil","Saline"="Saline Soil")
+levels(Article1Meta$TISSUE)
+levels(Article1Meta$MEDIA)<-list("PDA"= "PDA", "PDA+Plant"="PDA+Plant extract")
+## Subset OTU frequency dataframe
+Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
+                                                     "Launaea acunthodes",
+                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                                     "Tamrix hispida"))
+# check to see if it worked 
+rownames(Article1OTU)==rownames(Article1Meta)
+class(Article1Meta)
+class(Article1OTU)
+View(Article1OTU)
+View(Article1Meta)
+colnames(Article1OTU)
+
+
 Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
                                                      "Launaea acunthodes",
                                                      "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
@@ -1114,7 +1151,7 @@ Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Art
 rownames(Article1Order)==rownames(Article1Meta)
 class(Article1Order)
 colnames(Article1Order)
-
+View(Article1Order)
 # creat a Pie chart 
 order.colsum<-colSums(Article1Order)
 order.slic<- c(265,170,589,301,1300,443,4944,88,1736,89,741)  #get the valus from order.colsum
@@ -1129,57 +1166,175 @@ pie(order.slic,labels =order.lbls, col = c("firebrick","indianred1","skyblue1","
                                    "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
 
 # aggregate the Order abundance for all variables
-aggregateHOST = aggregate(.~Article1Meta$HOST,Article1Order, sum)
+aggregateHOST = aggregate (.~Article1Meta$HOST,Article1Order, sum)
 aggregateSITE = aggregate (.~Article1Meta$SITE,Article1Order, sum)
 aggregateSOIL = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
-aggregateTIME = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
-aggregateTISSUE = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
+aggregateTIME = aggregate (.~Article1Meta$TIME,Article1Order, sum)
+aggregateTISSUE = aggregate (.~Article1Meta$TISSUE,Article1Order, sum)
 
+# plot porpotion of each order  (HOST)
 
-# plot porpotion of each order 
-dat <- read.table(text = "    A.persarum A.sieberi  H.ammodendron L.acunthodes P.stephaniana S.incanescens S.rosmarinus T.hispida
+dat.Order.Host <- read.table (text = "    A.persarum A.sieberi  H.ammodendron L.acunthodes P.stephaniana S.incanescens S.rosmarinus T.hispida
                   Eurotiales  0 0  170 0 95 0 0 0
-                  Diaporthales   0 0 170 0 0 0 0 0 
-                  Ophiostomatales   0 0 589 0 0 0 0 0
-                  Boletales   0 0 301 0 0 0 0 0
-                  Amphisphaeriales   89 0 0 0 0 0 0 0
-                  Saccharomycetales 0 0 0 0 0 0 0 0 
-                  Hypocreales 82 0 0 0 0 0 195 166
-                  Pleosporales 103 572 1513 564 886 264 1042 0 
-                  Xylariales 72 0 580 0 0 201 447 0
-                  Sordariales 0 0 418 272 387 0 546 113
-                  Unknown 221 0 0 0 0 0 348 172",sep = "",header = TRUE)
+                              Diaporthales   0 0 170 0 0 0 0 0 
+                              Ophiostomatales   0 0 589 0 0 0 0 0
+                              Boletales   0 0 301 0 0 0 0 0
+                              Amphisphaeriales   89 0 0 0 0 0 0 0
+                              Saccharomycetales 0 0 0 0 0 0 0 0 
+                              Hypocreales 82 0 0 0 0 0 195 166
+                              Pleosporales 103 572 1513 564 886 264 1042 0 
+                              Xylariales 72 0 580 0 0 201 447 0
+                              Sordariales 0 0 418 272 387 0 546 113
+                              Unknown 221 0 0 0 0 0 348 172",sep = "",header = TRUE)
 
 library(reshape)
-datm <- melt(cbind(dat, ind = rownames(dat)), id.vars = c('ind'))
+datH <- melt(cbind(dat.Order.Host, ind = rownames(dat.Order.Host)), id.vars = c('ind'))
 
 library(scales)
-ggplot(datm,aes(x = variable, y = value,fill = ind)) + 
+ggplot(datH,aes(x = variable, y = value,fill = ind)) + 
+  geom_bar(position = "fill",stat = "identity") +
+  # or:
+  # geom_bar(position = position_fill(), stat = "identity") 
+  scale_y_continuous(labels = percent_format())
+
+# plot porpotion of each order  (SITE)
+dat.Order.Site <- read.table (text = " Garmsar  HajAli  HozeSoltan  Maranjab  RigBoland
+                  Eurotiales  265 0 0 0 0
+                  Diaporthales 170 0 0 0 0   
+                  Ophiostomatales  0 0 589 0 0  
+                  Boletales 0 0 301 0 0  
+                  Amphisphaeriales  0 0 89 0 0 
+                  Saccharomycetales 0 0 0 0 88
+                  Hypocreales 0 196 165 0 82
+                  Pleosporales 180 639 2959 1025 141
+                  Xylariales 0 0 1031 269 0 
+                  Sordariales 0 135 625 796 180 
+                  Unknown 0 1313 98 0 515 ",sep = "",header = TRUE)
+
+library(reshape)
+datS <- melt(cbind(dat.Order.Site, ind = rownames(dat.Order.Site)), id.vars = c('ind'))
+
+library(scales)
+ggplot(datS,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
   # geom_bar(position = position_fill(), stat = "identity") 
   scale_y_continuous(labels = percent_format())
 
 
+# plot porpotion of each order  (TIME)
+
+dat.Order.Time <- read.table (text = " S2016 S2017 W2015 W2016
+                              Eurotiales  0 265 0 0
+                              Diaporthales 0 170 0 0  
+                              Ophiostomatales  235 0 354 0
+                              Boletales 186 0 115 0  
+                              Amphisphaeriales  89 0 0 0 
+                              Saccharomycetales 0 0 0 88
+                              Hypocreales 0 349 0 94
+                              Pleosporales 1511 1807 1171 455
+                              Xylariales 436 541 323 0
+                              Sordariales 186 1066 257 227
+                              Unknown 0 475 58 208 ",sep = "",header = TRUE)
+
+library(reshape)
+datT <- melt(cbind(dat.Order.Time, ind = rownames(dat.Order.Time)), id.vars = c('ind'))
+
+library(scales)
+ggplot(datT,aes(x = variable, y = value,fill = ind)) + 
+  geom_bar(position = "fill",stat = "identity") +
+  # or:
+  # geom_bar(position = position_fill(), stat = "identity") 
+  scale_y_continuous(labels = percent_format())
 
 
+# plot porpotion of each order  (SOIL)
+
+dat.Order.Soil <- read.table (text = " Arid  Saline
+                              Eurotiales  265 0
+                              Diaporthales 170 0  
+                              Ophiostomatales  0 589 
+                              Boletales 0 301 
+                              Amphisphaeriales  0 89
+                              Saccharomycetales 88 0
+                              Hypocreales 112 331
+                              Pleosporales 1385 3559 
+                              Xylariales 269 1031
+                              Sordariales 1056 680
+                              Unknown 577 164",sep = "",header = TRUE)
+
+library(reshape)
+datSO <- melt(cbind(dat.Order.Soil , ind = rownames(dat.Order.Soil )), id.vars = c('ind'))
+
+library(scales)
+ggplot(datSO,aes(x = variable, y = value,fill = ind)) + 
+  geom_bar(position = "fill",stat = "identity") +
+  # or:
+  # geom_bar(position = position_fill(), stat = "identity") 
+  scale_y_continuous(labels = percent_format())
 
 
+# plot porpotion of each order  (TISSUE)
+
+dat.Order.Tissue <- read.table (text = "  Branch  Leaf  Root
+                              Eurotiales  120 145 0
+                              Diaporthales 120 50 0  
+                              Ophiostomatales  153 136 300 
+                              Boletales 301 0 0 
+                              Amphisphaeriales  1 88 0
+                              Saccharomycetales 18 31 39
+                              Hypocreales 38 24 381
+                              Pleosporales 606 1867 2471 
+                              Xylariales 110 323 867
+                              Sordariales 802 671 263
+                              Unknown 453 285 3",sep = "",header = TRUE)
+
+library(reshape)
+datTI <- melt(cbind(dat.Order.Tissue , ind = rownames(dat.Order.Tissue)), id.vars = c('ind'))
+
+library(scales)
+ggplot(datTI,aes(x = variable, y = value,fill = ind)) + 
+  geom_bar(position = "fill",stat = "identity") +
+  # or:
+  # geom_bar(position = position_fill(), stat = "identity") 
+  scale_y_continuous(labels = percent_format())
+
+#aggregate 3 Varibles 
+
+aggregate(Article1Order $  Eurotiales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Diaporthales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Ophiostomatales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Boletales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Amphisphaeriales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Saccharomycetales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Hypocreales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Pleosporales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Xylariales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Sordariales  ~ HOST + SITE , data = Article1Meta, sum)
+aggregate(Article1Order $  Unknown  ~ HOST + SITE , data = Article1Meta, sum)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+myd1 <- data.frame(  var1  = c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8),   
+                     samp = c("A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E"),   
+                     Eurotiales = c(170,0,0,0,0,95,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), 
+                     Diaporthales = c(170,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Ophiostomatales = c(0,0,589,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Boletales = c(0,0,301,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Amphisphaeriales = c(0,0,0,0,0,0,0,0,0,0, 0,0,89,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Saccharomycetales = c(0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Hypocreales = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,0,30,165,0,0,0,166,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+                     Pleosporales = c(180,0,914,419,0,0,0,771,115,0,0,0,103,0,0,0,202,699,0,141,0,0,0,0,0,0,437,0,135,0,0,0,331,233,0,0,0,141,123,0),
+                     Xylariales = c(0,0,311,269,0,0,0,0,0,0,0,0,72,0,0,0,0,447,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,201,0,0),
+                     Sordariales = c(0,0,95,323,0,0,0,0,387,0,0,0,0,0,0,0,135,344,0,67,0,0,0,0,113,0,0,0,0,0,0,0,186,86,0,0,0,0,0,0),
+                     Unknown = c(0,0,0,0,0,0,0,0,0,0,0,0,0,221,0,0,133,98,0,117,0,0,0,0,172,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) 
+# rshaping data to long form for ggplot2 
+library(reshape2)
+meltd<- melt(myd1 , id.vars=1:2) 
+View (myd1 )
+#plot 
+library(ggplot2)
+ggplot(meltd, aes(x=var1, y=value, fill=variable)) +
+  geom_bar(stat="identity") + facet_grid(~samp) + theme_bw()
 
 
 
