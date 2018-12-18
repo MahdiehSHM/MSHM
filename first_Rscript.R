@@ -1171,9 +1171,9 @@ aggregateSITE = aggregate (.~Article1Meta$SITE,Article1Order, sum)
 aggregateSOIL = aggregate (.~Article1Meta$SOIL,Article1Order, sum)
 aggregateTIME = aggregate (.~Article1Meta$TIME,Article1Order, sum)
 aggregateTISSUE = aggregate (.~Article1Meta$TISSUE,Article1Order, sum)
+View(aggregateSITE)
 
-# plot porpotion of each order  (HOST)
-
+####### plot porpotion of each order  (HOST)
 dat.Order.Host <- read.table (text = "    A.persarum A.sieberi  H.ammodendron L.acunthodes P.stephaniana S.incanescens S.rosmarinus T.hispida
                   Eurotiales  0 0  170 0 95 0 0 0
                               Diaporthales   0 0 170 0 0 0 0 0 
@@ -1186,16 +1186,18 @@ dat.Order.Host <- read.table (text = "    A.persarum A.sieberi  H.ammodendron L.
                               Xylariales 72 0 580 0 0 201 447 0
                               Sordariales 0 0 418 272 387 0 546 113
                               Unknown 221 0 0 0 0 0 348 172",sep = "",header = TRUE)
-
+View(dat.Order.Host)
 library(reshape)
 datH <- melt(cbind(dat.Order.Host, ind = rownames(dat.Order.Host)), id.vars = c('ind'))
-
+View(datH)
 library(scales)
 ggplot(datH,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
   # geom_bar(position = position_fill(), stat = "identity") 
-  scale_y_continuous(labels = percent_format())
+  scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species")+ ylab("Proportional frequency")+
+  labs(fill = "Order")
 
 # plot porpotion of each order  (SITE)
 dat.Order.Site <- read.table (text = " Garmsar  HajAli  HozeSoltan  Maranjab  RigBoland
@@ -1211,10 +1213,10 @@ dat.Order.Site <- read.table (text = " Garmsar  HajAli  HozeSoltan  Maranjab  Ri
                   Sordariales 0 135 625 796 180 
                   Unknown 0 1313 98 0 515 ",sep = "",header = TRUE)
 
-library(reshape)
+View(dat.Order.Site)
 datS <- melt(cbind(dat.Order.Site, ind = rownames(dat.Order.Site)), id.vars = c('ind'))
+View(datS)
 
-library(scales)
 ggplot(datS,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
@@ -1224,7 +1226,7 @@ ggplot(datS,aes(x = variable, y = value,fill = ind)) +
 
 # plot porpotion of each order  (TIME)
 
-dat.Order.Time <- read.table (text = " S2016 S2017 W2015 W2016
+dat.Order.Time <- read.table (text = " Summer2016 Summer2017 Winter2015 Winter2016
                               Eurotiales  0 265 0 0
                               Diaporthales 0 170 0 0  
                               Ophiostomatales  235 0 354 0
@@ -1237,10 +1239,10 @@ dat.Order.Time <- read.table (text = " S2016 S2017 W2015 W2016
                               Sordariales 186 1066 257 227
                               Unknown 0 475 58 208 ",sep = "",header = TRUE)
 
-library(reshape)
+
 datT <- melt(cbind(dat.Order.Time, ind = rownames(dat.Order.Time)), id.vars = c('ind'))
 
-library(scales)
+
 ggplot(datT,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
@@ -1263,10 +1265,10 @@ dat.Order.Soil <- read.table (text = " Arid  Saline
                               Sordariales 1056 680
                               Unknown 577 164",sep = "",header = TRUE)
 
-library(reshape)
+
 datSO <- melt(cbind(dat.Order.Soil , ind = rownames(dat.Order.Soil )), id.vars = c('ind'))
 
-library(scales)
+
 ggplot(datSO,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
@@ -1289,10 +1291,10 @@ dat.Order.Tissue <- read.table (text = "  Branch  Leaf  Root
                               Sordariales 802 671 263
                               Unknown 453 285 3",sep = "",header = TRUE)
 
-library(reshape)
+
 datTI <- melt(cbind(dat.Order.Tissue , ind = rownames(dat.Order.Tissue)), id.vars = c('ind'))
 
-library(scales)
+
 ggplot(datTI,aes(x = variable, y = value,fill = ind)) + 
   geom_bar(position = "fill",stat = "identity") +
   # or:
@@ -1314,8 +1316,8 @@ aggregate(Article1Order $  Sordariales  ~ HOST + SITE , data = Article1Meta, sum
 aggregate(Article1Order $  Unknown  ~ HOST + SITE , data = Article1Meta, sum)
 
 
-myd1 <- data.frame(  var1  = c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8),   
-                     samp = c("A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E"),   
+myd1 <- data.frame(  host  = c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,7,7,8,8,8,8,8),   
+                     site = c("A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E","A","B","c","d","E"),   
                      Eurotiales = c(170,0,0,0,0,95,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), 
                      Diaporthales = c(170,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
                      Ophiostomatales = c(0,0,589,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
@@ -1327,32 +1329,56 @@ myd1 <- data.frame(  var1  = c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5
                      Xylariales = c(0,0,311,269,0,0,0,0,0,0,0,0,72,0,0,0,0,447,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,201,0,0),
                      Sordariales = c(0,0,95,323,0,0,0,0,387,0,0,0,0,0,0,0,135,344,0,67,0,0,0,0,113,0,0,0,0,0,0,0,186,86,0,0,0,0,0,0),
                      Unknown = c(0,0,0,0,0,0,0,0,0,0,0,0,0,221,0,0,133,98,0,117,0,0,0,0,172,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) 
+View(myd1)
 # rshaping data to long form for ggplot2 
-library(reshape2)
+
 meltd<- melt(myd1 , id.vars=1:2) 
-View (myd1 )
+View (meltd )
 #plot 
-library(ggplot2)
-ggplot(meltd, aes(x=var1, y=value, fill=variable)) +
-  geom_bar(stat="identity") + facet_grid(~samp) + theme_bw()
+
+ggplot(meltd, aes(x=host, y=value, fill=variable)) +
+  geom_bar(stat="identity") + facet_wrap(~site) + theme_bw()
+
+
+##### plot soil& host&orders
+
+#Eurotiales data frame
+host.s.e<-aggregate(Article1Order $  Eurotiales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.e)
+View(host.s.e)
+host.s.e$value=host.s.e$`Article1Order$Eurotiales`
+host.s.e$`Article1Order$Eurotiales`<-NULL
+host.s.e$Order<-c("Eurotiales")
+View(host.s.e)
+
+#Diaporthales data frame
+host.s.d<-aggregate(Article1Order $  Diaporthales  ~ HOST + SOIL , data = Article1Meta, sum)
+View(host.s.d)
+host.s.d$value=host.s.d$`Article1Order$Diaporthales`
+host.s.d$`Article1Order$Diaporthales`<-NULL
+host.s.d$Order<-c("Diaporthales")
+View(host.s.d)
+
+# Mahdie!!! do the same for the rest
+
+host.s.O<-aggregate(Article1Order $  Ophiostomatales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.b<-aggregate(Article1Order $  Boletales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.a<-aggregate(Article1Order $  Amphisphaeriales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.s<-aggregate(Article1Order $  Saccharomycetales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.h<-aggregate(Article1Order $  Hypocreales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.p<-aggregate(Article1Order $  Pleosporales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.x<-aggregate(Article1Order $  Xylariales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.so<-aggregate(Article1Order $  Sordariales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.un<-aggregate(Article1Order $  Unknown  ~ HOST + SOIL , data = Article1Meta, sum)
 
 
 
+# try rbind for making a new dataframe for ploting
+eample1<-rbind(host.s.d, host.s.e)
+View(eample1)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# after finishing the codes above: rbind all the data frames or all the ORDERS
+# then you can easly plot them as you wish!!
 
 
 
