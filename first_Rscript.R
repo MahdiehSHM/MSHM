@@ -1343,7 +1343,7 @@ ggplot(meltd, aes(x=host, y=value, fill=variable)) +
 ##### plot soil& host&orders
 
 #Eurotiales data frame
-host.s.e<-aggregate(Article1Order $  Eurotiales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.e <-aggregate(Article1Order $  Eurotiales ~ HOST + SOIL , data = Article1Meta, sum)
 class(host.s.e)
 View(host.s.e)
 host.s.e$value=host.s.e$`Article1Order$Eurotiales`
@@ -1352,33 +1352,134 @@ host.s.e$Order<-c("Eurotiales")
 View(host.s.e)
 
 #Diaporthales data frame
-host.s.d<-aggregate(Article1Order $  Diaporthales  ~ HOST + SOIL , data = Article1Meta, sum)
+host.s.d <-aggregate(Article1Order $  Diaporthales  ~ HOST + SOIL , data = Article1Meta, sum)
 View(host.s.d)
 host.s.d$value=host.s.d$`Article1Order$Diaporthales`
 host.s.d$`Article1Order$Diaporthales`<-NULL
 host.s.d$Order<-c("Diaporthales")
 View(host.s.d)
 
-# Mahdie!!! do the same for the rest
 
-host.s.O<-aggregate(Article1Order $  Ophiostomatales  ~ HOST + SOIL , data = Article1Meta, sum)
-host.s.b<-aggregate(Article1Order $  Boletales  ~ HOST + SOIL , data = Article1Meta, sum)
+#Ophiostomatales data frame
+host.s.o <-aggregate(Article1Order $  Ophiostomatales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.o)
+View (host.s.o)
+host.s.o$value=host.s.o$`Article1Order$Ophiostomatales`
+host.s.o$`Article1Order$Ophiostomatales`<-NULL
+host.s.o$Order<-c("Ophiostomatales")
+View (host.s.o)
+
+
+#Boletales data frame
+host.s.b <-aggregate(Article1Order $  Boletales  ~ HOST + SOIL , data = Article1Meta, sum)
+View(host.s.b)
+host.s.b$value=host.s.b$`Article1Order$Boletales`
+host.s.b$`Article1Order$Boletales`<-NULL
+host.s.b$Order<-c("Boletales")
+View(host.s.b)
+
+
+#Amphisphaeriales data frame
 host.s.a<-aggregate(Article1Order $  Amphisphaeriales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.a)
+View(host.s.a)
+host.s.a$value=host.s.a$`Article1Order$Amphisphaeriales`
+host.s.a$`Article1Order$Amphisphaeriales`<-NULL
+host.s.a$Order<-c("Amphisphaeriales")
+View(host.s.a)
+
+
+#Saccharomycetales data frame
 host.s.s<-aggregate(Article1Order $  Saccharomycetales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.s)
+View(host.s.s)
+host.s.s$value=host.s.s$`Article1Order$Saccharomycetales`
+host.s.s$`Article1Order$Saccharomycetales`<-NULL
+host.s.s$Order<-c("Saccharomycetales")
+View(host.s.s)
+
+#Hypocreales data frame
 host.s.h<-aggregate(Article1Order $  Hypocreales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.h)
+View(host.s.h)
+host.s.h$value=host.s.h$`Article1Order$Hypocreales`
+host.s.h$`Article1Order$Hypocreales`<-NULL
+host.s.h$Order<-c("Hypocreales")
+View(host.s.h)
+
+#Pleosporales data frame
 host.s.p<-aggregate(Article1Order $  Pleosporales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.p)
+View(host.s.p)
+host.s.p$value=host.s.p$`Article1Order$Pleosporales`
+host.s.p$`Article1Order$Pleosporales`<-NULL
+host.s.p$Order<-c("Pleosporales")
+View(host.s.p)
+
+#Xylariales data frame
 host.s.x<-aggregate(Article1Order $  Xylariales  ~ HOST + SOIL , data = Article1Meta, sum)
-host.s.so<-aggregate(Article1Order $  Sordariales  ~ HOST + SOIL , data = Article1Meta, sum)
-host.s.un<-aggregate(Article1Order $  Unknown  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.x)
+View(host.s.x)
+host.s.x$value=host.s.x$`Article1Order$Xylariales`
+host.s.x$`Article1Order$Xylariales`<-NULL
+host.s.x$Order<-c("Xylariales")
+View(host.s.x)
+
+
+# Sordariales data frame
+host.s.ss<-aggregate(Article1Order $  Sordariales  ~ HOST + SOIL , data = Article1Meta, sum)
+class(host.s.ss)
+View(host.s.ss)
+host.s.ss$value=host.s.ss$`Article1Order$Sordariales`
+host.s.ss$`Article1Order$Sordariales`<-NULL
+host.s.ss$Order<-c("Sordariales")
+View(host.s.ss)
+
+
+# Unknown data frame
+host.s.u <-aggregate(Article1Order $  Unknown  ~ HOST + SOIL , data = Article1Meta, sum)
+View(host.s.u)
+host.s.u$value=host.s.u$`Article1Order$Unknown`
+host.s.u$`Article1Order$Unknown`<-NULL
+host.s.u$Order<-c("Unknown")
+View(host.s.u)
+
+# a new dataframe for ploting
+eample1<-rbind (host.s.d, host.s.e, host.s.o,host.s.b,host.s.a, host.s.s, host.s.h, host.s.p, host.s.x, host.s.ss, host.s.u)
+View(eample1 )
+
+ggplot(eample1, aes(x=HOST, y=value, fill=Order)) +
+  geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
 
 
 
-# try rbind for making a new dataframe for ploting
-eample1<-rbind(host.s.d, host.s.e)
-View(eample1)
 
-# after finishing the codes above: rbind all the data frames or all the ORDERS
-# then you can easly plot them as you wish!!
+library(reshape)
+eample1<-rbind (host.s.d, host.s.e, host.s.o,host.s.b,host.s.a, host.s.s, host.s.h, host.s.p, host.s.x, host.s.ss, host.s.u)
+View(eample1 )
+library(scales)
+ggplot(eample1,aes(x = HOST, y = value,fill = Order)) + 
+  geom_bar(position = "fill",stat = "identity") +facet_wrap(~SOIL) + theme_bw()+
+  # or:
+  # geom_bar(position = position_fill(), stat = "identity") 
+  scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species")+ ylab("Proportional frequency")+
+  labs(fill = "Order")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
