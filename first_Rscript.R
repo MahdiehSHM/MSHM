@@ -522,41 +522,51 @@ ordiellipse(nmds.art2, MetaRich.ART1$TISSUE,cex=1,
 
 legend("bottomright", c("Branch","Leaf","Root" ), 
        fill= 1:3,border="white", bty="n")
+###########################################
+#NMDS time:
+###########################################
+levels(MetaRich.ART1$TIME)
+dev.off()
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5))
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
+ordiellipse(nmds.art2, MetaRich.ART1$TIME,cex=1,
+            draw="polygon", col= 1:4,border=1:4,lwd=3,alpha = 200, kind="se", conf=0.95)
 
-
+legend("bottomright", c("Summer 2016", "Summer 2017" ,"Winter 2015" ,"Winter 2016" ), 
+       fill= 1:4,border="white", bty="n")
 #################
 #plot organ and soil toghether:
-dev.off()
-NM.pl<-ordiplot(nmds.art1,type = "none")
-# points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
-# show soil communities:
-ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
-         draw="line", col= "grey20",
-         lwd = 2, lty = 2,
-         show.groups=(c("Arid")))#Arid soil endophyte community
-ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
-         draw="line", col= "grey20",
-         lwd = 2,lty = 9,
-         show.groups=(c("Saline")))# Saline soil endophyte community
-# show different organs: leaf, twig and root:
-
-ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
-            draw="polygon", col= "green",
-            alpha=200, kind="se", conf=0.95,
-            show.groups=(c("Leaf")))
-ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1.5,
-            draw="polygon", col= "blue",
-            alpha=200, kind="se", conf=0.95,
-            show.groups=(c("Branch")))
-ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
-            draw="polygon", col= "red",
-            alpha=200, kind="se", conf=0.95,
-            show.groups=(c("Root")))
-legend("topleft", c("Arid soil","Saline soil","Leaf", "Branch",
-                    "Root"), 
-       col=c("grey20","grey20","green","blue","red"),
-       lty = c(2,9,1,1,1), border="white", bty="n")
+# dev.off()
+# NM.pl<-ordiplot(nmds.art1,type = "none")
+# # points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
+# points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
+# # show soil communities:
+# ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+#          draw="line", col= "grey20",
+#          lwd = 2, lty = 2,
+#          show.groups=(c("Arid")))#Arid soil endophyte community
+# ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
+#          draw="line", col= "grey20",
+#          lwd = 2,lty = 9,
+#          show.groups=(c("Saline")))# Saline soil endophyte community
+# # show different organs: leaf, twig and root:
+# 
+# ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
+#             draw="polygon", col= "green",
+#             alpha=200, kind="se", conf=0.95,
+#             show.groups=(c("Leaf")))
+# ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1.5,
+#             draw="polygon", col= "blue",
+#             alpha=200, kind="se", conf=0.95,
+#             show.groups=(c("Branch")))
+# ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
+#             draw="polygon", col= "red",
+#             alpha=200, kind="se", conf=0.95,
+#             show.groups=(c("Root")))
+# legend("topleft", c("Arid soil","Saline soil","Leaf", "Branch",
+#                     "Root"), 
+#        col=c("grey20","grey20","green","blue","red"),
+#        lty = c(2,9,1,1,1), border="white", bty="n")
 
 ########################################################
 #### Individul reactions of OTUs to our variables
