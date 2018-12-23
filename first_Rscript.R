@@ -388,52 +388,40 @@ dev.off()
 ################
 
 sh.m<-lm(formula =log(shannon.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
-sh.m2<-lm(formula =log(shannon.art1)~SOIL*HOST+TISSUE+TIME+SITE,data = MetaNotOne.art1)
-sh.m3<-lm(formula =log(shannon.art1)~HOST*SOIL+TISSUE+TIME+SITE,data = MetaNotOne.art1)
-
-
-summary(sh.m)
-summary(sh.m2)
-summary(sh.m3)
+# sh.m2<-lm(formula =log(shannon.art1)~SOIL*HOST+TISSUE+TIME+SITE,data = MetaNotOne.art1)
+# sh.m3<-lm(formula =log(shannon.art1)~HOST*SOIL+TISSUE+TIME+SITE,data = MetaNotOne.art1)
 
 #MODEL SUMMARY FOR SHANNON
 shannon.sum<-summary(sh.m)
-shannon.sum2<-summary(sh.m2)
-shannon.sum3<-summary(sh.m3)
+# shannon.sum2<-summary(sh.m2)
+# shannon.sum3<-summary(sh.m3)
 
-summary(shannon.sum)
-summary(shannon.sum2)
-summary(shannon.sum3)
 #ANOVA RESULS FOR SHANON
 shannon.anov<-anova(sh.m, test="F")
 AIC(sh.m)
-
-shannon.anov2<-anova(sh.m2, test="F")
-AIC(sh.m2)
-
-shannon.anov2<-anova(sh.m3, test="F")
-AIC(sh.m3)
-
+# shannon.anov2<-anova(sh.m2, test="F")
+# AIC(sh.m2)
+# 
+# shannon.anov2<-anova(sh.m3, test="F")
+# AIC(sh.m3)
 ###############
 #SIMPSON MODEL
 ###############
 simp.m<-lm(formula =log(simpson.art1)~SOIL*TISSUE+HOST+TIME+SITE,data = MetaNotOne.art1)
-simp.m2<-lm(formula =log(simpson.art1)~SOIL*HOST+TISSUE+TIME+SITE,data = MetaNotOne.art1)
-simp.m3<-lm(formula =log(simpson.art1)~HOST*SOIL+TISSUE+TIME+SITE,data = MetaNotOne.art1)
-summary(simp.m)
-summary(simp.m2)
-summary(simp.m3)
+# simp.m2<-lm(formula =log(simpson.art1)~SOIL*HOST+TISSUE+TIME+SITE,data = MetaNotOne.art1)
+# simp.m3<-lm(formula =log(simpson.art1)~HOST*SOIL+TISSUE+TIME+SITE,data = MetaNotOne.art1)
+
 #MODEL SUMMARY FOR SIMPSON
 simp.sum<-summary(simp.m)
-simp.sum<-summary(simp.m2)
-simp.sum<-summary(simp.m3)
+# simp.sum<-summary(simp.m2)
+# simp.sum<-summary(simp.m3)
 #ANOVA RESULTS FOR SIMPSON
 simp.anov<-anova(simp.m, test="F")
 AIC(simp.m)
-simp.anov<-anova(simp.m2, test="F")
-AIC(simp.m2)
-simp.anov<-anova(simp.m3, test="F")
-AIC(simp.m3)
+# simp.anov<-anova(simp.m2, test="F")
+# AIC(simp.m2)
+# simp.anov<-anova(simp.m3, test="F")
+# AIC(simp.m3)
 ######## Step 4: Choose the best way to visualize the results
 
 
@@ -460,113 +448,82 @@ comm.anova<-adonis(formula=tran.abund.notzero~SOIL*TISSUE+HOST+TIME+SITE, data= 
 comm.anova.coef = as.data.frame(comm.anova$coefficients)
 
 ## which OTUs significantly affected by any variables:
+
+
+
 #####################
 ####### NMDS PLOTS 
 #####################
 # first I am computing an NMDS matrix for all of the OTUs
-nmds.art1<-metaMDS(AbundNotZero.art1, distance = "bray", k= 2, trymax = 20)
+# nmds.art1<-metaMDS(AbundNotZero.art1, distance = "bray", k= 2, trymax = 20)
 #NMDS with square root transformed data:
 nmds.art2<-metaMDS(tran.abund.notzero, distance = "bray", k= 2, trymax = 20)
 plot(nmds.art1)
 # red + are species and black dots are sites (samples)
-dev.off()
+
 ###########################################
 #this is the base of our plots: 
-NM.pl<-ordiplot(nmds.art2,type = "none")
+# NM.pl<-ordiplot(nmds.art2,type = "none")
 # you can show species ot samples or both
 # points(NM.pl,"sites",pch = 19, cex= 0.5, col="grey30")
-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.6)
+# p.spe<-points(NM.pl,"species",pch = 2, col= "black", cex= 0.8)
+
 ###########################################
-# show soil communities:
-ordihull(nmds.art2, MetaRich.ART1$SOIL,cex=1.5,
-         draw="line", col= "grey20",
-         lwd = 2, lty = 2,
-         show.groups=(c("Arid")))#Arid soil endophyte community
-ordihull(nmds.art2, MetaRich.ART1$SOIL,cex=1.5,
-         draw="line", col= "grey20",
-         lwd = 2,lty = 9,
-         show.groups=(c("Saline")))# Saline soil endophyte community
-# show different sampling sites:
-ordibar(nmds.art2, MetaRich.ART1$SITE,
-            col= "green",lwd = 2,
-            kind="se", conf=0.99,
-            show.groups=(c("Garmsar")))
-ordibar(nmds.art2, MetaRich.ART1$SITE,
-             col= "blue",lwd = 2,
-            kind="se", conf=0.99,
-            show.groups=(c("Haj Ali Gholi Lake")))
-ordibar(nmds.art1, MetaRich.ART1$SITE,
-            col= "red",lwd = 2,
-           kind="se", conf=0.99,
-            show.groups=(c("Hoze Soltan Lake")))
-ordibar(nmds.art1, MetaRich.ART1$SITE,
-             col= "yellow",lwd = 2,
-             kind="se", conf=0.99,
-            show.groups=(c("Maranjab Desert")))
-ordibar(nmds.art1, MetaRich.ART1$SITE,
-        col= "violetred4",lwd = 2,
-         kind="se", conf=0.99, 
-        show.groups=(c("Rig-Boland Desert")))
-pl.legend = legend("topleft", c("Arid soil","Saline soil","Garmsar", "Haj Ali Gholi Lake",
-                                "Hoze Soltan Lake","Maranjab Desert","Rig-Boland Desert"), 
-                  col=c("grey20","grey20","green","blue","red","yellow","violetred4"),
-                  lty = c(2,9,1,1,1,1,1), border="white", bty="n")
-#or:
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
-            draw="polygon", col= "green",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Garmsar")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "blue",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Haj Ali Gholi Lake")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
-            draw="polygon", col= "red",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Hoze Soltan Lake")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "yellow",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Maranjab Desert")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "violetred4",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Rig-Boland Desert")))
-
-?legend
-?points
-?ordiellipse
-?ordiplot
-?ordibar
-# in case we  decided to show the data in other shapes:
-# try a new plot for sites with different x & y limites
+# NMDS soil:
+###########################################
 dev.off()
-site.pl<-ordiplot(nmds.art1,type = "none", xlim = c(-8,8), ylim = c(-4,4))
-points(site.pl,"species",pch = 2, col= "grey20", cex= 0.6)
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
-            draw="polygon", col= "green",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Garmsar")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "blue",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Haj Ali Gholi Lake")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1,
-            draw="polygon", col= "red",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Hoze Soltan Lake")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "yellow",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Maranjab Desert")))
-ordiellipse(nmds.art1, MetaRich.ART1$SITE,cex=1.5,
-            draw="polygon", col= "violetred4",
-            alpha=200, kind="se", conf=0.99,
-            show.groups=(c("Rig-Boland Desert")))
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5))
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
 
+ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,lwd = 3,alpha = 200, 
+            draw="polygon", col= "Blue",border="Blue",
+             kind="se", conf=0.95,show.groups=(c("Saline")))
+
+ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,alpha = 200, 
+            draw="polygon", col= "red",lwd = 3,border="red",
+             kind="se", conf=0.95,show.groups=(c("Arid")))
+legend("bottomright", c("Saline soil","Arid soil"), 
+       fill=c("blue","red"),
+       border="white", bty="n")
+
+###########################################
+# NMDS Hosts
+###########################################
+levels(MetaRich.ART1$HOST)
 dev.off()
-?points
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5))
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
+ordiellipse(nmds.art2, MetaRich.ART1$HOST,cex=1,alpha = 200, 
+            draw="polygon", col= 1:8,border=1:8,lwd=3, kind="se", conf=0.95)
+
+legend("bottomright", c("A.pers" ,"A.sieb", "H.ammo" ,"L.acun" ,"P.step" ,"S.inca", "S.rosm" ,"T.hisp"), 
+       fill= 1:8,border="white", bty="n")
+###########################################
+#NMDS sampling sites:
+###########################################
 levels(MetaRich.ART1$SITE)
+dev.off()
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5))
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
+ordiellipse(nmds.art2, MetaRich.ART1$SITE,cex=1,alpha = 200, 
+            draw="polygon", col= 1:5,border= 1:5,lwd=3, kind="se", conf=0.95)
+
+legend("bottomright", c("Garmsar","Haj Ali Gholi Lake","Hoze Soltan Lake","Maranjab Desert","Rig-Boland Desert"), 
+       fill= 1:5, border="white", bty="n")
+###########################################
+#NMDS ORGAN:
+###########################################
+levels(MetaRich.ART1$TISSUE)
+dev.off()
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5))
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
+ordiellipse(nmds.art2, MetaRich.ART1$TISSUE,cex=1,
+            draw="polygon", col= 1:3,border=1:3,lwd=3,alpha = 200, kind="se", conf=0.95)
+
+legend("bottomright", c("Branch","Leaf","Root" ), 
+       fill= 1:3,border="white", bty="n")
+
+
 #################
 #plot organ and soil toghether:
 dev.off()
@@ -586,26 +543,25 @@ ordihull(nmds.art1, MetaRich.ART1$SOIL,cex=1.5,
 
 ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
             draw="polygon", col= "green",
-            alpha=200, kind="se", conf=0.99,
+            alpha=200, kind="se", conf=0.95,
             show.groups=(c("Leaf")))
 ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1.5,
             draw="polygon", col= "blue",
-            alpha=200, kind="se", conf=0.99,
+            alpha=200, kind="se", conf=0.95,
             show.groups=(c("Branch")))
 ordiellipse(nmds.art1, MetaRich.ART1$TISSUE,cex=1,
             draw="polygon", col= "red",
-            alpha=200, kind="se", conf=0.99,
+            alpha=200, kind="se", conf=0.95,
             show.groups=(c("Root")))
 legend("topleft", c("Arid soil","Saline soil","Leaf", "Branch",
                     "Root"), 
        col=c("grey20","grey20","green","blue","red"),
        lty = c(2,9,1,1,1), border="white", bty="n")
 
-
-levels(MetaRich.ART1$TISSUE)
-
+########################################################
+#### Individul reactions of OTUs to our variables
+########################################################
 ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
-# example: first OTU
 
 OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
                            SITE,data = MetaRich.ART1,link = "log")
@@ -803,7 +759,8 @@ OTU49.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh3.Trichoderma.rifaii~SOIL*T
                       SITE,data = MetaRich.ART1,link = "log")
 OTU49.anov<-anova(OTU49.model,test = "Chisq")
 
-
+### MAHDIEH!!!!
+# what are these numbers 
 ########## SOIL 
 # 1.3.4.5.6.7.10.11.12.13.14.15.16.17.18.19.20.21.22.23.24.25.26.27.28.29.30.31.
 # 32.33.34.35.36.37.38.39.4043.44.45.46.47.48.49
@@ -835,10 +792,6 @@ var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
                  Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
 plot(var.art1)
 
-row.names(AbundNotZero.art1)==row.names(MetaRich.ART1)
-
-View(AbundNotZero.art1)
-View(MetaRich.ART1)
 # >0 samles only
 var.art2<-varpart(AbundNotZero.art1,MetaRich.ART1$SOIL,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$TISSUE, 
@@ -849,6 +802,8 @@ var.art3<-varpart(AbundNotZero.art1,MetaRich.ART1$TIME,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$SOIL, 
                   transfo="hellinger")
 plot(var.art3)
+##varpart with models
+
 
 
 ##############################################
@@ -900,15 +855,11 @@ points(rda.art1, display = "sites", col = colvec[soilfactor],
 arrows(0, 0, mul * rda.scores[,1], mul * rda.scores[,2],
        length = 0.05, col ="black", lwd=2)
 labs <- rownames(rda.scores)
-# labs<-c("Ece","EC","Cle","pHe")
+#labs<-c("Ece","EC","Cle","pHe")
 text(ordiArrowTextXY(mul * rda.scores, labs), labs)
 legend("topleft", c("Arid soil","Saline soil"), 
              col=c("red","blue"),
        pch = c(16,17), border="white", bty="n")
-?arrows
-?legend
-?points()
-
 
 ##############################################
 ##############################################
@@ -1451,9 +1402,7 @@ View(eample1 )
 ggplot(eample1, aes(x=HOST, y=value, fill=Order)) +
   geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
 
-
-
-
+#### PLOT!
 library(reshape)
 eample1<-rbind (host.s.d, host.s.e, host.s.o,host.s.b,host.s.a, host.s.s, host.s.h, host.s.p, host.s.x, host.s.ss, host.s.u)
 View(eample1 )
