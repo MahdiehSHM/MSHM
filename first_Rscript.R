@@ -797,14 +797,24 @@ var.art2<-varpart(AbundNotZero.art1,MetaRich.ART1$SOIL,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$TISSUE, 
                   transfo="hellinger")
 plot(var.art2)
-#without soil
+#without tissue
 var.art3<-varpart(AbundNotZero.art1,MetaRich.ART1$TIME,
                   MetaRich.ART1$HOST, MetaRich.ART1$SITE,MetaRich.ART1$SOIL, 
                   transfo="hellinger")
 plot(var.art3)
 ##varpart with models
+var.part4<- varpart(AbundNotZero.art1,~MetaRich.ART1$TIME+
+                    MetaRich.ART1$HOST+ MetaRich.ART1$SITE+MetaRich.ART1$TISSUE,
+                   ~env.Rich.ART1$Ece+env.Rich.ART1$pHe+env.Rich.ART1$Cle+env.Rich.ART1$EC,
+                   transfo = "hellinger")
+plot(var.part4)
 
-
+#with soil*tissue
+var.part5<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,MetaRich.ART1$TIME,
+                  MetaRich.ART1$SITE,~MetaRich.ART1$SOIL*MetaRich.ART1$TISSUE, 
+                  transfo="hellinger")
+plot(var.part5,Xnames = c("Host","Time","Site","Soil*Organ"),
+     bg=c("grey20","green","blue","red"),alpha=100)
 
 ##############################################
 ##############################################
@@ -831,23 +841,22 @@ env.Rich.ART1$Cle<-as.numeric(env.Rich.ART1$Cle)
 ##### PCA (Principal Components Analysis) analysis 
 #use rda fun in vegan for PCA:
 ?rda()
-
 rda.art1<-rda(AbundNotZero.art1~.,data =env.Rich.ART1)
 head(summary(rda.art1))
 
 #Plot PCA results
 plot(rda.art1, xlim=c(-2,2), ylim=c(-1,2.5))# this is a simple plot with both sites and species
 
-#coloring:
-soilfactor<-factor(MetaRich.ART1$SOIL)
-colvec <-  c("red","blue")
-cols<-colvec[soilfactor]
-#scors:
+# #coloring:
+# soilfactor<-factor(MetaRich.ART1$SOIL)
+# colvec <-  c("red","blue")
+# cols<-colvec[soilfactor]
+# #scors:
 rda.scores <- scores(rda.art1, display = 'bp')
 mul <- ordiArrowMul(rda.scores, fill = 0.75)
- 
-?scores()
+
 dev.off()
+####### FINAL RDA PLOT
 plot(rda.art1, type = "n")
 points(rda.art1, display = "sites", col = colvec[soilfactor], 
        pch = (16:17)[soilfactor],cex=0.85)#salin=blue
@@ -860,6 +869,15 @@ text(ordiArrowTextXY(mul * rda.scores, labs), labs)
 legend("topleft", c("Arid soil","Saline soil"), 
              col=c("red","blue"),
        pch = c(16,17), border="white", bty="n")
+
+#### SOIL DATA VARATION PARTITIONING
+
+var.soil1<-varpart(AbundNotZero.art1, env.Rich.ART1$Ece+env.Rich.ART1$EC+env.Rich.ART1$Cle+env.Rich.ART1$pHe ,
+                   env.Rich.ART1$pH.1.5+env.Rich.ART1$OM+env.Rich.ART1$OC+env.Rich.ART1$Nt+env.Rich.ART1$P+
+                     env.Rich.ART1$P2O5+env.Rich.ART1$M+env.Rich.ART1$SP+env.Rich.ART1$M.SP,
+                   transfo="hellinger")
+plot(var.soil1)
+#This is not good for us rather ignore it
 
 ##############################################
 ##############################################
