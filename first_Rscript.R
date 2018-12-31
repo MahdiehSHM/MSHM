@@ -1444,8 +1444,32 @@ ggplot(eample1,aes(x = HOST, y = value,fill = Order)) +
   labs(fill = "Order")
 
 
+#### ggtree!
+
+vignette("ggtree", package = "ggtree")
+vignette("Importer", package="treeio")
 
 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("ggtree", version = "3.8")
+browseVignettes("ggtree")
+vignette("Importer", package="treeio")
+
+
+#### loaded your tree in R
+library("ape")
+library("Biostrings")
+library("ggtree")
+library("treeio")
+
+file <- system.file("extdata/MrBayes", "A.tree", package="treeio")
+tree <- read.mrbayes(file)
+
+ggplot(tree, aes(x, y)) + geom_tree() + theme_tree()
+ggtree(tree, color="firebrick", size=1, linetype="dotted")
+
+####https://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeVisualization.html#displaying-tree-scale-evolution-distance
 
 
 
