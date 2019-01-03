@@ -1456,6 +1456,11 @@ BiocManager::install("ggtree", version = "3.8")
 browseVignettes("ggtree")
 vignette("Importer", package="treeio")
 
+#install ggtree
+source("https://bioconductor.org/biocLite.R")
+# biocLite("BiocUpgrade") # you may need this
+biocLite("ggtree")
+library(ggtree)
 
 #### loaded your tree in R
 library("ape")
