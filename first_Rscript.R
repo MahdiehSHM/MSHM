@@ -1445,41 +1445,57 @@ ggplot(eample1,aes(x = HOST, y = value,fill = Order)) +
 
 
 #### ggtree!
-
-vignette("ggtree", package = "ggtree")
-vignette("Importer", package="treeio")
-
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-BiocManager::install("ggtree", version = "3.8")
-browseVignettes("ggtree")
-vignette("Importer", package="treeio")
-
 #install ggtree
 source("https://bioconductor.org/biocLite.R")
 # biocLite("BiocUpgrade") # you may need this
 biocLite("ggtree")
 library(ggtree)
+library(tidyverse)
 
-#### loaded your tree in R
-library("ape")
-library("Biostrings")
-library("ggtree")
-library("treeio")
+#loaded your tree
+tree <- read.tree("A.tree")
+ggplot(tree) + geom_tree() + theme_tree()
+ggtree(tree)
 
-file <- system.file("extdata/MrBayes", "A.tree", package="treeio")
-tree <- read.mrbayes(file)
+#Add a tree scale
+ggtree(tree) + geom_treescale()
+ggtree(tree) + theme_tree2()
 
-ggplot(tree, aes(x, y)) + geom_tree() + theme_tree()
-ggtree(tree, color="firebrick", size=1, linetype="dotted")
+#turn your tree into a cladogram
+ggtree(tree, branch.length="none")
 
-####https://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeVisualization.html#displaying-tree-scale-evolution-distance
+ggtree(tree, branch.length="none", color="red", size=2, linetype=2)
+
+#turn your tree into circular layout
+ggtree (tree, layout="circular") + ggtitle("(Phylogram) circular layout")
+
+p <- ggtree(tree)
+p + geom_nodepoint()
+p + geom_tippoint()
+p + geom_tiplab()
+p + geom_tiplab()+ geom_nodepoint() 
+
+ggtree(tree) + geom_text(aes(label=node), hjust=-0.3)
 
 
+# label and color for every branch
+ggtree(tree) + geom_cladelabel(node=17, label="APEsh6", color="blue")
+
+ggtree(tree) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
+
+ggtree(tree) + geom_tiplab() + geom_cladelabel(node=59, label="Some random clade", color="red2", offset=1.5) + 
+geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
 
 
+ggtree(tree) + geom_tiplab() + geom_cladelabel(node=59, label="Some random clade", color="red2", offset=5, align=TRUE) + 
+geom_cladelabel(node=80, label="A different clade", color="blue", offset=5, align=TRUE) + theme_tree2() + 
+xlim(0, 15) + theme_tree()
 
+
+ggtree(tree) + geom_tiplab() + geom_hilight(node=59, fill="gold") + geom_hilight(node=80, fill="purple")
+
+
+msaplot(p=ggtree(tree), fasta="data/flu_aasequence.fasta", window=c(150, 175))
 
 
 
