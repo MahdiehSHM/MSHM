@@ -1507,4 +1507,3 @@ msaplot(p=ggtree(tree), fasta="data/flu_aasequence.fasta", window=c(150, 175))
 
 
 
-
