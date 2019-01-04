@@ -1497,7 +1497,7 @@ ggtree(tree) + geom_tiplab() + geom_hilight(node=59, fill="gold") + geom_hilight
 
 msaplot(p=ggtree(tree), fasta="data/flu_aasequence.fasta", window=c(150, 175))
 
-
+# what is this file: data/flu_aasequence.fasta????? is it yours?
 
 
 
