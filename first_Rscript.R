@@ -1453,51 +1453,57 @@ library(ggtree)
 library(tidyverse)
 
 #loaded your tree
-tree <- read.tree("A.tree")
-ggplot(tree) + geom_tree() + theme_tree()
-ggtree(tree)
+treeDP <- read.tree("A.tree")
+ggplot(treeDP) + geom_tree() + theme_tree()
+ggtree(treeDP)
 
 #Add a tree scale
-ggtree(tree) + geom_treescale()
-ggtree(tree) + theme_tree2()
+ggtree(treeDP) + geom_treescale()
+ggtree(treeDP) + theme_tree2()
 
 #turn your tree into a cladogram
-ggtree(tree, branch.length="none")
+ggtree(treeDP, branch.length="none")
 
-ggtree(tree, branch.length="none", color="red", size=2, linetype=2)
+ggtree(treeDP, branch.length="none", color="red", size=2, linetype=2)
 
 #turn your tree into circular layout
-ggtree (tree, layout="circular") + ggtitle("(Phylogram) circular layout")
+ggtree (treeDP, layout="circular") + ggtitle("(Phylogram) circular layout")
 
-p <- ggtree(tree)
+p <- ggtree(treeDP)
 p + geom_nodepoint()
 p + geom_tippoint()
 p + geom_tiplab()
 p + geom_tiplab()+ geom_nodepoint() 
 
-ggtree(tree) + geom_text(aes(label=node), hjust=-0.3)
+ggtree(treeDP)+  geom_text(aes(label=node), hjust=-3)
 
 
 # label and color for every branch
-ggtree(tree) + geom_cladelabel(node=17, label="APEsh6", color="blue")
+ggtree(treeDP) + geom_cladelabel(node=17, label="APEsh6", color="blue")
 
-ggtree(tree) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
+ggtree(treeDP) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
 
-ggtree(tree) + geom_tiplab() + geom_cladelabel(node=59, label="Some random clade", color="red2", offset=1.5) + 
+ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
 geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
 
 
-ggtree(tree) + geom_tiplab() + geom_cladelabel(node=59, label="Some random clade", color="red2", offset=5, align=TRUE) + 
-geom_cladelabel(node=80, label="A different clade", color="blue", offset=5, align=TRUE) + theme_tree2() + 
+ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
+geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
 xlim(0, 15) + theme_tree()
 
 
-ggtree(tree) + geom_tiplab() + geom_hilight(node=59, fill="gold") + geom_hilight(node=80, fill="purple")
+ggtree(treeDP) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
 
 
-msaplot(p=ggtree(tree), fasta="data/flu_aasequence.fasta", window=c(150, 175))
 
-# what is this file: data/flu_aasequence.fasta????? is it yours?
+#Plot tree with other data
+ggtree(tree)
+TreeFile <- read.csv("Tree.csv")
+p2 <- facet_plot(tree, panel="dot", data=Tree, geom=geom_point, aes(x=val), color='red3')
+
+#aggregate (TISSUE)
+aggregateTISSUE = aggregate (.~Article1Meta$TISSUE,Article1OTU, sum)
+
 
 
 
