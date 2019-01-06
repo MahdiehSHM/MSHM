@@ -1443,20 +1443,24 @@ ggplot(eample1,aes(x = HOST, y = value,fill = Order)) +
   xlab("Host plant species")+ ylab("Proportional frequency")+
   labs(fill = "Order")
 
+#########################################################
+#########################################################
+#########################################################
+# phylogenic tree for the article
+
 
 #### ggtree!
 #install ggtree
-source("https://bioconductor.org/biocLite.R")
+#source("https://bioconductor.org/biocLite.R")
 # biocLite("BiocUpgrade") # you may need this
-biocLite("ggtree")
+#biocLite("ggtree")
 library(ggtree)
 library(tidyverse)
 
 #loaded your tree
 treeDP <- read.tree("A.tree")
-ggplot(treeDP) + geom_tree() + theme_tree()
-ggtree(treeDP)
 
+ggplot(treeDP) + geom_tree() + theme_tree()
 #Add a tree scale
 ggtree(treeDP) + geom_treescale()
 ggtree(treeDP) + theme_tree2()
@@ -1464,7 +1468,7 @@ ggtree(treeDP) + theme_tree2()
 #turn your tree into a cladogram
 ggtree(treeDP, branch.length="none")
 
-ggtree(treeDP, branch.length="none", color="red", size=2, linetype=2)
+ggtree(treeDP, branch.length="none", color="red", size=1, linetype=1)
 
 #turn your tree into circular layout
 ggtree (treeDP, layout="circular") + ggtitle("(Phylogram) circular layout")
@@ -1491,25 +1495,34 @@ ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="re
 geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
 xlim(0, 15) + theme_tree()
 
-
 ggtree(treeDP) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
 
-
-
 #Plot tree with other data
-ggtree(tree)
-TreeFile <- read.csv("Tree.csv")
-p2 <- facet_plot(tree, panel="dot", data=Tree, geom=geom_point, aes(x=val), color='red3')
+#read the help first!!!!!!!!!!!!!!!!
+?facet_plot
 
-#aggregate (TISSUE)
-aggregateTISSUE = aggregate (.~Article1Meta$TISSUE,Article1OTU, sum)
+#this shows the tip lables
+d = fortify(treeDP)
+d = subset(d, isTip)
+d2<-with(d, label[order(y, decreasing=T)])
+
+#extract and use in data for ploting
+write.csv(d2, file = "tiplab.csv")
+
+# modified data import
+Treedata1 <- read.csv("Tree.csv")
+View(Treedata1)
+
+tree.p<-ggtree(treeDP)
+# now plot toghether
+tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
+           aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
+
+tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment, 
+           aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
+facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
+                    aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
 
 
-
-
-
-
-
-
-
-
+facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
+                    aes(x=0),color='blue')
