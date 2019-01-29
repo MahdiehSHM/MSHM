@@ -1,5 +1,5 @@
-##################################
-## Pakages we need for the analysis
+
+
 library(mvabund)
 library(vegan)
 library(coda)
@@ -9,151 +9,6 @@ library(boral)
 library(effects)
 library(MASS)
 library(ggplot2)
-
-##################################
-## DATA Input
-
-data <- read.csv("MSHM.csv",header = T, row.names = 1)
-otu <- read.csv(file="OTU.csv",header = T, row.names = 1)
-str(data)
-str(otu)
-summary(otu)
-summary(data)
-
-######## Temperature as fector:
-data$TEMP<-as.factor(data$TEMP)
-######## MERG the OTU abundance data by 4
-S1<-seq(1,121920,4)
-S2<-seq(4,121920,4)
-O1<-matrix(0,length(S1),133)
-for (i in 1:length(S1)) {
-O1[i,]<-colSums(otu[S1[i]:S2[i],])}
-
-########now convert to data frame and rename the columns
-OTUabund<-data.frame(O1)
-class(OTUabund)
-colnames(OTUabund)=colnames(otu)
-name<- row.names(data)
-row.names(OTUabund)<- name[1:30480]
-summary(OTUabund)
-########the abundance data is now saved under object name: OTUabund
-
-######## Merging METADATA
-S1<-seq(1,121920,4)
-S2<-seq(4,121920,4)
-D<-matrix(0,length(S1),7)
-for (i in 1:length(S1)) {
-  D[i,1]<-noquote(paste(data[S2[i],1]))
-  D[i,2]<-noquote(paste(data[S2[i],2]))
-  D[i,3]<-noquote(paste(data[S2[i],3]))
-  D[i,4]<-noquote(paste(data[S2[i],4]))
-  D[i,5]<-noquote(paste(data[S2[i],5]))
-  D[i,6]<-noquote(paste(data[S2[i],6]))
-  D[i,7]<-noquote(paste(data[S2[i],7]))
-  }
-MetaData<-data.frame(D)
-class(MetaData)
-colnames(MetaData)=colnames(data)
-row.names(MetaData)<- name[1:30480]
-summary(MetaData)
-######## the merged metadata is now saved under object named: MetaData
-
-######## calculating Isolation Rate for each sample, We need this for diversity estimations
-isolationRate= apply(OTUabund,1, sum)
-MetaData = cbind(MetaData, IR = isolationRate)
-######## now check the MetaData object to see that a new variable is added "IR"
-###Exporting as csv files
-
-write.csv(MetaData,file="MataDataMerg.csv")
-write.csv(OTUabund, file="OTUabundMerg.csv")
-##############################################
-##### IR histograms for each variable/factor
-##############################################
-
-hist(MetaData $ IR) 
-hist(log(MetaData $ IR))
-hist(log(MetaData $ IR), prob=TRUE)
-hist(log(MetaData $ IR), prob=TRUE, breaks=20)
-
-boxplot(IR ~ SITE, data = MetaData)
-boxplot(IR ~ SOIL, data = MetaData)
-boxplot(IR ~ TIME, data = MetaData)
-boxplot(IR ~ HOST, data = MetaData)
-boxplot(IR ~ TISSUE, data = MetaData)
-boxplot(IR ~ TEMP, data = MetaData)
-boxplot(IR ~ MEDIA, data = MetaData)
-
-
-##############################################
-##### Diversity Indices
-##############################################
-########Fixing Time levels:
-levels(MetaData$TIME)<- list("W2015"=c("2015-winter","2015-Winter"),"S2016"="2016-Summer",
-                             "W2016"="2016-Winter","S2017"="2017-Summer")
-#Check and see if it worked?
-summary(MetaData)
-
-######## Richness (Species number)#################
-######## Richness is the nmber of culture observations in the samples. 
-######## Some samples had more than one observed species.
-hist(isolationRate)
-
-########  For the evaluation of richness we need to remove the samples with zero observations.
-NotZero = isolationRate > 0 
-########filter for zero-observation samples
-######## Keep only the samples with at least one observed species
-AbundNotZero=OTUabund[NotZero,]
-
-######## Richness in the samples
-Richness = specnumber(AbundNotZero)
-hist(Richness)
-hist(log(Richness))
-
-######## Remove the samples with zero observation from the metadata
-MetaRich = MetaData[NotZero,]
-
-######## Shannon and Simpson indices####################
-######## Keep only samples with at least two OTUs
-RichNotOne = Richness > 1
-AbundNotOne=AbundNotZero[RichNotOne,]
-
-######## This keeps observations with at least two OTUs
-MetaNotOne = MetaRich[RichNotOne,] 
-
-######## Calculate diversity indices
-shannon = diversity(AbundNotOne,index = "shannon")
-simpson = diversity(AbundNotOne,index = "simpson")
-hist(shannon)
-hist(simpson)
-hist(log(shannon))
-hist(log(simpson))
-
-######## Aggregate of 3 Fungi(Periconia macrospinosa,Neocamarosporium chichastianum and Neocamarosporium.goegapense)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~HOST, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~TISSUE, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~SOIL, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~SITE, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~TIME, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~TEMP, data = MetaData, sum)
-aggregate(OTUabund $ ZEE.se11.Periconia.macrospinosa ~MEDIA, data = MetaData, sum)
-
-
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~SITE, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~TIME, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~TEMP, data = MetaData, sum)
-aggregate(OTUabund $ LREwh64..Neocamarosporium.chichastianum ~MEDIA, data = MetaData, sum)
-
-
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~HOST, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TISSUE, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~SOIL, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~SITE, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TIME, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~TEMP, data = MetaData, sum)
-aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData, sum)
 
 #################################################
 #### Article 1
@@ -180,12 +35,12 @@ aggregate(OTUabund $ SREwh19.Neocamarosporium.goegapense ~MEDIA, data = MetaData
 #the Kruskal–Wallis rank sum test
 # Taxonomic classification of isolates
 
-  
+
 ####### Subsetting the data for ARTICLE1
 Article1M = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
-                                            "Launaea acunthodes",
-                                            "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                            "Tamrix hispida"))
+                                        "Launaea acunthodes",
+                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                        "Tamrix hispida"))
 # some how this still shows the 40 hists!! I am trying another way to fix it!
 levels(Article1M$SITE)
 levels(Article1M$HOST)
@@ -355,7 +210,7 @@ var(Richness.art1)
 
 ### stepwise model selection with all variables
 R.m<-glm(formula =Richness.art1~SOIL+HOST+TISSUE+TIME+SITE+MEDIA+TEMP ,data = MetaRich.ART1,
-        family=poisson(link = "log"))
+         family=poisson(link = "log"))
 
 stepAIC(R.m,direction="backward")
 # try couple of interactions
@@ -440,7 +295,7 @@ memory.limit(size=30000)
 tran.abund.notzero<-decostand(AbundNotZero.art1,method="hellinger")
 #PERMANOVA
 comm.anova<-adonis(formula=tran.abund.notzero~SOIL*TISSUE+HOST+TIME+SITE, data= MetaRich.ART1,
-       permutations = 999, method = "bray",by=NULL)
+                   permutations = 999, method = "bray",by=NULL)
 # if you get an error about the memory allocation run the above lines:memory.limit
 
 
@@ -477,11 +332,11 @@ p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
 
 ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,lwd = 3,alpha = 200, 
             draw="polygon", col= "Blue",border="Blue",
-             kind="se", conf=0.95,show.groups=(c("Saline")))
+            kind="se", conf=0.95,show.groups=(c("Saline")))
 
 ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,alpha = 200, 
             draw="polygon", col= "red",lwd = 3,border="red",
-             kind="se", conf=0.95,show.groups=(c("Arid")))
+            kind="se", conf=0.95,show.groups=(c("Arid")))
 legend("bottomright", c("Saline soil","Arid soil"), 
        fill=c("blue","red"),
        border="white", bty="n")
@@ -574,7 +429,7 @@ legend("bottomright", c("Summer 2016", "Summer 2017" ,"Winter 2015" ,"Winter 201
 ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
 
 OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
-                           SITE,data = MetaRich.ART1,link = "log")
+                     SITE,data = MetaRich.ART1,link = "log")
 OTU1.anov<-anova(OTU1.model,test = "Chisq")
 
 OTU2.model<-glm.nb(formula =AbundNotZero.art1$TPEsh28.Humicola.fuscoatra~SOIL*TISSUE+ HOST+ TIME+
@@ -610,7 +465,7 @@ OTU9.model<-glm.nb(formula =AbundNotZero.art1$RAE.sh12.Acrocalymma.vagum~SOIL*TI
 OTU9.anov<-anova(OTU9.model,test = "Chisq")
 
 OTU10.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh14.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
+                      SITE,data = MetaRich.ART1,link = "log")
 OTU10.anov<-anova(OTU10.model,test = "Chisq")
 
 OTU11.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh40.Dimorphosporicola.tragani~SOIL*TISSUE+ HOST+ TIME+
@@ -799,7 +654,7 @@ OTU49.anov<-anova(OTU49.model,test = "Chisq")
 
 ?varpart
 var.art1<-varpart(Article1OTU,Article1Meta$SOIL,
-                 Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
+                  Article1Meta$HOST, Article1Meta$SITE,Article1Meta$TISSUE)
 plot(var.art1)
 
 # >0 samles only
@@ -814,15 +669,15 @@ var.art3<-varpart(AbundNotZero.art1,MetaRich.ART1$TIME,
 plot(var.art3)
 ##varpart with models
 var.part4<- varpart(AbundNotZero.art1,~MetaRich.ART1$TIME+
-                    MetaRich.ART1$HOST+ MetaRich.ART1$SITE+MetaRich.ART1$TISSUE,
-                   ~env.Rich.ART1$Ece+env.Rich.ART1$pHe+env.Rich.ART1$Cle+env.Rich.ART1$EC,
-                   transfo = "hellinger")
+                      MetaRich.ART1$HOST+ MetaRich.ART1$SITE+MetaRich.ART1$TISSUE,
+                    ~env.Rich.ART1$Ece+env.Rich.ART1$pHe+env.Rich.ART1$Cle+env.Rich.ART1$EC,
+                    transfo = "hellinger")
 plot(var.part4)
 
 #with soil*tissue
 var.part5<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,MetaRich.ART1$TIME,
-                  MetaRich.ART1$SITE,~MetaRich.ART1$SOIL*MetaRich.ART1$TISSUE, 
-                  transfo="hellinger")
+                   MetaRich.ART1$SITE,~MetaRich.ART1$SOIL*MetaRich.ART1$TISSUE, 
+                   transfo="hellinger")
 plot(var.part5,Xnames = c("Host","Time","Site","Soil*Organ"),
      bg=c("grey20","green","blue","red"),alpha=100)
 
@@ -836,9 +691,9 @@ env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
 
 #subset for this article:
 env.data.art1<- subset (env.data, MetaData$HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
-                                           "Launaea acunthodes",
-                                           "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                           "Tamrix hispida"))
+                                                     "Launaea acunthodes",
+                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                                     "Tamrix hispida"))
 row.names(env.data.art1)==row.names(Article1Meta)
 
 # remove thesamples with zero obs for PCA
@@ -877,7 +732,7 @@ labs <- rownames(rda.scores)
 #labs<-c("Ece","EC","Cle","pHe")
 text(ordiArrowTextXY(mul * rda.scores, labs), labs)
 legend("topleft", c("Arid soil","Saline soil"), 
-             col=c("red","blue"),
+       col=c("red","blue"),
        pch = c(16,17), border="white", bty="n")
 
 #### SOIL DATA VARATION PARTITIONING
@@ -1123,9 +978,9 @@ colnames(Article1OTU)
 
 
 Article1Order = subset (orderabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                                     "Launaea acunthodes",
-                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                                   "Tamrix hispida"))
+                                                         "Launaea acunthodes",
+                                                         "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
+                                                         "Tamrix hispida"))
 # check to see if it worked 
 rownames(Article1Order)==rownames(Article1Meta)
 class(Article1Order)
@@ -1135,14 +990,14 @@ View(Article1Order)
 order.colsum<-colSums(Article1Order)
 order.slic<- c(265,170,589,301,1300,443,4944,88,1736,89,741)  #get the valus from order.colsum
 order.lbls<- c("Eurotiales","Diaporthales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
-           "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
+               "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
 
 order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
 order.lbls <- paste(order.lbls, order.Percent)
 order.lbls<-paste(order.lbls,"%",sep="")
 pie(order.slic,labels =order.lbls, col = c("firebrick","indianred1","skyblue1","magenta",
-                                   "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                   "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+                                           "deeppink1","mediumblue","royalblue1","orchid1","cyan",
+                                           "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
 
 # aggregate the Order abundance for all variables
 aggregateHOST = aggregate (.~Article1Meta$HOST,Article1Order, sum)
@@ -1154,7 +1009,7 @@ View(aggregateSITE)
 
 ####### plot porpotion of each order  (HOST)
 dat.Order.Host <- read.table (text = "    A.persarum A.sieberi  H.ammodendron L.acunthodes P.stephaniana S.incanescens S.rosmarinus T.hispida
-                  Eurotiales  0 0  170 0 95 0 0 0
+                              Eurotiales  0 0  170 0 95 0 0 0
                               Diaporthales   0 0 170 0 0 0 0 0 
                               Ophiostomatales   0 0 589 0 0 0 0 0
                               Boletales   0 0 301 0 0 0 0 0
@@ -1180,17 +1035,17 @@ ggplot(datH,aes(x = variable, y = value,fill = ind)) +
 
 # plot porpotion of each order  (SITE)
 dat.Order.Site <- read.table (text = " Garmsar  HajAli  HozeSoltan  Maranjab  RigBoland
-                  Eurotiales  265 0 0 0 0
-                  Diaporthales 170 0 0 0 0   
-                  Ophiostomatales  0 0 589 0 0  
-                  Boletales 0 0 301 0 0  
-                  Amphisphaeriales  0 0 89 0 0 
-                  Saccharomycetales 0 0 0 0 88
-                  Hypocreales 0 196 165 0 82
-                  Pleosporales 180 639 2959 1025 141
-                  Xylariales 0 0 1031 269 0 
-                  Sordariales 0 135 625 796 180 
-                  Unknown 0 1313 98 0 515 ",sep = "",header = TRUE)
+                              Eurotiales  265 0 0 0 0
+                              Diaporthales 170 0 0 0 0   
+                              Ophiostomatales  0 0 589 0 0  
+                              Boletales 0 0 301 0 0  
+                              Amphisphaeriales  0 0 89 0 0 
+                              Saccharomycetales 0 0 0 0 88
+                              Hypocreales 0 196 165 0 82
+                              Pleosporales 180 639 2959 1025 141
+                              Xylariales 0 0 1031 269 0 
+                              Sordariales 0 135 625 796 180 
+                              Unknown 0 1313 98 0 515 ",sep = "",header = TRUE)
 
 View(dat.Order.Site)
 datS <- melt(cbind(dat.Order.Site, ind = rownames(dat.Order.Site)), id.vars = c('ind'))
@@ -1258,17 +1113,17 @@ ggplot(datSO,aes(x = variable, y = value,fill = ind)) +
 # plot porpotion of each order  (TISSUE)
 
 dat.Order.Tissue <- read.table (text = "  Branch  Leaf  Root
-                              Eurotiales  120 145 0
-                              Diaporthales 120 50 0  
-                              Ophiostomatales  153 136 300 
-                              Boletales 301 0 0 
-                              Amphisphaeriales  1 88 0
-                              Saccharomycetales 18 31 39
-                              Hypocreales 38 24 381
-                              Pleosporales 606 1867 2471 
-                              Xylariales 110 323 867
-                              Sordariales 802 671 263
-                              Unknown 453 285 3",sep = "",header = TRUE)
+                                Eurotiales  120 145 0
+                                Diaporthales 120 50 0  
+                                Ophiostomatales  153 136 300 
+                                Boletales 301 0 0 
+                                Amphisphaeriales  1 88 0
+                                Saccharomycetales 18 31 39
+                                Hypocreales 38 24 381
+                                Pleosporales 606 1867 2471 
+                                Xylariales 110 323 867
+                                Sordariales 802 671 263
+                                Unknown 453 285 3",sep = "",header = TRUE)
 
 
 datTI <- melt(cbind(dat.Order.Tissue , ind = rownames(dat.Order.Tissue)), id.vars = c('ind'))
@@ -1488,12 +1343,12 @@ ggtree(treeDP) + geom_cladelabel(node=17, label="APEsh6", color="blue")
 ggtree(treeDP) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
 
 ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
-geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
+  geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
 
 
 ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
-geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
-xlim(0, 15) + theme_tree()
+  geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
+  xlim(0, 15) + theme_tree()
 
 ggtree(treeDP) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
 
@@ -1516,17 +1371,17 @@ View(Treedata1)
 tree.p<-ggtree(treeDP)
 # now plot toghether
 tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
-           aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
+                    aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
 
 tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment, 
-           aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
+                    aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
 facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
-                    aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
+           aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
 
 ### fixed the points size
 facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
-
-                    aes(x=0,size=val), color='blue')+ theme(legend.position="right")
+           
+           aes(x=0,size=val), color='blue')+ theme(legend.position="right")
 
 #load the new tree
 TREEARTICLE1 <- read.tree("Tree.nxs.tree")
@@ -1548,4 +1403,6 @@ p + geom_nodepoint()
 p + geom_tippoint()
 p + geom_tiplab()
 p + geom_tiplab()+ geom_nodepoint() 
+
+
 
