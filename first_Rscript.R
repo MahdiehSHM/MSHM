@@ -1525,4 +1525,33 @@ facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment,
 
 ### fixed the points size
 facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
+
                     aes(x=0,size=val), color='blue')+ theme(legend.position="right")
+
+#loaded your tree
+TREEARTICLE1 <- read.tree("Tree.nxs.tree")
+
+ggplot(TREEARTICLE1) + geom_tree() + theme_tree()
+#Add a tree scale
+ggtree(TREEARTICLE1) + geom_treescale()
+
+#turn your tree into a cladogram
+ggtree(TREEARTICLE1, branch.length="none")
+
+ggtree(TREEARTICLE1, branch.length="none", color="red", size=1, linetype=1)
+
+#turn your tree into circular layout
+ggtree (TREEARTICLE1, layout="circular") + ggtitle("(Phylogram) circular layout")
+
+p <- ggtree(TREEARTICLE1)
+p + geom_nodepoint()
+p + geom_tippoint()
+p + geom_tiplab()
+p + geom_tiplab()+ geom_nodepoint() 
+
+
+
+
+
+
+>>>>>>> 4d4ed2ea5821fde3f746b517b1408c5b9c678b0e
