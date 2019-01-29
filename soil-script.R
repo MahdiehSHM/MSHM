@@ -36,58 +36,33 @@ library(ggplot2)
 # Taxonomic classification of isolates
 
 
-####### Subsetting the data for ARTICLE1
-Article1M = subset (MetaData, HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
-                                        "Launaea acunthodes",
-                                        "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                        "Tamrix hispida"))
-# some how this still shows the 40 hists!! I am trying another way to fix it!
-levels(Article1M$SITE)
-levels(Article1M$HOST)
-write.csv(Article1M, file = "testmetadata.csv")
+####### new subset : remove GARMSAR data from Article1Meta&Article1OTU
 
-Article1Meta<-read.csv("testmetadata.csv",header = T, row.names = 1)
 
-# remane the long variable levels
+# subset OTU abundance data FIRST
 levels(Article1Meta$SITE)
-levels(Article1Meta$HOST)
-levels(Article1Meta$HOST)<- list("A.pers"="Alhagi persarum","A.sieb"="Artemisia sieberi",
-                                 "H.ammo"="Haloxylon ammodendron","L.acun"="Launaea acunthodes",
-                                 "P.step"="Prosopis stephaniana","S.inca"="Salsola incanescens",
-                                 "S.rosm"="Seidlitzia rosmarinus","T.hisp"="Tamrix hispida")
+Article1OTU.n = subset (Article1OTU, Article1Meta$SITE!="Garmsar")
+Article1OTU<-Article1OTU.n[, colSums(Article1OTU.n != 0) > 0]
+#export the abundance data of article 1:
+write.csv(Article1OTU,file = "art1.abundance.cav")
+#this is the abundance data for article 1 :art1.abundance.cav
+#SUBSET METADATA
+Article1data <- subset(Article1Meta, Article1Meta$SITE!="Garmsar")
+write.csv(Article1data, file = "art1data.csv")
+#this is the metadata for article 1 :art1data.csv
 
-levels(Article1Meta$SOIL)<-list("Arid"="Arid soil","Saline"="Saline Soil")
-levels(Article1Meta$TISSUE)
-levels(Article1Meta$MEDIA)<-list("PDA"= "PDA", "PDA+Plant"="PDA+Plant extract")
-## Subset OTU frequency dataframe
-Article1OTU = subset (OTUabund, MetaData$HOST %in% c("Alhagi persarum", "Artemisia sieberi", "Haloxylon ammodendron", 
-                                                     "Launaea acunthodes",
-                                                     "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
-                                                     "Tamrix hispida"))
-# check to see if it worked 
-rownames(Article1OTU)==rownames(Article1Meta)
-class(Article1Meta)
-class(Article1OTU)
-View(Article1OTU)
-View(Article1Meta)
-colnames(Article1OTU)
-#FROM NOW ON: WE ONLY USE THESE TWO DATA FRAMES FOR ARTICLE 1: Article1OTU & Article1Meta
+# I am using the same name for metada object this way I only need to run everything again 
+#to have the new results. this overwrites all the objects we had in the old script
+# if you need the old results you should run the codes in first-Rscript again
 
-# What OTUs are in this project?
+Article1Meta<-read.csv(file = "art1data.csv",header = TRUE, row.names = 1)
+#now we have 4 sites: 2 have salin soil and the other 2 have dry soil
+levels(Article1Meta$SITE)
 
-OTUsINarticl1<-colSums(Article1OTU)
-Article1OTU<-Article1OTU[, colSums(Article1OTU != 0) > 0]
-# OTU frequencies Article 1
-colSums(Article1OTU)
-#OTU list Article 1
-colnames(Article1OTU)
 
-### chosen OTU for other experiments:LREwh64..Neocamarosporium.chichastianum
-# isolated from?
-aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$SOIL, Article1OTU, sum)
-aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$HOST, Article1OTU, sum)
-aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TISSUE, Article1OTU, sum)
-aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TIME, Article1OTU, sum)
+
+
+
 
 
 #############################################################################
