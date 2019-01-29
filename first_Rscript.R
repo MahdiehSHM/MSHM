@@ -1523,6 +1523,6 @@ tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment,
 facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
                     aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
 
-
+### fixed the points size
 facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
-                    aes(x=0),color='blue')
+                    aes(x=0,size=val), color='blue')+ theme(legend.position="right")
