@@ -268,7 +268,7 @@ legend("bottomright", c("Summer","Winter"),
 ########################################################
 ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
 
-OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum~SOIL*TISSUE+ HOST+ TIME+
+OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum ~ SOIL*TISSUE+ HOST+ TIME+
                      SITE,data = MetaRich.ART1,link = "log")
 OTU1.anov<-anova(OTU1.model,test = "Chisq")
 
@@ -316,9 +316,6 @@ OTU12.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh66.Comoclathris.italica~SOI
                       SITE,data = MetaRich.ART1,link = "log")
 OTU12.anov<-anova(OTU12.model,test = "Chisq")
 
-OTU13.model<-glm.nb(formula =AbundNotZero.art1$PSE.ss7.Penicillium.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU13.anov<-anova(OTU13.model,test = "Chisq")
 
 OTU14.model<-glm.nb(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
@@ -344,9 +341,6 @@ OTU19.model<-glm.nb(formula =AbundNotZero.art1$HAE.se5.Camarosporomyces.flavigen
                       SITE,data = MetaRich.ART1,link = "log")
 OTU19.anov<-anova(OTU19.model,test = "Chisq")
 
-OTU20.model<-glm.nb(formula =AbundNotZero.art1$HAE.ss4.Cytospora.chrysosperma~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU20.anov<-anova(OTU20.model,test = "Chisq")
 
 OTU21.model<-glm.nb(formula =AbundNotZero.art1$HAE.we5.Coniolariella.sp.~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
@@ -395,10 +389,6 @@ OTU31.anov<-anova(OTU31.model,test = "Chisq")
 OTU32.model<-glm.nb(formula =AbundNotZero.art1$SREwh18...Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
 OTU32.anov<-anova(OTU32.model,test = "Chisq")
-
-OTU33.model<-glm.nb(formula =AbundNotZero.art1$LAEsh5.Coniolariella.ershadii~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1 = "log")
-OTU33.anov<-anova(OTU33.model,test = "Chisq")
 
 OTU34.model<-glm(formula =AbundNotZero.art1$LAE.se3.Neosetophoma.lunariae~SOIL*TISSUE+ HOST+ TIME+
                    SITE,data = MetaRich.ART1, family=poisson(link = "log"))
@@ -463,6 +453,8 @@ OTU48.anov<-anova(OTU48.model,test = "Chisq")
 OTU49.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh3.Trichoderma.rifaii~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
 OTU49.anov<-anova(OTU49.model,test = "Chisq")
+
+
 
 ### MAHDIEH!!!!
 # what are these numbers???? 
@@ -823,7 +815,7 @@ View(Article1Order)
 # creat a Pie chart 
 order.colsum<-colSums(Article1Order)
 order.slic<- c(589,301,1300,443,4764,88,1736,89,741)  #get the valus from order.colsum
-order.lbls<- c("Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
+order.lbls<- c("Eurotiales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
                "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
 
 order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
