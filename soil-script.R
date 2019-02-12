@@ -63,9 +63,24 @@ levels(Article1Meta$SITE)
 #############################################################################
 ######## Step 3: Find the right kind of analysis for each research questions:
 
+
+#######################################
+#IR model
+#######################################
+hist(Article1Meta$IR)
+IR.m<-glm(formula =IR~SOIL*TISSUE+HOST+season+SITE,data = Article1Meta,
+                family=poisson(link = "log"))
+#MODEL SUMMARY FOR REACHNESS
+IR.summ<-summary(IR.m)
+#ANOVA RESULTS FOR RICHNESS
+IR.anova<-anova(IR.m, test = "Chisq")
+
+
 #########################################################
 #########################################################
 ##### Diversity indices
+#########################################################
+#########################################################
 #For diversity we are using model based aproaches:
 ## I am using the codes that we wrote earlier:
 ## first delete the IR in metadata.not sure if it is ok
@@ -528,15 +543,12 @@ var.part6<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,
 plot(var.part6,Xnames = c("Host","Site","Soil","Organ"),
      bg=c("grey20","green","blue","red"),alpha=100)
 
-#remove season keep soil*tissue
-var.part7<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,
+# time and soil*tissue
+var.part7<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,MetaRich.ART1$TIME,
                    MetaRich.ART1$SITE,~MetaRich.ART1$SOIL*MetaRich.ART1$TISSUE, 
                    transfo="hellinger")
-plot(var.part7,Xnames = c("Host","Site","Soil*Organ"),
-     bg=c("green","blue","red"),alpha=100)
-
-
-
+plot(var.part7,Xnames = c("Host","Season","Site","Soil*Organ"),
+     bg=c("green","blue","red","black"),alpha=100)
 
 ##############################################
 ##############################################
@@ -566,7 +578,8 @@ env.Rich.ART1$Cle<-as.numeric(env.Rich.ART1$Cle)
 ##### PCA (Principal Components Analysis) analysis 
 #use rda fun in vegan for PCA:
 ?rda()
-rda.art1<-rda(AbundNotZero.art1~.,data =env.Rich.ART1)
+rda.art1<-rda(AbundNotZero.art1~Ece + EC + pHe +Cle +  pH.1.5 + OM + OC + Nt + P + P2O5 + M + SP +
+                M.SP,data =env.Rich.ART1)
 head(summary(rda.art1))
 
 #Plot PCA results
