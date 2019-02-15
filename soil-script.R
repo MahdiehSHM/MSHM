@@ -2,9 +2,6 @@
 ############################################
 # desert endophytes
 ############################################
-
-
-
 library(vegan)
 library(rjags)
 library(MASS)
@@ -155,6 +152,7 @@ AIC(Richness.m)
 par(mfrow=(c(2,2)))
 plot(Richness.m)
 dev.off()
+
 
 ################
 # SHANNON MODEL
@@ -331,7 +329,6 @@ OTU12.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh66.Comoclathris.italica~SOI
                       SITE,data = MetaRich.ART1,link = "log")
 OTU12.anov<-anova(OTU12.model,test = "Chisq")
 
-
 OTU14.model<-glm.nb(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
 OTU14.anov<-anova(OTU14.model,test = "Chisq")
@@ -355,7 +352,6 @@ OTU18.anov<-anova(OTU18.model,test = "Chisq")
 OTU19.model<-glm.nb(formula =AbundNotZero.art1$HAE.se5.Camarosporomyces.flavigenus~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
 OTU19.anov<-anova(OTU19.model,test = "Chisq")
-
 
 OTU21.model<-glm.nb(formula =AbundNotZero.art1$HAE.we5.Coniolariella.sp.~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
@@ -404,6 +400,10 @@ OTU31.anov<-anova(OTU31.model,test = "Chisq")
 OTU32.model<-glm.nb(formula =AbundNotZero.art1$SREwh18...Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
                       SITE,data = MetaRich.ART1,link = "log")
 OTU32.anov<-anova(OTU32.model,test = "Chisq")
+
+OTU33.model<-glm.nb(formula =AbundNotZero.art1$LAEsh5.Coniolariella.ershadii~SOIL*TISSUE+ HOST+ TIME+
+                      SITE,data = MetaRich.ART1 = "log")
+OTU33.anov<-anova(OTU33.model,test = "Chisq")
 
 OTU34.model<-glm(formula =AbundNotZero.art1$LAE.se3.Neosetophoma.lunariae~SOIL*TISSUE+ HOST+ TIME+
                    SITE,data = MetaRich.ART1, family=poisson(link = "log"))
@@ -470,6 +470,43 @@ OTU49.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh3.Trichoderma.rifaii~SOIL*T
 OTU49.anov<-anova(OTU49.model,test = "Chisq")
 
 
+order.colsum<-colSums(AbundNotZero.art1)
+
+########################################
+########################################
+# creat a Pie chart (Order)
+OTU.colsum<-colSums(AbundNotZero.art1)
+
+OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
+OTU.lbls<- c("Rosellinia limonispora","Acrocalymma vagum","Dimorphosporicola tragani","Raffaelea montetyi",
+               "Paracamarosporium hawaiiense","Fusariella sinensis","Humicola fuscoatra",
+               "Neocamarosporium chichastianum", "Camarosporomyces flavigenus",
+               "Preussia sp.","Coniophora marmorata", "Other")
+
+OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
+OTU.lbls <- paste(OTU.lbls, OTU.Percent)
+order.lbls<-paste(OTU.lbls,"%",sep="")
+pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
+                                           "deeppink1","mediumblue","royalblue1","orchid1","cyan",
+                                           "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+########################################
+######################################## 2 the most frequently isolated species
+
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SITE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TIME, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TEMP, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~MEDIA, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SOIL, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SITE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TIME, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TEMP, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~MEDIA, data = Article1Meta, sum)
 
 ### MAHDIEH!!!!
 # what are these numbers???? 
@@ -653,6 +690,8 @@ anova(glm.Lshoot, test = "Chisq")
 par(mfrow = c(2, 2))
 plot(glm.Lshoot)
 
+aggregate(glm.Lshoot)
+
 glm.Wshoot<-glm(Wshoot~Fungi*Drought*Salinity,data = GH.data, family =poisson(link = "log"))
 summary(glm.Wshoot)
 anova(glm.Wshoot, test = "Chisq")
@@ -818,25 +857,25 @@ class(Article1Order)
 colnames(Article1Order)
 colSums(Article1Order)
 # remove zero observed orders
-Article1Order$Eurotiales<-NULL
 Article1Order$Diaporthales<-NULL
 View(Article1Order)
 ##################################################
 ####################################################
 #Mahdie pls Check this! and make sure of the coloring
 
-# creat a Pie chart 
+# creat a Pie chart (Order)
 order.colsum<-colSums(Article1Order)
-order.slic<- c(589,301,1300,443,4764,88,1736,89,741)  #get the valus from order.colsum
+order.slic<- c(51, 589,301,1300,443,4764,88,1736,89,741)  #get the valus from order.colsum
 order.lbls<- c("Eurotiales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
                "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
 
 order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
 order.lbls <- paste(order.lbls, order.Percent)
 order.lbls<-paste(order.lbls,"%",sep="")
-pie(order.slic,labels =order.lbls, col = c("skyblue1","magenta",
+pie(order.slic,labels =order.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                            "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+
 
 ##############################################
 ################################################
