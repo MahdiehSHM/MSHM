@@ -586,6 +586,7 @@ plot(var.part7,Xnames = c("Host","Season","Site","Soil*Organ"),
 ##############################################
 # data input
 env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
+view (env.data)
 
 #subset for this article:
 env.data.ar1<- subset (env.data, MetaData$HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
