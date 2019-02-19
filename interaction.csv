@@ -1,0 +1,19 @@
+Soil,Organ,Index,value
+Dry soil,Twig,Simpson iIndex,0.467711514
+Saline Soil,Twig,Simpson iIndex,0.513129482
+Dry soil,Leaf,Simpson iIndex,0.491423533
+Saline Soil,Leaf,Simpson iIndex,0.517896004
+Dry soil,Root,Simpson iIndex,0.438447749
+Saline Soil,Root,Simpson iIndex,0.501682984
+Dry soil,Twig,Shannon index,0.659870904
+Saline Soil,Twig,Shannon index,0.794630465
+Dry soil,Leaf,Shannon index,0.725252259
+Saline Soil,Leaf,Shannon index,0.798284659
+Dry soil,Root,Shannon index,0.62846338
+Saline Soil,Root,Shannon index,0.764449274
+Dry soil,Twig,Isolation rate,0.821895425
+Saline Soil,Twig,Isolation rate,1.413888889
+Dry soil,Leaf,Isolation rate,0.953431373
+Saline Soil,Leaf,Isolation rate,1.924074074
+Dry soil,Root,Isolation rate,0.463235294
+Saline Soil,Root,Isolation rate,1.476851852
