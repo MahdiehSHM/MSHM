@@ -591,23 +591,198 @@ pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                            "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
 ########################################
-######################################## 2 the most frequently isolated species
-# 
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SITE, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TIME, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TEMP, data = Article1Meta, sum)
-# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~MEDIA, data = Article1Meta, sum)
-# 
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~HOST, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TISSUE, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SOIL, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SITE, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TIME, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TEMP, data = Article1Meta, sum)
-# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~MEDIA, data = Article1Meta, sum)
+######################################## Aggregate for ggtree
+
+aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ TPEsh28.Humicola.fuscoatra ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ TPEsh28.Humicola.fuscoatra ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ TPEsh28.Humicola.fuscoatra ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ SREwh22.Preussia.minimoides ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh22.Preussia.minimoides ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh22.Preussia.minimoides ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ THE.we10..Aporospora.terricola ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ THE.we10..Aporospora.terricola ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ THE.we10..Aporospora.terricola ~SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ THE.ss3.Fusarium.sp. ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ THE.ss3.Fusarium.sp. ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ THE.ss3.Fusarium.sp. ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ SIE.sh1.Briansuttonomyces.eucalypti ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SIE.sh1.Briansuttonomyces.eucalypti ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SIE.sh1.Briansuttonomyces.eucalypti ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ RAE.sh12.Acrocalymma.vagum ~HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ RAE.sh12.Acrocalymma.vagum ~TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ RAE.sh12.Acrocalymma.vagum ~SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ PSE.wh40.Dimorphosporicola.tragani ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh40.Dimorphosporicola.tragani ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh40.Dimorphosporicola.tragani ~ SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ PSE.wh66.Comoclathris.italica ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh66.Comoclathris.italica ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh66.Comoclathris.italica ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ PSE.we4..Chaetomium.globosum ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.we4..Chaetomium.globosum ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.we4..Chaetomium.globosum ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ PSE.we8.Alternaria.chlamydospora ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.we8.Alternaria.chlamydospora ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.we8.Alternaria.chlamydospora ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ LDE.se7.Coniothyrium.aleuritis ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LDE.se7.Coniothyrium.aleuritis ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LDE.se7.Coniothyrium.aleuritis ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ LAE.se5.Sordaria.humana ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.se5.Sordaria.humana ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.se5.Sordaria.humana ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.se5.Camarosporomyces.flavigenus ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se5.Camarosporomyces.flavigenus ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se5.Camarosporomyces.flavigenus ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.we5.Coniolariella.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.we5.Coniolariella.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.we5.Coniolariella.sp. ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.wh26.Preussia.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh26.Preussia.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh26.Preussia.sp. ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.wh10.Raffaelea.montetyi ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh10.Raffaelea.montetyi ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh10.Raffaelea.montetyi ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.wh65.Coniophora.marmorata ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh65.Coniophora.marmorata ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.wh65.Coniophora.marmorata ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.se9.Chaetomium.nigricolor ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se9.Chaetomium.nigricolor ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se9.Chaetomium.nigricolor ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ HAE.se1.Acrocalymma.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se1.Acrocalymma.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ HAE.se1.Acrocalymma.sp. ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SREwh19.Neocamarosporium.goegapense ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh19.Neocamarosporium.goegapense ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh19.Neocamarosporium.goegapense ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ APEsh6.Dictyosporium.digitatum ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ APEsh6.Dictyosporium.digitatum ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ APEsh6.Dictyosporium.digitatum ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ APE.sh8.Pestalotiopsis.vismiae ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.sh8.Pestalotiopsis.vismiae ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.sh8.Pestalotiopsis.vismiae ~ SOIL, data = Article1Meta, sum) 
+
+aggregate(Article1OTU $ APE.se3.Dactylonectria.macrodidyma ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.se3.Dactylonectria.macrodidyma ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.se3.Dactylonectria.macrodidyma ~ SOIL, data = Article1Meta, sum) 
+
+aggregate(Article1OTU $ APE.sh5.Nigrospora.sphaerica ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.sh5.Nigrospora.sphaerica ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ APE.sh5.Nigrospora.sphaerica ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SREwh18...Preussia.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh18...Preussia.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SREwh18...Preussia.sp. ~ SOIL, data = Article1Meta, sum) 
+
+aggregate(Article1OTU $ LAEsh5.Coniolariella.ershadii ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAEsh5.Coniolariella.ershadii ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAEsh5.Coniolariella.ershadii ~ SOIL, data = Article1Meta, sum) 
+
+aggregate(Article1OTU $ LAE.se3.Neosetophoma.lunariae ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.se3.Neosetophoma.lunariae ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.se3.Neosetophoma.lunariae ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ LAE.SH.7.Muriphaeosphaeria.viburni ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.SH.7.Muriphaeosphaeria.viburni ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.SH.7.Muriphaeosphaeria.viburni ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ LAE.sh1.Acrocalymma.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.sh1.Acrocalymma.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ LAE.sh1.Acrocalymma.sp. ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh30..Preussia.grandispora ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh30..Preussia.grandispora ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh30..Preussia.grandispora ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.ss.4.Neocamarosporium.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ss.4.Neocamarosporium.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ss.4.Neocamarosporium.sp. ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.ws8.Botryotrichum.murorum ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ws8.Botryotrichum.murorum ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ws8.Botryotrichum.murorum ~ SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ SRE.ws10.Sarocladium.kiliense ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ws10.Sarocladium.kiliense ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.ws10.Sarocladium.kiliense ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.wh16.Paracamarosporium.hawaiiense ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.wh16.Paracamarosporium.hawaiiense ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.wh16.Paracamarosporium.hawaiiense ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.wh13.Ovatospora.senegalensis ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.wh13.Ovatospora.senegalensis ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.wh13.Ovatospora.senegalensis ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.we6.Fusariella.sinensis ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.we6.Fusariella.sinensis ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.we6.Fusariella.sinensis ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.we.10.pichia.kudriavzevii ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.we.10.pichia.kudriavzevii ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.we.10.pichia.kudriavzevii ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh9.Preussia.intermedia ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh9.Preussia.intermedia ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh9.Preussia.intermedia ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh4.Penicillium.vinaceum ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh4.Penicillium.vinaceum ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh4.Penicillium.vinaceum ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh3.Trichoderma.rifaii ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh3.Trichoderma.rifaii ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh3.Trichoderma.rifaii ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh7.Chaetomium.cucumericola ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh7.Chaetomium.cucumericola ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh7.Chaetomium.cucumericola ~ SOIL, data = Article1Meta, sum)
+
+aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ SOIL, data = Article1Meta, sum)
+
 
 ### MAHDIEH!!!!
 # what are these numbers???? 
