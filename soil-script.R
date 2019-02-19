@@ -55,8 +55,8 @@ write.csv(Article1data, file = "art1data.csv")
 
 Article1Meta<-read.csv(file = "art1data.csv",header = TRUE, row.names = 1)
 #now we have 4 sites: 2 have salin soil and the other 2 have dry soil
-levels(Article1Meta$SITE)
-
+levels(Article1Meta$SOIL)
+levels(Article1Meta$SOIL)<-list("Dry soil" = "Arid", "Saline soil"= "Saline")
 #############################################################################
 ######## Step 3: Find the right kind of analysis for each research questions:
 
@@ -71,6 +71,17 @@ IR.m<-glm(formula =IR~SOIL*TISSUE+HOST+season+SITE,data = Article1Meta,
 IR.summ<-summary(IR.m)
 #ANOVA RESULTS FOR RICHNESS
 IR.anova<-anova(IR.m, test = "Chisq")
+boxplot(IR~SOIL,data = Article1Meta)
+boxplot(IR~HOST,data = Article1Meta)
+aggregate(IR~HOST,data= Article1Meta,mean )
+aggregate(IR~TISSUE,data= Article1Meta,mean )
+
+
+#plot the interaction between soil and organ
+ggplot (Article1Meta, aes(x=TISSUE,y=IR))+
+  facet_wrap(~SOIL)+ geom_boxplot(position = "dodge", width=0.5) + theme_bw()+
+xlab("Organ type")+ylab("Isolation rate")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))+ theme(legend.position = "non")
+
 
 
 #########################################################
@@ -152,6 +163,10 @@ AIC(Richness.m)
 par(mfrow=(c(2,2)))
 plot(Richness.m)
 dev.off()
+boxplot(Richness.art1~MetaRich.ART1$HOST)
+MetaRich.ART1$richness.art1<-Richness.art1
+aggregate(richness.art1~SITE, data=MetaRich.ART1,mean)
+
 
 
 ################
@@ -171,6 +186,38 @@ simp.sum<-summary(simp.m)
 #ANOVA RESULTS FOR SIMPSON
 simp.anov<-anova(simp.m, test="F")
 AIC(simp.m)
+
+
+#plot the interaction
+dev.off()
+?geom_step()
+MetaNotOne.art1$shannon<-shannon.art1
+MetaNotOne.art1$simpson.art1<-simpson.art1
+
+ggplot (MetaNotOne.art1)+
+  geom_boxplot(aes(x=TISSUE,y=simpson.art1),  width=0.5, position = "dodge") +
+  geom_boxplot(aes(x=TISSUE,y=shannon), width=0.5, position = "dodge")+
+  facet_wrap(~SOIL)+ 
+  xlab("Organ type")+ylab("Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
+
+
+# فعلا جدا جدا میکشیم تا وقتیکه مشکل حل بشه
+#simpson
+ggplot (MetaNotOne.art1)+
+  geom_boxplot(aes(x=TISSUE,y=simpson.art1),  width=0.5, position = "dodge") +
+  facet_wrap(~SOIL)+ 
+  xlab("Organ type")+ylab("Simpson Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
+aggregate(simpson.art1~SOIL+TISSUE, data = MetaNotOne.art1, mean)
+
+#shanon
+ggplot (MetaNotOne.art1)+
+  geom_boxplot(aes(x=TISSUE,y=shannon), width=0.5, position = "dodge")+
+  facet_wrap(~SOIL)+ 
+  xlab("Organ type")+ylab("Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
+aggregate(shannon~SOIL+TISSUE, data = MetaNotOne.art1, mean)
+
+?position_dodge()
+?geom_boxplot
 
 ##############################
 ######## visualize the results
@@ -279,198 +326,227 @@ legend("bottomright", c("Summer","Winter"),
 ########################################################
 #### Individul reactions of OTUs to our variables
 ########################################################
-####use glm.nb for each OTU to figur out each of their frequency recation to every variables
 
-OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum ~ SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU1.anov<-anova(OTU1.model,test = "Chisq")
+#useing manyglm function from mvabund package
+library(mvabund)
+fun.Mvabund = mvabund(Article1OTU)
 
-OTU2.model<-glm.nb(formula =AbundNotZero.art1$TPEsh28.Humicola.fuscoatra~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU2.anov<-anova(OTU2.model,test = "Chisq")
+fun.Mvabund.m = manyglm (fun.Mvabund ~ SOIL*TISSUE+HOST+season+SITE, data= Article1Meta,
+                         family="negative.binomial", show.residuals=T)
 
-OTU3.model<-glm.nb(formula =AbundNotZero.art1$PFE.sh7..Rosellinia.limonispora~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU3.anov<-anova(OTU3.model,test = "Chisq")
+fun.Mvabund.m.sum = summary.manyglm (fun.Mvabund.m, nBoot=100, test="LR",p.uni="adjusted", 
+                                     resamp="montecarlo")
 
-OTU4.model<-glm.nb(formula =AbundNotZero.art1$LREwh64..Neocamarosporium.chichastianum~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU4.anov<-anova(OTU4.model,test = "Chisq")
+## Analysis of variance explained by the predictors
+# fun.Mvabund.m.anova = anova.manyglm (fun.Mvabund.m, nBoot=300, test="LR", p.uni="adjusted", 
+#                                 resamp="montecarlo")
+#options(max.print=25000)
+fun.Mvabund.m.anova100 = anova.manyglm (fun.Mvabund.m, nBoot=100, test="LR", p.uni="adjusted", 
+                                        resamp="montecarlo")
 
-OTU5.model<-glm.nb(formula =AbundNotZero.art1$SREwh22.Preussia.minimoides~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU5.anov<-anova(OTU5.model,test = "Chisq")
+## Coefficients
+fun.Mvabund.m.coef = as.data.frame(fun.Mvabund.m$coefficients)
+## mean-centering the contrasts
+fun.Mvabund.m.coef.contrast = fun.Mvabund.m.coef - apply (fun.Mvabund.m.coef,2,mean)
 
-OTU6.model<-glm.nb(formula =AbundNotZero.art1$THE.we10..Aporospora.terricola~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU6.anov<-anova(OTU6.model,test = "Chisq")
+# ## OTUs significantly affected by the source??
+mvabund.m.anova <- as.data.frame(fun.Mvabund.m.anova100$uni.p)
+OTU.INTER<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL:TISSUE",]<= 0.05]#2otus affected
+OTU.HOST<-colnames(mvabund.m.anova)[mvabund.m.anova["HOST",]<= 0.05]#47otus affected
+OTU.SITE<-colnames(mvabund.m.anova)[mvabund.m.anova["SITE",]<= 0.05]#14otus affected
+OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affected
+OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
 
-OTU7.model<-glm.nb(formula =AbundNotZero.art1$THE.ss3.Fusarium.sp.~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU7.anov<-anova(OTU7.model,test = "Chisq")
+# ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
+# 
+# OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum ~ SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU1.anov<-anova(OTU1.model,test = "Chisq")
+# 
+# OTU2.model<-glm.nb(formula =AbundNotZero.art1$TPEsh28.Humicola.fuscoatra~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU2.anov<-anova(OTU2.model,test = "Chisq")
+# 
+# OTU3.model<-glm.nb(formula =AbundNotZero.art1$PFE.sh7..Rosellinia.limonispora~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU3.anov<-anova(OTU3.model,test = "Chisq")
+# 
+# OTU4.model<-glm.nb(formula =AbundNotZero.art1$LREwh64..Neocamarosporium.chichastianum~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU4.anov<-anova(OTU4.model,test = "Chisq")
+# 
+# OTU5.model<-glm.nb(formula =AbundNotZero.art1$SREwh22.Preussia.minimoides~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU5.anov<-anova(OTU5.model,test = "Chisq")
+# 
+# OTU6.model<-glm.nb(formula =AbundNotZero.art1$THE.we10..Aporospora.terricola~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU6.anov<-anova(OTU6.model,test = "Chisq")
+# 
+# OTU7.model<-glm.nb(formula =AbundNotZero.art1$THE.ss3.Fusarium.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU7.anov<-anova(OTU7.model,test = "Chisq")
+# 
+# OTU8.model<-glm.nb(formula =AbundNotZero.art1$SIE.sh1.Briansuttonomyces.eucalypti~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU8.anov<-anova(OTU8.model,test = "Chisq")
+# 
+# OTU9.model<-glm.nb(formula =AbundNotZero.art1$RAE.sh12.Acrocalymma.vagum~SOIL*TISSUE+ HOST+ TIME+
+#                      SITE,data = MetaRich.ART1,link = "log")
+# OTU9.anov<-anova(OTU9.model,test = "Chisq")
+# 
+# OTU10.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh14.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU10.anov<-anova(OTU10.model,test = "Chisq")
+# 
+# OTU11.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh40.Dimorphosporicola.tragani~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU11.anov<-anova(OTU11.model,test = "Chisq")
+# 
+# OTU12.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh66.Comoclathris.italica~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU12.anov<-anova(OTU12.model,test = "Chisq")
+# 
+# OTU14.model<-glm.nb(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU14.anov<-anova(OTU14.model,test = "Chisq")
+# 
+# OTU15.model<-glm.nb(formula =AbundNotZero.art1$PSE.se8.Podospora.minicauda~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU15.anov<-anova(OTU15.model,test = "Chisq")
+# 
+# OTU16.model<-glm.nb(formula =AbundNotZero.art1$PSE.we8.Alternaria.chlamydospora~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU16.anov<-anova(OTU16.model,test = "Chisq")
+# 
+# OTU17.model<-glm.nb(formula =AbundNotZero.art1$LDE.se7.Coniothyrium.aleuritis~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU17.anov<-anova(OTU17.model,test = "Chisq")
+# 
+# OTU18.model<-glm.nb(formula =AbundNotZero.art1$LAE.se5.Sordaria.humana~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU18.anov<-anova(OTU18.model,test = "Chisq")
+# 
+# OTU19.model<-glm.nb(formula =AbundNotZero.art1$HAE.se5.Camarosporomyces.flavigenus~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU19.anov<-anova(OTU19.model,test = "Chisq")
+# 
+# OTU21.model<-glm.nb(formula =AbundNotZero.art1$HAE.we5.Coniolariella.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU21.anov<-anova(OTU21.model,test = "Chisq")
+# 
+# OTU22.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh26.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU22.anov<-anova(OTU22.model,test = "Chisq")
+# 
+# OTU23.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh10.Raffaelea.montetyi~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU23.anov<-anova(OTU23.model,test = "Chisq")
+# 
+# OTU24.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh65.Coniophora.marmorata~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU24.anov<-anova(OTU24.model,test = "Chisq")
+# 
+# OTU25.model<-glm.nb(formula =AbundNotZero.art1$HAE.se9.Chaetomium.nigricolor~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU25.anov<-anova(OTU25.model,test = "Chisq")
+# 
+# OTU26.model<-glm.nb(formula =AbundNotZero.art1$HAE.se1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU26.anov<-anova(OTU26.model,test = "Chisq")
+# 
+# OTU27.model<-glm.nb(formula =AbundNotZero.art1$SREwh19.Neocamarosporium.goegapense~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU27.anov<-anova(OTU27.model,test = "Chisq")
+# 
+# OTU28.model<-glm.nb(formula =AbundNotZero.art1$APEsh6.Dictyosporium.digitatum~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU28.anov<-anova(OTU28.model,test = "Chisq")
+# 
+# OTU29.model<-glm.nb(formula =AbundNotZero.art1$APE.sh8.Pestalotiopsis.vismiae~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU29.anov<-anova(OTU29.model,test = "Chisq")
+# 
+# OTU30.model<-glm.nb(formula =AbundNotZero.art1$APE.se3.Dactylonectria.macrodidyma~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU30.anov<-anova(OTU30.model,test = "Chisq")
+# 
+# OTU31.model<-glm.nb(formula =AbundNotZero.art1$APE.sh5.Nigrospora.sphaerica~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU31.anov<-anova(OTU31.model,test = "Chisq")
+# 
+# OTU32.model<-glm.nb(formula =AbundNotZero.art1$SREwh18...Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU32.anov<-anova(OTU32.model,test = "Chisq")
+# 
+# OTU33.model<-glm.nb(formula =AbundNotZero.art1$LAEsh5.Coniolariella.ershadii~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1 = "log")
+# OTU33.anov<-anova(OTU33.model,test = "Chisq")
+# 
+# OTU34.model<-glm(formula =AbundNotZero.art1$LAE.se3.Neosetophoma.lunariae~SOIL*TISSUE+ HOST+ TIME+
+#                    SITE,data = MetaRich.ART1, family=poisson(link = "log"))
+# OTU34.anov<-anova(OTU34.model,test = "Chisq")
+# 
+# OTU35.model<-glm.nb(formula =AbundNotZero.art1$LAE.SH.7.Muriphaeosphaeria.viburni~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU35.anov<-anova(OTU35.model,test = "Chisq")
+# 
+# OTU36.model<-glm.nb(formula =AbundNotZero.art1$LAE.sh1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU36.anov<-anova(OTU36.model,test = "Chisq")
+# 
+# OTU37.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh30..Preussia.grandispora~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU37.anov<-anova(OTU37.model,test = "Chisq")
+# 
+# OTU38.model<-glm.nb(formula =AbundNotZero.art1$SRE.ss.4.Neocamarosporium.sp.~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU38.anov<-anova(OTU38.model,test = "Chisq")
+# 
+# OTU39.model<-glm.nb(formula =AbundNotZero.art1$SRE.ws8.Botryotrichum.murorum~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU39.anov<-anova(OTU39.model,test = "Chisq")
+# 
+# OTU40.model<-glm.nb(formula =AbundNotZero.art1$SRE.ws10.Sarocladium.kiliense~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU40.anov<-anova(OTU40.model,test = "Chisq")
+# 
+# OTU41.model<-glm.nb(formula =AbundNotZero.art1$SRE.wh16.Paracamarosporium.hawaiiense~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data =  MetaRich.ART1,link = "log")
+# OTU41.anov<-anova(OTU41.model,test = "Chisq")
+# 
+# OTU42.model<-glm.nb(formula =AbundNotZero.art1$SRE.wh13.Ovatospora.senegalensis~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU42.anov<-anova(OTU42.model,test = "Chisq")
+# 
+# OTU43.model<-glm.nb(formula =AbundNotZero.art1$SRE.we6.Fusariella.sinensis~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU43.anov<-anova(OTU43.model,test = "Chisq")
+# 
+# OTU44.model<-glm.nb(formula =AbundNotZero.art1$SRE.we.10.pichia.kudriavzevii~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU44.anov<-anova(OTU44.model,test = "Chisq")
+# 
+# OTU45.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh7.Chaetomium.cucumericola~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU45.anov<-anova(OTU45.model,test = "Chisq")
+# 
+# OTU46.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh5.Fusarium.redolens~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU46.anov<-anova(OTU46.model,test = "Chisq")
+# 
+# OTU47.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh9.Preussia.intermedia~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU47.anov<-anova(OTU47.model,test = "Chisq")
+# 
+# OTU48.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh4.Penicillium.vinaceum~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU48.anov<-anova(OTU48.model,test = "Chisq")
+# 
+# OTU49.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh3.Trichoderma.rifaii~SOIL*TISSUE+ HOST+ TIME+
+#                       SITE,data = MetaRich.ART1,link = "log")
+# OTU49.anov<-anova(OTU49.model,test = "Chisq")
 
-OTU8.model<-glm.nb(formula =AbundNotZero.art1$SIE.sh1.Briansuttonomyces.eucalypti~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU8.anov<-anova(OTU8.model,test = "Chisq")
-
-OTU9.model<-glm.nb(formula =AbundNotZero.art1$RAE.sh12.Acrocalymma.vagum~SOIL*TISSUE+ HOST+ TIME+
-                     SITE,data = MetaRich.ART1,link = "log")
-OTU9.anov<-anova(OTU9.model,test = "Chisq")
-
-OTU10.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh14.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU10.anov<-anova(OTU10.model,test = "Chisq")
-
-OTU11.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh40.Dimorphosporicola.tragani~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU11.anov<-anova(OTU11.model,test = "Chisq")
-
-OTU12.model<-glm.nb(formula =AbundNotZero.art1$PSE.wh66.Comoclathris.italica~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU12.anov<-anova(OTU12.model,test = "Chisq")
-
-OTU14.model<-glm.nb(formula =AbundNotZero.art1$PSE.we4..Chaetomium.globosum~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU14.anov<-anova(OTU14.model,test = "Chisq")
-
-OTU15.model<-glm.nb(formula =AbundNotZero.art1$PSE.se8.Podospora.minicauda~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU15.anov<-anova(OTU15.model,test = "Chisq")
-
-OTU16.model<-glm.nb(formula =AbundNotZero.art1$PSE.we8.Alternaria.chlamydospora~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU16.anov<-anova(OTU16.model,test = "Chisq")
-
-OTU17.model<-glm.nb(formula =AbundNotZero.art1$LDE.se7.Coniothyrium.aleuritis~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU17.anov<-anova(OTU17.model,test = "Chisq")
-
-OTU18.model<-glm.nb(formula =AbundNotZero.art1$LAE.se5.Sordaria.humana~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU18.anov<-anova(OTU18.model,test = "Chisq")
-
-OTU19.model<-glm.nb(formula =AbundNotZero.art1$HAE.se5.Camarosporomyces.flavigenus~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU19.anov<-anova(OTU19.model,test = "Chisq")
-
-OTU21.model<-glm.nb(formula =AbundNotZero.art1$HAE.we5.Coniolariella.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU21.anov<-anova(OTU21.model,test = "Chisq")
-
-OTU22.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh26.Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU22.anov<-anova(OTU22.model,test = "Chisq")
-
-OTU23.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh10.Raffaelea.montetyi~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU23.anov<-anova(OTU23.model,test = "Chisq")
-
-OTU24.model<-glm.nb(formula =AbundNotZero.art1$HAE.wh65.Coniophora.marmorata~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU24.anov<-anova(OTU24.model,test = "Chisq")
-
-OTU25.model<-glm.nb(formula =AbundNotZero.art1$HAE.se9.Chaetomium.nigricolor~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU25.anov<-anova(OTU25.model,test = "Chisq")
-
-OTU26.model<-glm.nb(formula =AbundNotZero.art1$HAE.se1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU26.anov<-anova(OTU26.model,test = "Chisq")
-
-OTU27.model<-glm.nb(formula =AbundNotZero.art1$SREwh19.Neocamarosporium.goegapense~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU27.anov<-anova(OTU27.model,test = "Chisq")
-
-OTU28.model<-glm.nb(formula =AbundNotZero.art1$APEsh6.Dictyosporium.digitatum~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU28.anov<-anova(OTU28.model,test = "Chisq")
-
-OTU29.model<-glm.nb(formula =AbundNotZero.art1$APE.sh8.Pestalotiopsis.vismiae~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU29.anov<-anova(OTU29.model,test = "Chisq")
-
-OTU30.model<-glm.nb(formula =AbundNotZero.art1$APE.se3.Dactylonectria.macrodidyma~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU30.anov<-anova(OTU30.model,test = "Chisq")
-
-OTU31.model<-glm.nb(formula =AbundNotZero.art1$APE.sh5.Nigrospora.sphaerica~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU31.anov<-anova(OTU31.model,test = "Chisq")
-
-OTU32.model<-glm.nb(formula =AbundNotZero.art1$SREwh18...Preussia.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU32.anov<-anova(OTU32.model,test = "Chisq")
-
-OTU33.model<-glm.nb(formula =AbundNotZero.art1$LAEsh5.Coniolariella.ershadii~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1 = "log")
-OTU33.anov<-anova(OTU33.model,test = "Chisq")
-
-OTU34.model<-glm(formula =AbundNotZero.art1$LAE.se3.Neosetophoma.lunariae~SOIL*TISSUE+ HOST+ TIME+
-                   SITE,data = MetaRich.ART1, family=poisson(link = "log"))
-OTU34.anov<-anova(OTU34.model,test = "Chisq")
-
-OTU35.model<-glm.nb(formula =AbundNotZero.art1$LAE.SH.7.Muriphaeosphaeria.viburni~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU35.anov<-anova(OTU35.model,test = "Chisq")
-
-OTU36.model<-glm.nb(formula =AbundNotZero.art1$LAE.sh1.Acrocalymma.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU36.anov<-anova(OTU36.model,test = "Chisq")
-
-OTU37.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh30..Preussia.grandispora~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU37.anov<-anova(OTU37.model,test = "Chisq")
-
-OTU38.model<-glm.nb(formula =AbundNotZero.art1$SRE.ss.4.Neocamarosporium.sp.~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU38.anov<-anova(OTU38.model,test = "Chisq")
-
-OTU39.model<-glm.nb(formula =AbundNotZero.art1$SRE.ws8.Botryotrichum.murorum~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU39.anov<-anova(OTU39.model,test = "Chisq")
-
-OTU40.model<-glm.nb(formula =AbundNotZero.art1$SRE.ws10.Sarocladium.kiliense~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU40.anov<-anova(OTU40.model,test = "Chisq")
-
-OTU41.model<-glm.nb(formula =AbundNotZero.art1$SRE.wh16.Paracamarosporium.hawaiiense~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data =  MetaRich.ART1,link = "log")
-OTU41.anov<-anova(OTU41.model,test = "Chisq")
-
-OTU42.model<-glm.nb(formula =AbundNotZero.art1$SRE.wh13.Ovatospora.senegalensis~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU42.anov<-anova(OTU42.model,test = "Chisq")
-
-OTU43.model<-glm.nb(formula =AbundNotZero.art1$SRE.we6.Fusariella.sinensis~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU43.anov<-anova(OTU43.model,test = "Chisq")
-
-OTU44.model<-glm.nb(formula =AbundNotZero.art1$SRE.we.10.pichia.kudriavzevii~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU44.anov<-anova(OTU44.model,test = "Chisq")
-
-OTU45.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh7.Chaetomium.cucumericola~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU45.anov<-anova(OTU45.model,test = "Chisq")
-
-OTU46.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh5.Fusarium.redolens~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU46.anov<-anova(OTU46.model,test = "Chisq")
-
-OTU47.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh9.Preussia.intermedia~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU47.anov<-anova(OTU47.model,test = "Chisq")
-
-OTU48.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh4.Penicillium.vinaceum~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU48.anov<-anova(OTU48.model,test = "Chisq")
-
-OTU49.model<-glm.nb(formula =AbundNotZero.art1$SRE.sh3.Trichoderma.rifaii~SOIL*TISSUE+ HOST+ TIME+
-                      SITE,data = MetaRich.ART1,link = "log")
-OTU49.anov<-anova(OTU49.model,test = "Chisq")
-
-
-order.colsum<-colSums(AbundNotZero.art1)
 
 ########################################
 ########################################
@@ -491,22 +567,22 @@ pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
 ########################################
 ######################################## 2 the most frequently isolated species
-
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SITE, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TIME, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TEMP, data = Article1Meta, sum)
-aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~MEDIA, data = Article1Meta, sum)
-
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~HOST, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TISSUE, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SOIL, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SITE, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TIME, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TEMP, data = Article1Meta, sum)
-aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~MEDIA, data = Article1Meta, sum)
+# 
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~HOST, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TISSUE, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SOIL, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~SITE, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TIME, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~TEMP, data = Article1Meta, sum)
+# aggregate(Article1OTU $ LREwh64..Neocamarosporium.chichastianum ~MEDIA, data = Article1Meta, sum)
+# 
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~HOST, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TISSUE, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SOIL, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~SITE, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TIME, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~TEMP, data = Article1Meta, sum)
+# aggregate(Article1OTU $ PFE.sh7..Rosellinia.limonispora ~MEDIA, data = Article1Meta, sum)
 
 ### MAHDIEH!!!!
 # what are these numbers???? 
@@ -553,7 +629,7 @@ var.art3<-varpart(AbundNotZero.art1,MetaRich.ART1$season,
 plot(var.art3)
 ##varpart with models
 var.part4<- varpart(AbundNotZero.art1,~MetaRich.ART1$TIME+
-                      MetaRich.ART1$HOST+ MetaRich.ART1$SITE+MetaRich.ART1$TISSUE,
+                      MetaRich.ART1$HOST+ MetaRich.ART1$SITE+ MetaRich.ART1$TISSUE,
                     ~env.Rich.ART1$Ece+env.Rich.ART1$pHe+env.Rich.ART1$Cle+env.Rich.ART1$EC,
                     transfo = "hellinger")
 plot(var.part4)
