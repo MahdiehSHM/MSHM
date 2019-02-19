@@ -809,6 +809,7 @@ ggplot(Antifungal.AC.data, aes(x = Fungi, y = Growth)) +
 # boxplot(Antifungal.AC.data$Growth)
 
 # P. graminea
+
 Antifungal.PG.data<-read.csv("Antifungal.PG.csv", header = T, row.names = 1)
 View(Antifungal.PG.data)
 
