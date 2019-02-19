@@ -357,6 +357,31 @@ OTU.SITE<-colnames(mvabund.m.anova)[mvabund.m.anova["SITE",]<= 0.05]#14otus affe
 OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affected
 OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
 
+
+## OTU (SOIL*TISSUE)
+
+# LAE.se5.Sordaria.humana data frame
+LAEse5 <-aggregate(Article1OTU $  LAE.se5.Sordaria.humana  ~ TISSUE + SOIL , data = Article1Meta, sum)
+View(LAEse5)
+LAEse5$value=LAEse5$`Article1OTU$LAE.se5.Sordaria.humana`
+LAEse5$`Article1OTU$LAE.se5.Sordaria.humana`<-NULL
+LAEse5$OTU<-c("LAE.se5.Sordaria.humana")
+View(LAEse5)
+# TPEsh28.Humicola.fuscoatra data frame
+TPEsh28 <-aggregate(Article1OTU $ TPEsh28.Humicola.fuscoatra  ~ TISSUE + SOIL , data = Article1Meta, sum)
+View(TPEsh28)
+TPEsh28$value=TPEsh28$`Article1OTU$TPEsh28.Humicola.fuscoatra`
+TPEsh28$`Article1OTU$TPEsh28.Humicola.fuscoatra`<-NULL
+TPEsh28$OTU<-c("TPEsh28.Humicola.fuscoatra")
+View(TPEsh28)
+# a new dataframe for ploting
+SOILTISSUE<-rbind (TPEsh28,LAEse5)
+View(SOILTISSUE )
+
+ggplot(SOILTISSUE, aes(x=TISSUE, y=value, fill=OTU)) +
+  geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
+
+
 # ####use glm.nb for each OTU to figur out each of their frequency recation to every variables
 # 
 # OTU1.model<-glm.nb(formula =AbundNotZero.art1$APE.se5.Staphylotrichum.coccosporum ~ SOIL*TISSUE+ HOST+ TIME+
@@ -1172,6 +1197,13 @@ p + geom_nodepoint()
 p + geom_tippoint()
 p + geom_tiplab()
 p + geom_tiplab()+ geom_nodepoint() 
+
+
+
+
+
+
+
 
 
 
