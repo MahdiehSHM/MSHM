@@ -226,8 +226,8 @@ simpson.interact<-aggregate(simpson~SOIL+TISSUE,MetaNotOne.art1,mean)
 inter.data<-cbind(IR.interact,shanon.interact,simpson.interact)
 inter.data$SOIL<-NULL#run 2 times
 inter.data$TISSUE<-NULL
-inter.data
-write.csv(inter.data, "interaction.csv")
+#inter.data
+#write.csv(inter.data, "interaction.csv")
 # I manualy fixed the data fram
 # now read it agin
 interact.data<-read.csv("interaction.csv", header = TRUE)
@@ -413,7 +413,6 @@ OTU.lbls <- paste(OTU.lbls, OTU.Percent)
 order.lbls<-paste(OTU.lbls,"%",sep="")
 pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-<<<<<<< HEAD
                                            "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
 ########################################
 ######################################## Aggregate for ggtree
@@ -608,33 +607,6 @@ aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ HOST, data = Article1Meta, s
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ TISSUE, data = Article1Meta, sum)
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ SOIL, data = Article1Meta, sum)
 
-
-### MAHDIEH!!!!
-# what are these numbers???? 
-########## SOIL 
-# 1.3.4.5.6.7.10.11.12.13.14.15.16.17.18.19.20.21.22.23.24.25.26.27.28.29.30.31.
-# 32.33.34.35.36.37.38.39.4043.44.45.46.47.48.49
-
-########## Tissue
-# 1.2.3.4.5.6.7.8.9.10.11.12.13.14.16.17.18.19.20.21.22.24.25.26.27.28.29.30.31.32.33.34.35.36.37.39.40.41.42.43.
-# 45.46.47.48.49
-########## HOST
-# 1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.20.21.22.23.24.25.26.27.28.29.30.31.32.33.34.35.36.37.38.39.40.
-# 41.42.43.44.45.46.47.48.49
-# 
-########## TIME
-# 2.5.9.11.12.13.14.15.1618.20.21.22.23.24.25.27.32.33.34.37.38.39.40.41.44.45.46.47.48.49
-
-########## SITE
-#2.3.4.13.14.1520.2125.33.38.39.40.43.44.45.46.47.48.49
-
-########## SITE:Tissue
-#2.8.
-=======
-                                           "yellow", "springgreen2", "pink","green" ) , main = "OTU", 
-    cex=1,border = NA,cex.main= 1.5, radius = 0.9)
->>>>>>> 51f26aa51d12a7656100941e52684b299d55b767
-
 ##############################################
 ##############################################
 # Variation partitioning
@@ -801,7 +773,9 @@ ghphoto.sum<-summary(GH.photo)
 # total biomass
 GH.Biomass<-aov(Biomass~Fungi*Drought*Salinity,data = GH.data)
 ghBiomass.sum<-summary(GH.Biomass)
-
+################################
+# plots for the paper
+#################################
 # how to show this?
 # only the significant interactions
 # shoot lenght
