@@ -341,7 +341,7 @@ OTU.HOST<-colnames(mvabund.m.anova)[mvabund.m.anova["HOST",]<= 0.05]#47otus affe
 OTU.SITE<-colnames(mvabund.m.anova)[mvabund.m.anova["SITE",]<= 0.05]#14otus affected
 OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affected
 OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
-
+OTU.organ<-colnames(mvabund.m.anova)[mvabund.m.anova["TISSUE",]<= 0.05]#40otus affected
 ###############################################
 ## plot affected OTUs by SOIL*TISSUE for the paper
 ################################################
@@ -380,7 +380,7 @@ OTU.lbls <- paste(OTU.lbls, OTU.Percent)
 order.lbls<-paste(OTU.lbls,"%",sep="")
 pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                           "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+                                           "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 1.7)
 ########################################
 ######################################## Aggregate for ggtree
 
