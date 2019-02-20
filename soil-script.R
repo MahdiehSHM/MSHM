@@ -3,6 +3,7 @@
 # desert endophytes
 ############################################
 library(vegan)
+library(mvabund)
 library(rjags)
 library(MASS)
 library(ggplot2)
@@ -75,13 +76,6 @@ boxplot(IR~SOIL,data = Article1Meta)
 boxplot(IR~HOST,data = Article1Meta)
 aggregate(IR~HOST,data= Article1Meta,mean )
 aggregate(IR~TISSUE,data= Article1Meta,mean )
-
-
-#plot the interaction between soil and organ
-# ggplot (Article1Meta, aes(x=TISSUE,y=IR))+
-#   facet_wrap(~SOIL)+ geom_boxplot(position = "dodge", width=0.5) + theme_bw()+
-# xlab("Organ type")+ylab("Isolation rate")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))+ theme(legend.position = "non")
-# 
 
 
 #########################################################
@@ -186,33 +180,6 @@ simp.sum<-summary(simp.m)
 #ANOVA RESULTS FOR SIMPSON
 simp.anov<-anova(simp.m, test="F")
 AIC(simp.m)
-
-
-#plot the interaction
-# ggplot (MetaNotOne.art1)+
-#   geom_boxplot(aes(x=TISSUE,y=simpson.art1),  width=0.5, position = "dodge") +
-#   geom_boxplot(aes(x=TISSUE,y=shannon), width=0.5, position = "dodge")+
-#   facet_wrap(~SOIL)+ 
-#   xlab("Organ type")+ylab("Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
-# 
-
-# فعلا جدا جدا میکشیم تا وقتیکه مشکل حل بشه
-#simpson
-# ggplot (MetaNotOne.art1)+
-#   geom_boxplot(aes(x=TISSUE,y=simpson.art1),  width=0.5, position = "dodge") +
-#   facet_wrap(~SOIL)+ 
-#   xlab("Organ type")+ylab("Simpson Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
-# aggregate(simpson.art1~SOIL+TISSUE, data = MetaNotOne.art1, mean)
-# 
-# #shanon
-# ggplot (MetaNotOne.art1)+
-#   geom_boxplot(aes(x=TISSUE,y=shannon), width=0.5, position = "dodge")+
-#   facet_wrap(~SOIL)+ 
-#   xlab("Organ type")+ylab("Diversity")+ scale_x_discrete(labels = c("Twig", "Leaf","Root"))
-# aggregate(shannon~SOIL+TISSUE, data = MetaNotOne.art1, mean)
-# 
-# ?position_dodge()
-# ?geom_boxplot
 
 ####################################################################
 ######## visualize the significant interaction results for the paper
