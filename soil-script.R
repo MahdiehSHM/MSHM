@@ -360,9 +360,16 @@ TPEsh28$OTU<-c("TPEsh28.Humicola.fuscoatra")
 # a new dataframe for ploting
 SOILTISSUE<-rbind (TPEsh28,LAEse5)
 View(SOILTISSUE )
+write.csv(SOILTISSUE, file = "SOILTISSUE.csv")
+read.csv("SOILTISSUE.csv")
+
+ST<- read.csv ("ST.csv")
+
 # the plot
-ggplot(SOILTISSUE, aes(x=TISSUE, y=value, fill=OTU)) +
-  geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
+ggplot(ST, aes(x=TISSUE, y=value, fill=OTU)) +
+  geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()+
+  xlab("Organ")+ ylab("Frequency")+
+  labs(fill = "OTU")
 
 ########################################
 ########################################
@@ -1004,22 +1011,22 @@ library(ggtree)
 library(tidyverse)
 
 #loaded your tree
-treeDP <- read.tree("A.tree")
+s <- read.tree("TREE.FINAL.tree")
 
-ggplot(treeDP) + geom_tree() + theme_tree()
+ggplot(s) + geom_tree() + theme_tree()
 #Add a tree scale
-ggtree(treeDP) + geom_treescale()
-ggtree(treeDP) + theme_tree2()
+ggtree(s) + geom_treescale()
+ggtree(s) + theme_tree2()
 
 #turn your tree into a cladogram
-ggtree(treeDP, branch.length="none")
+ggtree(s, branch.length="none")
 
-ggtree(treeDP, branch.length="none", color="red", size=1, linetype=1)
+ggtree(s, branch.length="none", color="red", size=1, linetype=1)
 
 #turn your tree into circular layout
-ggtree (treeDP, layout="circular") + ggtitle("(Phylogram) circular layout")
+ggtree (s, layout="circular") + ggtitle("(Phylogram) circular layout")
 
-p <- ggtree(treeDP)
+p <- ggtree(s)
 p + geom_nodepoint()
 p + geom_tippoint()
 p + geom_tiplab()
