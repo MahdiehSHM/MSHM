@@ -379,20 +379,25 @@ ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
 ########################################
 ########################################
 # Pie chart (OTUs!)
-library(lattice)
+library (lattice)
 OTU.colsum<-colSums(AbundNotZero.art1)
-OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
+
 # اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
 OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
-OTU.lbls<- c(expression(italic("Rosellinia limonispora")*'  8.57%' ),expression(italic("Acrocalymma vagum")),expression(italic("Dimorphosporicola tragani")),
-             expression(italic("Raffaelea montetyi")),expression(italic("Paracamarosporium hawaiiense")),expression(italic("Fusariella sinensis")),
-             expression(italic("Humicola fuscoatra")),expression(italic("Neocamarosporium chichastianum")),expression(italic("Camarosporomyces flavigenus")),
-             expression(italic("Preussia sp.")),expression(italic("Coniophora marmorata")), "Other")
+OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
+OTU.lbls<- c (expression (italic("Rosellinia ")*' sp. (8.57%)' ), expression (italic("Acrocalymma vagum")*' (3.48%)'), expression(italic("Dimorphosporicola")*' sp. (3%)'),
+             expression(italic("Raffaelea montetyi")*' (5.83%)'), expression(italic("Paracamarosporium")*' sp. (4.3%)'), expression(italic("Fusariella")*' sp. (3.44%)'),
+             expression(italic("Humicola fuscoatra")*' (5.3%)'),expression(italic("Neocamarosporium chichastianum")*' (8.68%)'),expression(italic("Chaetosphaeronema")*' sp. (4.95%)'),
+             expression(italic("Preussia")*' sp. (3.9%)'),expression (italic("Coniophora")*' sp. (2.98%)'), "Other (45.57%)")
 
-pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
-                                           "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                           "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency",
-    cex=1,border = NA,cex.main= 1.2, radius =1)
+pie (OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
+                                       "deeppink1","mediumblue","royalblue1","orchid1","cyan",
+                                       "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency",
+                                       cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
+
+
+# Pie chart (OTUs-Root)
+
 
 #change the font back to normal
 
@@ -881,15 +886,15 @@ View(Article1Order)
 # creat a Pie chart (Order)
 order.colsum<-colSums(Article1Order)
 order.slic<- c(51, 589,301,1300,443,4764,88,1736,89,741)  #get the valus from order.colsum
-order.lbls<- c("Eurotiales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
-               "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
+Order.Percent<- round(order.slic/sum(OTU.slic)*100, digits = 2 )
+order.lbls<- c("Eurotiales (0.5%)","Ophiostomatales (5.83%)","Boletales (2.98%)","Xylariales (12.87%)",
+               "Hypocreales (4.39%)"," Pleosporales (47.16%)",
+               "Saccharomycetales (0.87%)","Sordariales (17.18%) ", "Amphisphaeriales (0.88%)","Unknown (7.34%)")
 
-order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
-order.lbls <- paste(order.lbls, order.Percent)
-order.lbls<-paste(order.lbls,"%",sep="")
 pie(order.slic,labels =order.lbls, col = c("red","skyblue1","magenta",
-                                           "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                           "yellow", "springgreen2") , main = "Order", cex=1,border = NA,cex.main= 1.5, radius = 0.7)
+                                           "deeppink1","mediumblue","green","orchid1","cyan",
+                                           "yellow", "springgreen2") , main = "Orders frequency", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
 
 ##############################################
