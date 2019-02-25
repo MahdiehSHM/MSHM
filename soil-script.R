@@ -4,7 +4,6 @@
 ############################################
 library(vegan)
 library(mvabund)
-library(rjags)
 library(MASS)
 library(ggplot2)
 library(ggtree)
@@ -205,8 +204,10 @@ interact.data$Organ<-factor(interact.data$Organ, levels = c("Leaf" ,"Twig","Root
 # barplot
 ggplot(data = interact.data,aes(x=Organ,y=value, fill= Index))+
   geom_bar(stat="identity",position="dodge",width=0.5)+
-  facet_wrap(~Soil)+ theme_bw()+ ylab("Mean value")+theme(legend.position="top")+
-  guides(fill=guide_legend(""))
+  facet_wrap(~Soil)+ theme_bw()+ ylab("Mean value")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+  axis.title=element_text(size=14),legend.text=element_text(size=12),
+strip.text = element_text(size = 12))+ guides(fill=guide_legend(""))
 
 
 ####################################################
@@ -216,8 +217,8 @@ ggplot(data = interact.data,aes(x=Organ,y=value, fill= Index))+
 ####################################################
 # for this we are using Permutational multivariate analysis of variance (PERMANOVA)
 #this function from vegan does it
-memory.limit()
-memory.limit(size=30000)
+# memory.limit()
+# memory.limit(size=30000)
 # data transformation:
 tran.abund.notzero<-decostand(AbundNotZero.art1,method="hellinger")
 #PERMANOVA
@@ -342,6 +343,8 @@ OTU.SITE<-colnames(mvabund.m.anova)[mvabund.m.anova["SITE",]<= 0.05]#14otus affe
 OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affected
 OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
 OTU.organ<-colnames(mvabund.m.anova)[mvabund.m.anova["TISSUE",]<= 0.05]#40otus affected
+
+
 ###############################################
 ## plot affected OTUs by SOIL*TISSUE for the paper
 ################################################
@@ -359,38 +362,43 @@ TPEsh28$OTU<-c("TPEsh28.Humicola.fuscoatra")
 
 # a new dataframe for ploting
 SOILTISSUE<-rbind (TPEsh28,LAEse5)
-View(SOILTISSUE )
-write.csv(SOILTISSUE, file = "SOILTISSUE.csv")
-read.csv("SOILTISSUE.csv")
-
+# View(SOILTISSUE )
+# write.csv(SOILTISSUE, file = "SOILTISSUE.csv")
+# read.csv("SOILTISSUE.csv")
 ST<- read.csv ("ST.csv")
-
-# the plot
-ggplot(ST, aes(x=TISSUE, y=value, fill=OTU)) +
-  geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()+
-  xlab("Organ")+ ylab("Frequency")+
-  labs(fill = "OTU")
+ST$Organ<-factor(ST$Organ,levels = c("Leaf", "Twig","Root" ))
+levels(ST$Organ)
+##################### the soil:organ interaction plot for 2 otus
+ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
+  geom_bar(stat="identity", width = 0.5) + facet_wrap(~Soil) + theme_bw()+
+  xlab("Organ")+ ylab("Frequency")+ theme(legend.position="top",axis.text=element_text(size=12),
+                                          axis.title=element_text(size=14),legend.text=element_text(size=12),
+                                          strip.text = element_text(size = 12))+
+  guides(fill=guide_legend(title=NULL))
 
 ########################################
 ########################################
 # Pie chart (OTUs!)
+library(lattice)
 OTU.colsum<-colSums(AbundNotZero.art1)
-
-OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
-OTU.lbls<- c("Rosellinia limonispora","Acrocalymma vagum","Dimorphosporicola tragani","Raffaelea montetyi",
-               "Paracamarosporium hawaiiense","Fusariella sinensis","Humicola fuscoatra",
-               "Neocamarosporium chichastianum", "Camarosporomyces flavigenus",
-               "Preussia sp.","Coniophora marmorata", "Other")
-
 OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
-OTU.lbls <- paste(OTU.lbls, OTU.Percent)
-order.lbls<-paste(OTU.lbls,"%",sep="")
+# اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
+OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
+OTU.lbls<- c(expression(italic("Rosellinia limonispora")*'  8.57%' ),expression(italic("Acrocalymma vagum")),expression(italic("Dimorphosporicola tragani")),
+             expression(italic("Raffaelea montetyi")),expression(italic("Paracamarosporium hawaiiense")),expression(italic("Fusariella sinensis")),
+             expression(italic("Humicola fuscoatra")),expression(italic("Neocamarosporium chichastianum")),expression(italic("Camarosporomyces flavigenus")),
+             expression(italic("Preussia sp.")),expression(italic("Coniophora marmorata")), "Other")
+
 pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                           "yellow", "springgreen2", "pink","green" ) , main = "OTU", cex=1,border = NA,cex.main= 1.5, radius = 1.7)
+                                           "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency",
+    cex=1,border = NA,cex.main= 1.2, radius =1)
+
+#change the font back to normal
+
 ########################################
 ######################################## Aggregate for ggtree
-
+?par
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~HOST, data = Article1Meta, sum)
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~TISSUE, data = Article1Meta, sum)
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~SOIL, data = Article1Meta, sum)
