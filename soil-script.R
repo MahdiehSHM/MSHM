@@ -1025,99 +1025,76 @@ library(ggtree)
 library(tidyverse)
 
 #loaded your tree
-s <- read.tree("AfterEdit.tree")
-ggtree(tree, ladderize = FALSE)
-ggplot(s) + geom_tree() + theme_tree()
-#Add a tree scale
-ggtree(s) + geom_treescale()
-ggtree(s) + theme_tree2()
+# s <- read.tree("AfterEdit.tree")
+# ggtree(tree, ladderize = FALSE)
+# ggplot(s) + geom_tree() + theme_tree()
+# #Add a tree scale
+# ggtree(s) + geom_treescale()
+# ggtree(s) + theme_tree2()
+# 
+# #turn your tree into a cladogram
+# ggtree(s, branch.length="none",size=0.5, linetype=1, hjust=-3) + geom_tiplab()+ geom_nodepoint() 
+# 
+# ggtree(s, branch.length="none", color="red", size=1, linetype=1)
+# 
+# #turn your tree into circular layout
+# ggtree (s, layout="circular") + ggtitle("(Phylogram) circular layout")
+# 
+# p <- ggtree(s)
+# p + geom_nodepoint()
+# p + geom_tippoint()
+# p + geom_tiplab()
+# p + geom_tiplab()+ geom_nodepoint() 
+# 
+# ggtree(s)+  geom_text(aes(label=node), hjust=-3)
+# 
+# 
+# # label and color for every branch
+# ggtree(s) + geom_cladelabel(node=17, label="APEsh6", color="blue")
+# 
+# ggtree(s) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
+# 
+# ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
+#   geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
+# 
+# 
+# ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
+#   geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
+#   xlim(0, 15) + theme_tree()
+# 
+# ggtree(s) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
+# 
+# #Plot tree with other data
+# #read the help first!!!!!!!!!!!!!!!!
+# ?facet_plot
+# 
+# #this shows the tip lables
+# d = fortify(treeDP)
+# d = subset(d, isTip)
+# d2<-with(d, label[order(y, decreasing=T)])
+# 
+# #extract and use in data for ploting
+# write.csv(d2, file = "tiplab.csv")
 
-#turn your tree into a cladogram
-ggtree(s, branch.length="none",size=0.5, linetype=1, hjust=-3) + geom_tiplab()+ geom_nodepoint() 
 
-ggtree(s, branch.length="none", color="red", size=1, linetype=1)
-
-#turn your tree into circular layout
-ggtree (s, layout="circular") + ggtitle("(Phylogram) circular layout")
-
-p <- ggtree(s)
-p + geom_nodepoint()
-p + geom_tippoint()
-p + geom_tiplab()
-p + geom_tiplab()+ geom_nodepoint() 
-
-ggtree(s)+  geom_text(aes(label=node), hjust=-3)
-
-
-# label and color for every branch
-ggtree(s) + geom_cladelabel(node=17, label="APEsh6", color="blue")
-
-ggtree(s) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
-
-ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
-  geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
-
-
-ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
-  geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
-  xlim(0, 15) + theme_tree()
-
-ggtree(s) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
-
-#Plot tree with other data
-#read the help first!!!!!!!!!!!!!!!!
-?facet_plot
-
-#this shows the tip lables
-d = fortify(treeDP)
-d = subset(d, isTip)
-d2<-with(d, label[order(y, decreasing=T)])
-
-#extract and use in data for ploting
-write.csv(d2, file = "tiplab.csv")
+############# THE TREE!
 
 # modified data import
-Treedata1 <- read.csv("Tree.csv")
-View(Treedata1)
+Treedata.final <- read.csv("finalTREEdata.csv")
+View(Treedata.final)
+# import the tree
+tree1 <- read.tree("FinalTree.tree")
+tree.p<-ggtree(tree1,branch.length= "none")
 
-tree.p<-ggtree(s)
-# now plot toghether
-tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
-                    aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
+# now plot toghether with soil data
+tree.p2<-facet_plot(tree.p, panel='Dry soil', data=Treedata.final, geom=geom_point, 
+                    aes(x=0, size=Dry), color='blue')
 
-tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment, 
-                    aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
-facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
-           aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
-
-### fixed the points size
-facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
-           
-           aes(x=0,size=val), color='blue')+ theme(legend.position="right")
-
-#load the new tree
-TREEARTICLE1 <- read.tree("Tree.nxs.tree")
-
-ggplot(TREEARTICLE1) + geom_tree() + theme_tree()
-#Add a tree scale
-ggtree(TREEARTICLE1) + geom_treescale()
-
-#turn your tree into a cladogram
-ggtree(TREEARTICLE1, branch.length="none")
-
-ggtree(TREEARTICLE1, branch.length="none", color="red", size=1, linetype=1)
-
-#turn your tree into circular layout
-ggtree (TREEARTICLE1, layout="circular") + ggtitle("(Phylogram) circular layout")
-
-p <- ggtree(TREEARTICLE1)
-p + geom_nodepoint()
-p + geom_tippoint()
-p + geom_tiplab()
-p + geom_tiplab()+ geom_nodepoint() 
-
-
-#####################################
+tree.p3<-facet_plot(tree.p2, panel='Saline soil', data=Treedata.final, geom=geom_point, 
+                    aes(x=0, size=Saline), color='blue')+
+  theme(legend.position="right",legend.title = element_blank())
+  
+####################################
 ##### fig 1-article
 
 ### data prep
@@ -1154,7 +1131,7 @@ numbers.pie.leaf<-as.numeric(leaf.pie.otu.0[1,])
 3245-1813
 
 #plot the leaf pie chart
-pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("chartreuse4","yellowgreen","dodgerblue2",
+p.leaf<-pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("chartreuse4","yellowgreen","dodgerblue2",
                                            "yellow1","orchid4","maroon2","darkcyan","plum2",
                                            "cyan1", "goldenrod","tomato2") , main = "Leaf", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
@@ -1170,7 +1147,7 @@ numbers.pie.Twig<-as.numeric(Twig.pie.otu.0[1,])
 2533-1548
 
 #plot the Twig pie chart
-pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yellowgreen","dodgerblue2","yellow1",
+p.twig<-pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yellowgreen","dodgerblue2","yellow1",
                                                       "orchid4","darkcyan","plum2","cyan1","slategray",
                                                       "goldenrod","tomato2") , main = "Twig", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
@@ -1187,38 +1164,36 @@ numbers.pie.Root<-as.numeric(Root.pie.otu.0[1,])
 4324-3195
 
 #plot the Root pie chart
-pie(numbers.pie.Root,labels =lables.pie.Root, col = c("chartreuse4","Violetred4","darkturquoise",
+p.root<-pie(numbers.pie.Root,labels =lables.pie.Root, col = c("chartreuse4","Violetred4","darkturquoise",
                                                       "yellowgreen","plum4","yellow1","cyan1","darkorange",
                                                       "goldenrod","tomato2") , main = "Root", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+##############
+# Orders pie chart
+p.order<-pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
+                                                    "plum2","blue","orchid4","yellow","tomato2",
+                                                    "goldenrod", "aquamarine4") , main = "Orders frequency", 
+             cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
-#####################################
-##### fig 1-article
-
-### data prep
+### host otu barplot
 otu.sum.Host<-aggregate(.~MetaRich.ART1$HOST,AbundNotZero.art1,sum)
-otu.count<-colSums(AbundNotZero.art1)
-OTU.250<-subset(otu.count, otu.count>250)
-class(OTU.250)
-OTU.250<-as.data.frame(OTU.250)
-OTU.250<-t(OTU.250)
-# 15 OTUs selected
-
-selectedOTU<-colnames(OTU.250)
-
 #subset the sum aggregate
 selected.otu.count.Host<-otu.sum.Host[,names(otu.sum.Host) %in% colnames(OTU.250)]
+
 #add the Host column to it
 selected.otu.count.Host$Host<-otu.sum.Host$`MetaRich.ART1$HOST`
 View(selected.otu.count.Host)
-# now you have a data fram of 15 selected OTUs with more than 250 observations in selected.otu.count.organ
 # total observation per Host?
 total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
-
-ggplot(selected.otu.count.Host,aes(x = HOST, y = value,fill = Order)) + 
-  geom_bar(position = "fill",stat = "identity") +facet_wrap(~SOIL) + theme_bw()+scale_y_continuous(labels = percent_format())+
+#manually prep the data frame for the plot
+write.csv(selected.otu.count.Host,"selected.otu.host.csv")
+# import new data
+host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
+#barplot
+ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
+  geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
   xlab("Host plant species")+ ylab("Proportional frequency")+
-  labs(fill = "Order")
+  labs(fill = "OTU")
   
   
   
