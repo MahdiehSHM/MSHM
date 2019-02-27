@@ -1186,24 +1186,24 @@ View(selected.otu.count.Host)
 # total observation per Host?
 total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
 #manually prep the data frame for the plot
-write.csv(selected.otu.count.Host,"selected.otu.host.csv")
+#write.csv(selected.otu.count.Host,"selected.otu.host.csv")
 # import new data
 host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
-
-
-
-otu.cols<-c()
+otu.cols<-c("plum4","orchid4","yellowgreen","yellow1","maroon2","darkcyan","slategray","dodgerblue2",
+"goldenrod","chartreuse4","darkturquoise","tomato2",'darkorange',"plum2","cyan1","Violetred4")
 
 #barplot
-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
+host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
   geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
   xlab("Host plant species")+ ylab("Proportional frequency")+
-  labs(fill = "OTU")
-  
-  
-  
-  
-  
-  
-
-
+  labs(fill = "OTU")+ scale_fill_manual(values=otu.cols)+theme(legend.position="top")
+### export all of the plots together  
+margin1<-matrix(c(0,2,0,0,2,0,1,3,5,1,3,5,0,4,0,0,4,0))  
+layout(margin1)
+dev.off()
+par(mfrow=c(3,2))
+p.leaf
+p.twig
+p.root
+p.order
+host.barplot
