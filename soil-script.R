@@ -1153,7 +1153,7 @@ p.twig<-pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yel
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
 #######################
-#Root OTU pie chart 
+#Root OTU pie chart
 Root.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Root")
 Root.pie.otu$organ<-NULL
 Root.pie.otu$Others<-1129
@@ -1189,6 +1189,11 @@ total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
 write.csv(selected.otu.count.Host,"selected.otu.host.csv")
 # import new data
 host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
+
+
+
+otu.cols<-c()
+
 #barplot
 ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
   geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
