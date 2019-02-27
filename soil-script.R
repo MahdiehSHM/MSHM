@@ -393,23 +393,6 @@ pie (OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                        "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                        "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency", cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
 
-#change the font back to normal
-
-# Pie chart (OTUs!) Twig
-OTU.Twig.slic<- c(155,48,301,63,628, 120,153,32,167,142,114,148, 227,163,72)  
-OTU.Percent<-round(OTU.Twig.slic/sum (OTU.Twig.slic)*100, digits=2)
-OTU.lbls<- c (expression (italic("Humicola fuscoatra")*' sp. (6.12%)' ),expression (italic("Preussia")*' sp. 6 (1.89%)'), expression (italic("Coniophora")*' sp. 1 (11.88%)'),
-              expression(italic("Briansuttonomyces eucalypti")*'(2.49%)'), 
-              "Other (24.79%)",
-              expression(italic("Dimorphosporicola")*' sp. (4.74%)'), expression(italic("Raffaelea montetyi")*'  (6.04%)'),expression (italic("Preussia")*' sp. 2 (1.26%)'),  expression(italic("Fusariella")*' sp. (6.59%)'),
-              expression(italic("Preussia")*' sp. 3 (5.61%)'),expression(italic("Staphylotrichum")*' sp. (4.5%)'),expression(italic("Chaetomium")*' sp. (5.84%)'),
-              expression(italic("Asordaria humana")*' sp. (8.96%)'),expression (italic("Chaetomium")*' sp. 2 (6.44%)'),expression (italic("Coniolariella")*' sp. 1 (2.84%)'))
-
-pie (OTU.Twig.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
-                                             "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                             "yellow", "springgreen2", "pink","green", "blue", "black","orange" ) , main = "OTUs frequency", 
-     cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
-
 ########################################
 ######################################## Aggregate for ggtree
 ?par
@@ -909,9 +892,9 @@ order.lbls<- c("Eurotiales (0.5%)","Ophiostomatales (5.83%)","Boletales (2.98%)"
                "Hypocreales (4.39%)"," Pleosporales (47.16%)",
                "Saccharomycetales (0.87%)","Sordariales (17.18%) ", "Amphisphaeriales (0.88%)","Unknown (7.34%)")
 
-pie(order.slic,labels =order.lbls, col = c("red","skyblue1","magenta",
-                                           "deeppink1","mediumblue","green","orchid1","cyan",
-                                           "yellow", "springgreen2") , main = "Orders frequency", 
+pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
+                                           "plum2","blue","orchid4","yellow","tomato2",
+                                           "goldenrod", "aquamarine4") , main = "Orders frequency", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
 
@@ -1150,9 +1133,6 @@ OTU.250<-t(OTU.250)
 
 selectedOTU<-colnames(OTU.250)
 
-#برای هر کدوم از این 15 تا یک رنگ ثابت در نظر بگیر
-
-
 #subset the sum aggregate
 selected.otu.count.organ<-otu.sum.organ[,names(otu.sum.organ) %in% colnames(OTU.250)]
 #add the organ column to it
@@ -1166,39 +1146,84 @@ total.obs.organ<-aggregate(IR~TISSUE,MetaRich.ART1,sum)
 #leaf OTU pie chart 
 leaf.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Leaf")
 leaf.pie.otu$organ<-NULL
-# این عدد رو از پایین تر گرفتم اول خطوط بعدی رو ران کن بعد این عدد رو که بدست آورید این خط رو ران کن و 
-# بقیه رو هم دوباره ران کن تا لست اعداد و لیست نام ها کامل بشه و 
-#others 
-# اضافه بشه
 leaf.pie.otu$Others<-1432
 # more than zero?
 leaf.pie.otu.0<- leaf.pie.otu[, colSums(leaf.pie.otu != 0) > 0]
 lables.pie.leaf<-colnames(leaf.pie.otu.0)
 numbers.pie.leaf<-as.numeric(leaf.pie.otu.0[1,])
-
-# این اعداد از دو تا آبجکت بالاتر اومده
-#numbers.pie.leaf
-#و
-#total.obs.organ
-# از اینجا اعداد باقیمانده او تی  یو ها رو بدست آوردم و به لیست اضافه کردم
 3245-1813
 
 #plot the leaf pie chart
-pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("red","skyblue1","magenta",
-                                           "deeppink1","mediumblue","green","orchid1","cyan",
-                                           "yellow", "springgreen2","black") , main = "Leaf", 
+pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("chartreuse4","yellowgreen","dodgerblue2",
+                                           "yellow1","orchid4","maroon2","darkcyan","plum2",
+                                           "cyan1", "goldenrod","tomato2") , main = "Leaf", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+#######################
+#Twig OTU pie chart 
+Twig.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Branch")
+Twig.pie.otu$organ<-NULL
+Twig.pie.otu$Others<-985
+# more than zero?
+Twig.pie.otu.0<- Twig.pie.otu[, colSums(Twig.pie.otu != 0) > 0]
+lables.pie.Twig<-colnames(Twig.pie.otu.0)
+numbers.pie.Twig<-as.numeric(Twig.pie.otu.0[1,])
+2533-1548
+
+#plot the Twig pie chart
+pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yellowgreen","dodgerblue2","yellow1",
+                                                      "orchid4","darkcyan","plum2","cyan1","slategray",
+                                                      "goldenrod","tomato2") , main = "Twig", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
-# رنگ ها رو بر اساس رنگ های ثابتی که انتخاب میکنی تغییر بده
+#######################
+#Root OTU pie chart 
+Root.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Root")
+Root.pie.otu$organ<-NULL
+Root.pie.otu$Others<-1129
+# more than zero?
+Root.pie.otu.0<- Root.pie.otu[, colSums(Root.pie.otu != 0) > 0]
+lables.pie.Root<-colnames(Root.pie.otu.0)
+numbers.pie.Root<-as.numeric(Root.pie.otu.0[1,])
+4324-3195
 
+#plot the Root pie chart
+pie(numbers.pie.Root,labels =lables.pie.Root, col = c("chartreuse4","Violetred4","darkturquoise",
+                                                      "yellowgreen","plum4","yellow1","cyan1","darkorange",
+                                                      "goldenrod","tomato2") , main = "Root", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
+#####################################
+##### fig 1-article
 
+### data prep
+otu.sum.Host<-aggregate(.~MetaRich.ART1$HOST,AbundNotZero.art1,sum)
+otu.count<-colSums(AbundNotZero.art1)
+OTU.250<-subset(otu.count, otu.count>250)
+class(OTU.250)
+OTU.250<-as.data.frame(OTU.250)
+OTU.250<-t(OTU.250)
+# 15 OTUs selected
 
+selectedOTU<-colnames(OTU.250)
 
+#subset the sum aggregate
+selected.otu.count.Host<-otu.sum.Host[,names(otu.sum.Host) %in% colnames(OTU.250)]
+#add the Host column to it
+selected.otu.count.Host$Host<-otu.sum.Host$`MetaRich.ART1$HOST`
+View(selected.otu.count.Host)
+# now you have a data fram of 15 selected OTUs with more than 250 observations in selected.otu.count.organ
+# total observation per Host?
+total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
 
-
-
-
-
+ggplot(selected.otu.count.Host,aes(x = HOST, y = value,fill = Order)) + 
+  geom_bar(position = "fill",stat = "identity") +facet_wrap(~SOIL) + theme_bw()+scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species")+ ylab("Proportional frequency")+
+  labs(fill = "Order")
+  
+  
+  
+  
+  
+  
 
 
