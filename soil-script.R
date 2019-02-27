@@ -381,25 +381,34 @@ ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
 # Pie chart (OTUs!)
 library (lattice)
 OTU.colsum<-colSums(AbundNotZero.art1)
-
 # اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
 OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
 OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
-OTU.lbls<- c (expression (italic("Rosellinia ")*' sp. (8.57%)' ), expression (italic("Acrocalymma vagum")*' (3.48%)'), expression(italic("Dimorphosporicola")*' sp. (3%)'),
+OTU.lbls<- c (expression (italic("Rosellinia")*' sp. (8.57%)' ), expression (italic("Acrocalymma vagum")*' (3.48%)'), expression(italic("Dimorphosporicola")*' sp. (3%)'),
              expression(italic("Raffaelea montetyi")*' (5.83%)'), expression(italic("Paracamarosporium")*' sp. (4.3%)'), expression(italic("Fusariella")*' sp. (3.44%)'),
              expression(italic("Humicola fuscoatra")*' (5.3%)'),expression(italic("Neocamarosporium chichastianum")*' (8.68%)'),expression(italic("Chaetosphaeronema")*' sp. (4.95%)'),
              expression(italic("Preussia")*' sp. (3.9%)'),expression (italic("Coniophora")*' sp. (2.98%)'), "Other (45.57%)")
 
 pie (OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                        "deeppink1","mediumblue","royalblue1","orchid1","cyan",
-                                       "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency",
-                                       cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
-
-
-# Pie chart (OTUs-Root)
-
+                                       "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency", cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
 
 #change the font back to normal
+
+# Pie chart (OTUs!) Twig
+OTU.Twig.slic<- c(155,48,301,63,628, 120,153,32,167,142,114,148, 227,163,72)  
+OTU.Percent<-round(OTU.Twig.slic/sum (OTU.Twig.slic)*100, digits=2)
+OTU.lbls<- c (expression (italic("Humicola fuscoatra")*' sp. (6.12%)' ),expression (italic("Preussia")*' sp. 6 (1.89%)'), expression (italic("Coniophora")*' sp. 1 (11.88%)'),
+              expression(italic("Briansuttonomyces eucalypti")*'(2.49%)'), 
+              "Other (24.79%)",
+              expression(italic("Dimorphosporicola")*' sp. (4.74%)'), expression(italic("Raffaelea montetyi")*'  (6.04%)'),expression (italic("Preussia")*' sp. 2 (1.26%)'),  expression(italic("Fusariella")*' sp. (6.59%)'),
+              expression(italic("Preussia")*' sp. 3 (5.61%)'),expression(italic("Staphylotrichum")*' sp. (4.5%)'),expression(italic("Chaetomium")*' sp. (5.84%)'),
+              expression(italic("Asordaria humana")*' sp. (8.96%)'),expression (italic("Chaetomium")*' sp. 2 (6.44%)'),expression (italic("Coniolariella")*' sp. 1 (2.84%)'))
+
+pie (OTU.Twig.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
+                                             "deeppink1","mediumblue","royalblue1","orchid1","cyan",
+                                             "yellow", "springgreen2", "pink","green", "blue", "black","orange" ) , main = "OTUs frequency", 
+     cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
 
 ########################################
 ######################################## Aggregate for ggtree
@@ -593,6 +602,15 @@ aggregate(Article1OTU $ SRE.sh7.Chaetomium.cucumericola ~ SOIL, data = Article1M
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ HOST, data = Article1Meta, sum)
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ TISSUE, data = Article1Meta, sum)
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ SOIL, data = Article1Meta, sum)
+
+PSE.wh14.Preussia.sp.
+
+aggregate (IR~ TISSUE, data = Article1Meta, sum)
 
 ##############################################
 ##############################################
@@ -1024,15 +1042,15 @@ library(ggtree)
 library(tidyverse)
 
 #loaded your tree
-s <- read.tree("TREE.FINAL.tree")
-
+s <- read.tree("AfterEdit.tree")
+ggtree(tree, ladderize = FALSE)
 ggplot(s) + geom_tree() + theme_tree()
 #Add a tree scale
 ggtree(s) + geom_treescale()
 ggtree(s) + theme_tree2()
 
 #turn your tree into a cladogram
-ggtree(s, branch.length="none")
+ggtree(s, branch.length="none",size=0.5, linetype=1, hjust=-3) + geom_tiplab()+ geom_nodepoint() 
 
 ggtree(s, branch.length="none", color="red", size=1, linetype=1)
 
@@ -1045,23 +1063,23 @@ p + geom_tippoint()
 p + geom_tiplab()
 p + geom_tiplab()+ geom_nodepoint() 
 
-ggtree(treeDP)+  geom_text(aes(label=node), hjust=-3)
+ggtree(s)+  geom_text(aes(label=node), hjust=-3)
 
 
 # label and color for every branch
-ggtree(treeDP) + geom_cladelabel(node=17, label="APEsh6", color="blue")
+ggtree(s) + geom_cladelabel(node=17, label="APEsh6", color="blue")
 
-ggtree(treeDP) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
+ggtree(s) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
 
-ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
+ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
   geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
 
 
-ggtree(treeDP) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
+ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
   geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
   xlim(0, 15) + theme_tree()
 
-ggtree(treeDP) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
+ggtree(s) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
 
 #Plot tree with other data
 #read the help first!!!!!!!!!!!!!!!!
@@ -1079,7 +1097,7 @@ write.csv(d2, file = "tiplab.csv")
 Treedata1 <- read.csv("Tree.csv")
 View(Treedata1)
 
-tree.p<-ggtree(treeDP)
+tree.p<-ggtree(s)
 # now plot toghether
 tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
                     aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
