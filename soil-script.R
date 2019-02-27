@@ -1134,6 +1134,66 @@ p + geom_tiplab()
 p + geom_tiplab()+ geom_nodepoint() 
 
 
+#####################################
+##### fig 1-article
+
+### data prep
+otu.sum.organ<-aggregate(.~MetaRich.ART1$TISSUE,AbundNotZero.art1,sum)
+
+otu.count<-colSums(AbundNotZero.art1)
+
+OTU.250<-subset(otu.count, otu.count>250)
+class(OTU.250)
+OTU.250<-as.data.frame(OTU.250)
+OTU.250<-t(OTU.250)
+# 15 OTUs selected
+
+selectedOTU<-colnames(OTU.250)
+
+#برای هر کدوم از این 15 تا یک رنگ ثابت در نظر بگیر
+
+
+#subset the sum aggregate
+selected.otu.count.organ<-otu.sum.organ[,names(otu.sum.organ) %in% colnames(OTU.250)]
+#add the organ column to it
+selected.otu.count.organ$organ<-otu.sum.organ$`MetaRich.ART1$TISSUE`
+View(selected.otu.count.organ)
+# now you have a data fram of 15 selected OTUs with more than 250 observations in selected.otu.count.organ
+# total observation per organ?
+total.obs.organ<-aggregate(IR~TISSUE,MetaRich.ART1,sum)
+
+#######################
+#leaf OTU pie chart 
+leaf.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Leaf")
+leaf.pie.otu$organ<-NULL
+# این عدد رو از پایین تر گرفتم اول خطوط بعدی رو ران کن بعد این عدد رو که بدست آورید این خط رو ران کن و 
+# بقیه رو هم دوباره ران کن تا لست اعداد و لیست نام ها کامل بشه و 
+#others 
+# اضافه بشه
+leaf.pie.otu$Others<-1432
+# more than zero?
+leaf.pie.otu.0<- leaf.pie.otu[, colSums(leaf.pie.otu != 0) > 0]
+lables.pie.leaf<-colnames(leaf.pie.otu.0)
+numbers.pie.leaf<-as.numeric(leaf.pie.otu.0[1,])
+
+# این اعداد از دو تا آبجکت بالاتر اومده
+#numbers.pie.leaf
+#و
+#total.obs.organ
+# از اینجا اعداد باقیمانده او تی  یو ها رو بدست آوردم و به لیست اضافه کردم
+3245-1813
+
+#plot the leaf pie chart
+pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("red","skyblue1","magenta",
+                                           "deeppink1","mediumblue","green","orchid1","cyan",
+                                           "yellow", "springgreen2","black") , main = "Leaf", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
+# رنگ ها رو بر اساس رنگ های ثابتی که انتخاب میکنی تغییر بده
+
+
+
+
 
 
 
