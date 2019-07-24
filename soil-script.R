@@ -4,11 +4,13 @@
 ############################################
 library(vegan)
 library(mvabund)
-library(rjags)
 library(MASS)
 library(ggplot2)
 library(ggtree)
 library(tidyverse)
+library(tidytree)
+library(gtable)
+library(grid)
 #################################################
 #### Article 1
 #################################################
@@ -205,8 +207,10 @@ interact.data$Organ<-factor(interact.data$Organ, levels = c("Leaf" ,"Twig","Root
 # barplot
 ggplot(data = interact.data,aes(x=Organ,y=value, fill= Index))+
   geom_bar(stat="identity",position="dodge",width=0.5)+
-  facet_wrap(~Soil)+ theme_bw()+ ylab("Mean value")+theme(legend.position="top")+
-  guides(fill=guide_legend(""))
+  facet_wrap(~Soil)+ theme_bw()+ ylab("Mean value")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+  axis.title=element_text(size=14),legend.text=element_text(size=12),
+strip.text = element_text(size = 12))+ guides(fill=guide_legend(""))
 
 
 ####################################################
@@ -216,8 +220,8 @@ ggplot(data = interact.data,aes(x=Organ,y=value, fill= Index))+
 ####################################################
 # for this we are using Permutational multivariate analysis of variance (PERMANOVA)
 #this function from vegan does it
-memory.limit()
-memory.limit(size=30000)
+# memory.limit()
+# memory.limit(size=30000)
 # data transformation:
 tran.abund.notzero<-decostand(AbundNotZero.art1,method="hellinger")
 #PERMANOVA
@@ -342,6 +346,8 @@ OTU.SITE<-colnames(mvabund.m.anova)[mvabund.m.anova["SITE",]<= 0.05]#14otus affe
 OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affected
 OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
 OTU.organ<-colnames(mvabund.m.anova)[mvabund.m.anova["TISSUE",]<= 0.05]#40otus affected
+
+
 ###############################################
 ## plot affected OTUs by SOIL*TISSUE for the paper
 ################################################
@@ -359,6 +365,7 @@ TPEsh28$OTU<-c("TPEsh28.Humicola.fuscoatra")
 
 # a new dataframe for ploting
 SOILTISSUE<-rbind (TPEsh28,LAEse5)
+<<<<<<< HEAD
 View(SOILTISSUE )
 write.csv(SOILTISSUE, file = "H.csv")
 dev.off()
@@ -368,13 +375,30 @@ read.csv ("H.csv")
 ggplot(SOILTISSUE, aes(x=TISSUE, y=value, fill=OTU)) + xlab("Tissue")+ ylab("Frequency")+
   labs(fill = "OTU") + geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
 
+=======
+# View(SOILTISSUE )
+# write.csv(SOILTISSUE, file = "SOILTISSUE.csv")
+# read.csv("SOILTISSUE.csv")
+ST<- read.csv ("ST.csv")
+ST$Organ<-factor(ST$Organ,levels = c("Leaf", "Twig","Root" ))
+levels(ST$Organ)
+##################### the soil:organ interaction plot for 2 otus
+ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
+  geom_bar(stat="identity", width = 0.5) + facet_wrap(~Soil) + theme_bw()+
+  xlab("Organ")+ ylab("Frequency")+ theme(legend.position="top",axis.text=element_text(size=12),
+                                          axis.title=element_text(size=14),legend.text=element_text(size=12),
+                                          strip.text = element_text(size = 12))+
+  guides(fill=guide_legend(title=NULL))
+>>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
 
 ########################################
 ########################################
 # Pie chart (OTUs!)
+library (lattice)
 OTU.colsum<-colSums(AbundNotZero.art1)
-
+# اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
 OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
+<<<<<<< HEAD
 OTU.lbls<- c(expression(italic("Rosellinia sp.")),expression(italic("Acrocalymma vagum")),
                          expression(italic("Dimorphosporicola tragani")),
                          expression(italic("Raffaelea montetyi")),expression(italic("Paracamarosporium hawaiiense")),
@@ -391,9 +415,21 @@ pie(OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                            "yellow", "springgreen2", "pink","green" ) , main = "OTU", 
     cex=1,border = NA,cex.main= 0.5, radius = 1)
+
+OTU.Percent<-round(OTU.slic/sum (OTU.slic)*100, digits=2)
+OTU.lbls<- c (expression (italic("Rosellinia")*' sp. (8.57%)' ), expression (italic("Acrocalymma vagum")*' (3.48%)'), expression(italic("Dimorphosporicola")*' sp. (3%)'),
+             expression(italic("Raffaelea montetyi")*' (5.83%)'), expression(italic("Paracamarosporium")*' sp. (4.3%)'), expression(italic("Fusariella")*' sp. (3.44%)'),
+             expression(italic("Humicola fuscoatra")*' (5.3%)'),expression(italic("Neocamarosporium chichastianum")*' (8.68%)'),expression(italic("Chaetosphaeronema")*' sp. (4.95%)'),
+             expression(italic("Preussia")*' sp. (3.9%)'),expression (italic("Coniophora")*' sp. (2.98%)'), "Other (45.57%)")
+
+pie (OTU.slic,labels =OTU.lbls, col = c("red","skyblue1","magenta",
+                                       "deeppink1","mediumblue","royalblue1","orchid1","cyan",
+                                       "yellow", "springgreen2", "pink","green" ) , main = "OTUs frequency", cex=0.8,border = NA,cex.main= 1.1, radius =0.85)
+
+
 ########################################
 ######################################## Aggregate for ggtree
-
+?par
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~HOST, data = Article1Meta, sum)
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~TISSUE, data = Article1Meta, sum)
 aggregate(Article1OTU $ APE.se5.Staphylotrichum.coccosporum ~SOIL, data = Article1Meta, sum)
@@ -583,6 +619,15 @@ aggregate(Article1OTU $ SRE.sh7.Chaetomium.cucumericola ~ SOIL, data = Article1M
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ HOST, data = Article1Meta, sum)
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ TISSUE, data = Article1Meta, sum)
 aggregate(Article1OTU $ SRE.sh5.Fusarium.redolens ~ SOIL, data = Article1Meta, sum)
+
+
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ HOST, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ TISSUE, data = Article1Meta, sum)
+aggregate(Article1OTU $ PSE.wh14.Preussia.sp. ~ SOIL, data = Article1Meta, sum)
+
+PSE.wh14.Preussia.sp.
+
+aggregate (IR~ TISSUE, data = Article1Meta, sum)
 
 ##############################################
 ##############################################
@@ -878,9 +923,12 @@ View(Article1Order)
 png("orderplot1.png",width = 1700, height = 1700,res=600)
 order.colsum<-colSums(Article1Order)
 order.slic<- c(51, 589,301,1300,443,4764,88,1736,89,741)  #get the valus from order.colsum
-order.lbls<- c("Eurotiales","Ophiostomatales","Boletales","Xylariales","Hypocreales"," Pleosporales",
-               "Saccharomycetales","Sordariales ", "Amphisphaeriales","Unknown ")
+Order.Percent<- round(order.slic/sum(OTU.slic)*100, digits = 2 )
+order.lbls<- c("Eurotiales (0.5%)","Ophiostomatales (5.83%)","Boletales (2.98%)","Xylariales (12.87%)",
+               "Hypocreales (4.39%)"," Pleosporales (47.16%)",
+               "Saccharomycetales (0.87%)","Sordariales (17.18%) ", "Amphisphaeriales (0.88%)","Unknown (7.34%)")
 
+<<<<<<< HEAD
 order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
 order.lbls <- paste(order.lbls, order.Percent)
 order.lbls<-paste(order.lbls,"%",sep="")
@@ -888,6 +936,13 @@ pie(order.slic,labels =order.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                            "yellow", "springgreen2") , main = "Order", cex=0.2,border = NA,cex.main= 0.3, radius = 0.7)
 dev.off()
+=======
+pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
+                                           "plum2","blue","orchid4","yellow","tomato2",
+                                           "goldenrod", "aquamarine4") , main = "Orders frequency", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
+>>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
 
 ##############################################
 ################################################
@@ -1018,6 +1073,7 @@ library(tidyverse)
 library(tidytree)
 
 #loaded your tree
+
 treeDP1 <- read.tree("Final.nxs.tree")
 
 ggplot(treeDP1) + geom_tree() + theme_tree()
@@ -1061,69 +1117,102 @@ ggtree(treeDP)+  geom_text(aes(label=node), hjust=-3)
 #read the help first!!!!!!!!!!!!!!!!
 ?facet_plot
 
-#this shows the tip lables
-d = fortify(treeDP)
-d = subset(d, isTip)
-d2<-with(d, label[order(y, decreasing=T)])
+# s <- read.tree("AfterEdit.tree")
+# ggtree(tree, ladderize = FALSE)
+# ggplot(s) + geom_tree() + theme_tree()
+# #Add a tree scale
+# ggtree(s) + geom_treescale()
+# ggtree(s) + theme_tree2()
+# 
+# #turn your tree into a cladogram
+# ggtree(s, branch.length="none",size=0.5, linetype=1, hjust=-3) + geom_tiplab()+ geom_nodepoint() 
+# 
+# ggtree(s, branch.length="none", color="red", size=1, linetype=1)
+# 
+# #turn your tree into circular layout
+# ggtree (s, layout="circular") + ggtitle("(Phylogram) circular layout")
+# 
+# p <- ggtree(s)
+# p + geom_nodepoint()
+# p + geom_tippoint()
+# p + geom_tiplab()
+# p + geom_tiplab()+ geom_nodepoint() 
+# 
+# ggtree(s)+  geom_text(aes(label=node), hjust=-3)
+# 
+# 
+# # label and color for every branch
+# ggtree(s) + geom_cladelabel(node=17, label="APEsh6", color="blue")
+# 
+# ggtree(s) + geom_tiplab() +  geom_cladelabel(node=17, label="APEsh6", color="red", offset=1.5)
+# 
+# ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="Some random clade", color="red2", offset=1.5) + 
+#   geom_cladelabel(node=80, label="A different clade",  color="blue", offset=1.5)
+# 
+# 
+# ggtree(s) + geom_tiplab() + geom_cladelabel(node=17, label="ABC", color="red2", offset=5, align=TRUE) + 
+#   geom_cladelabel(node=80, label="DEF", color="blue", offset=5, align=TRUE) + theme_tree2() + 
+#   xlim(0, 15) + theme_tree()
+# 
+# ggtree(s) + geom_tiplab() + geom_hilight(node=17, fill="gold") + geom_hilight(node=80, fill="purple")
+# 
+# #Plot tree with other data
+# #read the help first!!!!!!!!!!!!!!!!
+# ?facet_plot
+# 
+# #this shows the tip lables
+# d = fortify(treeDP)
+# d = subset(d, isTip)
+# d2<-with(d, label[order(y, decreasing=T)])
+# 
+# #extract and use in data for ploting
+# write.csv(d2, file = "tiplab.csv")
 
-#extract and use in data for ploting
-write.csv(d2, file = "tiplab.csv")
+
+############# THE TREE!
 
 # modified data import
+
 Treedata1 <- read.csv("Tree.csv")
 View(Treedata1)
 
 tree.p<-ggtree(treeDP1)
-# now plot toghether
-tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
-                    aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
+# # now plot toghether
+# tree.p2<-facet_plot(tree.p, panel='branch', data=Treedata1, geom=geom_segment, 
+#                     aes(x=0, xend=val, y=y, yend=y), size=3, color='blue')
+# 
+# tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment, 
+#                     aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
+# facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
+#            aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
+# 
+# ### fixed the points size
+# facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
+#            
+#            aes(x=0,size=val), color='blue')+ theme(legend.position="right")
 
-tree.p3<-facet_plot(tree.p2, panel='leaf', data=Treedata1, geom=geom_segment, 
-                    aes(x=0, xend=val, y=y, yend=y), size=3, color='green')
-facet_plot(tree.p3, panel='root', data=Treedata1, geom=geom_segment, 
-           aes(x=0, xend=val, y=y, yend=y), size=3, color='red')
-
-### fixed the points size
-facet_plot(tree.p, panel='data', data=Treedata1, geom=geom_point, 
-           
-           aes(x=0,size=val), color='blue')+ theme(legend.position="right")
-
-#load the new tree
-TREEARTICLE1 <- read.tree("Tree.nxs.tree")
-
-ggplot(TREEARTICLE1) + geom_tree() + theme_tree()
-#Add a tree scale
-ggtree(TREEARTICLE1) + geom_treescale()
-
-#turn your tree into a cladogram
-ggtree(TREEARTICLE1, branch.length="none")
-
-ggtree(TREEARTICLE1, branch.length="none", color="red", size=1, linetype=1)
-
-#turn your tree into circular layout
-ggtree (TREEARTICLE1, layout="circular") + ggtitle("(Phylogram) circular layout")
-
-p <- ggtree(TREEARTICLE1)
-p + geom_nodepoint()
-p + geom_tippoint()
-p + geom_tiplab()
-p + geom_tiplab()+ geom_nodepoint() 
-
-
-############
-#get the tip lables from the tree
-d = fortify(treeDP)
-
-d = subset(d, isTip)
-
-d2<-with(d, label[order(y, decreasing=T)])
-
-#extract and use in data for ploting
+# #load the new tree
+# TREEARTICLE1 <- read.tree("Tree.nxs.tree")
+# 
+# ggplot(TREEARTICLE1) + geom_tree() + theme_tree()
+# #Add a tree scale
+# ggtree(TREEARTICLE1) + geom_treescale()
+# 
+# #turn your tree into a cladogram
+# ggtree(TREEARTICLE1, branch.length="none")
+# 
+# ggtree(TREEARTICLE1, branch.length="none", color="red", size=1, linetype=1)
+# 
+# #turn your tree into circular layout
+# ggtree (TREEARTICLE1, layout="circular") + ggtitle("(Phylogram) circular layout")
+# 
+# p <- ggtree(TREEARTICLE1)
+# p + geom_nodepoint()
+# p + geom_tippoint()
+# p + geom_tiplab()
+# p + geom_tiplab()+ geom_nodepoint() 
 
 
-
-write.csv(d2, file = "tiplab-new.csv")
-dev.off()
 
 
 
@@ -1133,31 +1222,65 @@ dev.off()
 
 # modified data import
 
-Treedata.final <- read.csv("finalTREEdata.csv")
-
-View(Treedata.final)
+# Treedata.final <- read.csv("finalTREEdata.csv")
+# 
+# View(Treedata.final)
 
 # import the tree
 
-tree1 <- read.tree("FinalTree.tree")
+#tree1 <- read.tree("FinalTree.tree")
 
-tree.p<-ggtree(tree1,branch.length= "none")
+treetmu<-read.tree("BeforeEdit.tree")
+############
+#get the tip lables from the tree
+d = fortify(treetmu)
 
+d = subset(d, isTip)
 
+d2<-with(d, label[order(y, decreasing=T)])
+
+#extract and use in data for ploting
+
+write.csv(d2, file = "tiplabtmu.csv")
+dev.off()
+#new data for ploting
+Treedata.tmu<- read.csv("tiplabtmu.csv")
+View(Treedata.tmu)
+#plot with soil data
+tree.tmu1<-ggtree(treetmu,branch.length= "none")
 
 # now plot toghether with soil data
 
-tree.p2<-facet_plot(tree.p, panel='Dry soil', data=Treedata.final, geom=geom_point, 
+tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(0.0009), panel='Dry soil', data=Treedata.tmu, geom=geom_point, 
                     
                     aes(x=0, size=Dry), color='blue')
 
-
-
-tree.p3<-facet_plot(tree.p2, panel='Saline soil', data=Treedata.final, geom=geom_point, 
+tree.tmu3<-facet_plot(tree.tmu2, panel='Saline soil', data=Treedata.tmu, geom=geom_point, 
                     
-                    aes(x=0, size=Saline), color='blue')+
-  
-  theme(legend.position="right",legend.title = element_blank())
+                    aes(x=0, size=Saline), color='blue')+ theme(legend.position="right",legend.title = element_blank())
+
+
+
+gtree(treeDP, branch.length="none")
+
+library(gtable)
+library(grid)
+#panel 2
+gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
+
+gtree1$layout$l[grep("panel-2",gtree1$layout$name)]
+gtree1$widths[7]=0.3*gtree1$widths[7]
+grid.draw(gtree1)
+
+#panel 1
+gtree1$layout$l[grep("panel-1",gtree1$layout$name)]
+gtree1$widths[5]=2.5*gtree1$widths[5]
+grid.draw(gtree1)
+#panel 3
+gtree1$layout$l[grep("panel-3",gtree1$layout$name)]
+gtree1$widths[9]=0.3*gtree1$widths[9]
+#final tree without lables
+grid.draw(gtree1)
 
 
 
@@ -1391,3 +1514,132 @@ host.barplot
 
 
 
+=======
+Treedata.final <- read.csv("finalTREEdata.csv")
+View(Treedata.final)
+# import the tree
+tree1 <- read.tree("FinalTree.tree")
+tree.p<-ggtree(tree1,branch.length= "none")
+
+# now plot toghether with soil data
+tree.p2<-facet_plot(tree.p, panel='Dry soil', data=Treedata.final, geom=geom_point, 
+                    aes(x=0, size=Dry), color='blue')
+
+tree.p3<-facet_plot(tree.p2, panel='Saline soil', data=Treedata.final, geom=geom_point, 
+                    aes(x=0, size=Saline), color='blue')+
+  theme(legend.position="right",legend.title = element_blank())
+  
+####################################
+##### fig 1-article
+
+### data prep
+otu.sum.organ<-aggregate(.~MetaRich.ART1$TISSUE,AbundNotZero.art1,sum)
+
+otu.count<-colSums(AbundNotZero.art1)
+
+OTU.250<-subset(otu.count, otu.count>250)
+class(OTU.250)
+OTU.250<-as.data.frame(OTU.250)
+OTU.250<-t(OTU.250)
+# 15 OTUs selected
+
+selectedOTU<-colnames(OTU.250)
+
+#subset the sum aggregate
+selected.otu.count.organ<-otu.sum.organ[,names(otu.sum.organ) %in% colnames(OTU.250)]
+#add the organ column to it
+selected.otu.count.organ$organ<-otu.sum.organ$`MetaRich.ART1$TISSUE`
+View(selected.otu.count.organ)
+# now you have a data fram of 15 selected OTUs with more than 250 observations in selected.otu.count.organ
+# total observation per organ?
+total.obs.organ<-aggregate(IR~TISSUE,MetaRich.ART1,sum)
+
+#######################
+#leaf OTU pie chart 
+leaf.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Leaf")
+leaf.pie.otu$organ<-NULL
+leaf.pie.otu$Others<-1432
+# more than zero?
+leaf.pie.otu.0<- leaf.pie.otu[, colSums(leaf.pie.otu != 0) > 0]
+lables.pie.leaf<-colnames(leaf.pie.otu.0)
+numbers.pie.leaf<-as.numeric(leaf.pie.otu.0[1,])
+3245-1813
+
+#plot the leaf pie chart
+p.leaf<-pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("chartreuse4","yellowgreen","dodgerblue2",
+                                           "yellow1","orchid4","maroon2","darkcyan","plum2",
+                                           "cyan1", "goldenrod","tomato2") , main = "Leaf", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+#######################
+#Twig OTU pie chart 
+Twig.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Branch")
+Twig.pie.otu$organ<-NULL
+Twig.pie.otu$Others<-985
+# more than zero?
+Twig.pie.otu.0<- Twig.pie.otu[, colSums(Twig.pie.otu != 0) > 0]
+lables.pie.Twig<-colnames(Twig.pie.otu.0)
+numbers.pie.Twig<-as.numeric(Twig.pie.otu.0[1,])
+2533-1548
+
+#plot the Twig pie chart
+p.twig<-pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yellowgreen","dodgerblue2","yellow1",
+                                                      "orchid4","darkcyan","plum2","cyan1","slategray",
+                                                      "goldenrod","tomato2") , main = "Twig", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
+#######################
+#Root OTU pie chart
+Root.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Root")
+Root.pie.otu$organ<-NULL
+Root.pie.otu$Others<-1129
+# more than zero?
+Root.pie.otu.0<- Root.pie.otu[, colSums(Root.pie.otu != 0) > 0]
+lables.pie.Root<-colnames(Root.pie.otu.0)
+numbers.pie.Root<-as.numeric(Root.pie.otu.0[1,])
+4324-3195
+
+#plot the Root pie chart
+p.root<-pie(numbers.pie.Root,labels =lables.pie.Root, col = c("chartreuse4","Violetred4","darkturquoise",
+                                                      "yellowgreen","plum4","yellow1","cyan1","darkorange",
+                                                      "goldenrod","tomato2") , main = "Root", 
+    cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+##############
+# Orders pie chart
+p.order<-pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
+                                                    "plum2","blue","orchid4","yellow","tomato2",
+                                                    "goldenrod", "aquamarine4") , main = "Orders frequency", 
+             cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
+### host otu barplot
+otu.sum.Host<-aggregate(.~MetaRich.ART1$HOST,AbundNotZero.art1,sum)
+#subset the sum aggregate
+selected.otu.count.Host<-otu.sum.Host[,names(otu.sum.Host) %in% colnames(OTU.250)]
+
+#add the Host column to it
+selected.otu.count.Host$Host<-otu.sum.Host$`MetaRich.ART1$HOST`
+View(selected.otu.count.Host)
+# total observation per Host?
+total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
+#manually prep the data frame for the plot
+#write.csv(selected.otu.count.Host,"selected.otu.host.csv")
+# import new data
+host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
+otu.cols<-c("plum4","orchid4","yellowgreen","yellow1","maroon2","darkcyan","slategray","dodgerblue2",
+"goldenrod","chartreuse4","darkturquoise","tomato2",'darkorange',"plum2","cyan1","Violetred4")
+
+#barplot
+host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
+  geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species")+ ylab("Proportional frequency")+
+  labs(fill = "OTU")+ scale_fill_manual(values=otu.cols)+theme(legend.position="top")
+### export all of the plots together  
+margin1<-matrix(c(0,2,0,0,2,0,1,3,5,1,3,5,0,4,0,0,4,0))  
+layout(margin1)
+dev.off()
+par(mfrow=c(3,2))
+p.leaf
+p.twig
+p.root
+p.order
+host.barplot
+>>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
