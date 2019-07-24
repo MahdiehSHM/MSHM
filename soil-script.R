@@ -1074,28 +1074,28 @@ library(tidytree)
 
 #loaded your tree
 
-treeDP1 <- read.tree("Final.nxs.tree")
+# treeDP1 <- read.tree("Final.nxs.tree")
 
-ggplot(treeDP1) + geom_tree() + theme_tree()
+# ggplot(treeDP1) + geom_tree() + theme_tree()
 #Add a tree scale
-ggtree(treeDP1) + geom_treescale()
-ggtree(treeDP1) + theme_tree2()
+# ggtree(treeDP1) + geom_treescale()
+# ggtree(treeDP1) + theme_tree2()
 
 #turn your tree into a cladogram
-ggtree(treeDP, branch.length="none")
+# ggtree(treeDP, branch.length="none")
 
-ggtree(treeDP, branch.length="none", color="red", size=1, linetype=1)
+# ggtree(treeDP, branch.length="none", color="red", size=1, linetype=1)
 
 #turn your tree into circular layout
-ggtree (treeDP, layout="circular") + ggtitle("(Phylogram) circular layout")
+# ggtree (treeDP, layout="circular") + ggtitle("(Phylogram) circular layout")
 
-p <- ggtree(treeDP)
-p + geom_nodepoint()
-p + geom_tippoint()
-p + geom_tiplab()
-p + geom_tiplab()+ geom_nodepoint() 
+# p <- ggtree(treeDP)
+# p + geom_nodepoint()
+# p + geom_tippoint()
+# p + geom_tiplab()
+# p + geom_tiplab()+ geom_nodepoint() 
 
-ggtree(treeDP)+  geom_text(aes(label=node), hjust=-3)
+# ggtree(treeDP)+  geom_text(aes(label=node), hjust=-3)
 
 
 # label and color for every branch
@@ -1211,9 +1211,6 @@ tree.p<-ggtree(treeDP1)
 # p + geom_tippoint()
 # p + geom_tiplab()
 # p + geom_tiplab()+ geom_nodepoint() 
-
-
-
 
 
 ############# THE TREE!
