@@ -1282,8 +1282,9 @@ dev.off()
 Treedata.tmu<- read.csv("tiplabtmu.csv")
 View(Treedata.tmu)
 #plot with soil data
-tree.tmu1<-ggtree(treetmu,branch.length= "none")
+tree.tmua<-ggtree(treetmu,branch.length= "none")
 
+tree.tmu1<-tree.tmua + geom_tiplab()+ geom_nodepoint()
 # now plot toghether with soil data
 
 tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(0.0009), panel='Dry soil', data=Treedata.tmu, geom=geom_point, 
