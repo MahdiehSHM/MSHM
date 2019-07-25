@@ -8,9 +8,17 @@ library(MASS)
 library(ggplot2)
 library(ggtree)
 library(tidyverse)
+<<<<<<< HEAD
 library(tidytree)
 library(gtable)
 library(grid)
+=======
+library(magrittr)
+library(scales)
+library(reshape)
+library (lattice)
+
+>>>>>>> c271edb1cb5f4adfc063c1c1864518a99de3425a
 #################################################
 #### Article 1
 #################################################
@@ -161,8 +169,8 @@ plot(Richness.m)
 dev.off()
 boxplot(Richness.art1~MetaRich.ART1$HOST)
 MetaRich.ART1$richness.art1<-Richness.art1
-aggregate(richness.art1~SITE, data=MetaRich.ART1,mean)
-
+aggregate(shannon~season, data=MetaNotOne.art1,mean)
+aggregate(simpson~TISSUE, data=MetaNotOne.art1,mean)
 
 
 ################
@@ -347,7 +355,6 @@ OTU.SOIL<-colnames(mvabund.m.anova)[mvabund.m.anova["SOIL",]<= 0.05]#45otus affe
 OTU.SEASON<-colnames(mvabund.m.anova)[mvabund.m.anova["season",]<= 0.05]#26otus affected
 OTU.organ<-colnames(mvabund.m.anova)[mvabund.m.anova["TISSUE",]<= 0.05]#40otus affected
 
-
 ###############################################
 ## plot affected OTUs by SOIL*TISSUE for the paper
 ################################################
@@ -394,7 +401,7 @@ ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
 ########################################
 ########################################
 # Pie chart (OTUs!)
-library (lattice)
+
 OTU.colsum<-colSums(AbundNotZero.art1)
 # اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
 OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
@@ -672,11 +679,11 @@ plot(var.part6,Xnames = c("Host","Site","Soil","Organ"),
      bg=c("grey20","green","blue","red"),alpha=100)
 
 # time and soil*tissue
-var.part7<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,MetaRich.ART1$TIME,
+var.part7<-varpart(AbundNotZero.art1, MetaRich.ART1$HOST,
                    MetaRich.ART1$SITE,~MetaRich.ART1$SOIL*MetaRich.ART1$TISSUE, 
                    transfo="hellinger")
-plot(var.part7,Xnames = c("Host","Season","Site","Soil*Organ"),
-     bg=c("green","blue","red","black"),alpha=100)
+plot(var.part7,Xnames = c("Host","Site","Soil*Organ"),
+     bg=c("green","blue","red"),alpha=150)
 
 ##############################################
 ##############################################
@@ -740,7 +747,7 @@ head(summary(rda.art1))
 
 
 # new plot for the paper
-library(magrittr)
+
 #coloring:
 soilfactor<-factor(MetaRich.ART1$SOIL)
 colvec <-  c("red","blue")
@@ -751,8 +758,8 @@ rda.art1 %>% plot(type="n", corr=TRUE) %>%
   text( "biplot", arrows=TRUE, col= "black", lwd=2, cex=1.2, xpd=TRUE, len=0.05)
 legend("topleft", c("Dry soil","Saline soil"), 
        col=c("red","blue"),
-       pch = c(16,17), border="white", bty="n")
-
+       pch = c(16,17), border="white", bty="n",cex = 1.2)
+dev.off()
 ##############################################
 ##############################################
 # Greenhouse data analysis
@@ -803,13 +810,39 @@ ghBiomass.sum<-summary(GH.Biomass)
 # only the significant interactions
 # shoot lenght
 ggplot(GH.data, aes(x=Drought,y=Lshoot, fill=Salinity)) + 
-  facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Shoot lenght (cm)")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
 # shoot wet weight
 ggplot(GH.data, aes(x=Drought,y=Wshoot, fill=Salinity)) + 
-  facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Shoot wet weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
 # shoot dry weight
 ggplot(GH.data, aes(x=Drought,y=DWshoot, fill=Salinity)) + 
-  facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Shoot dry weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# root lenght
+ggplot(GH.data, aes(x=Drought,y=Lroot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Root lenght (cm)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# root wet weight
+ggplot(GH.data, aes(x=Drought,y=Wroot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Root wet weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+
+
 # Chlorophyll concentration
 ggplot(GH.data, aes(x=Drought,y=Photosyntesis, fill=Salinity)) + 
   facet_wrap(~Fungi)+geom_boxplot(position = "dodge")+theme_bw()
@@ -1042,10 +1075,10 @@ View(host.s.u)
 #   geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
 
 #### PLOT!
-library(reshape)
+
 eample1<-rbind (host.s.o,host.s.b,host.s.a, host.s.s, host.s.h, host.s.p, host.s.x, host.s.ss, host.s.u)
 View(eample1 )
-library(scales)
+
 ggplot(eample1,aes(x = HOST, y = value,fill = Order)) + 
   geom_bar(position = "fill",stat = "identity") +facet_wrap(~SOIL) + theme_bw()+
   # or:
@@ -1066,11 +1099,16 @@ ggplot(eample1,aes(x = HOST, y = value,fill = Order)) +
 #install ggtree
 #source("https://bioconductor.org/biocLite.R")
 # biocLite("BiocUpgrade") # you may need this
+<<<<<<< HEAD
 # biocLite("ggtree")
 library(ggtree)
 # BiocManager::install("ggtree")
 library(tidyverse)
 library(tidytree)
+=======
+#biocLite("ggtree")
+
+>>>>>>> c271edb1cb5f4adfc063c1c1864518a99de3425a
 
 #loaded your tree
 
@@ -1528,6 +1566,7 @@ tree.p3<-facet_plot(tree.p2, panel='Saline soil', data=Treedata.final, geom=geom
   
 ####################################
 ##### fig 1-article
+###################################
 
 ### data prep
 otu.sum.organ<-aggregate(.~MetaRich.ART1$TISSUE,AbundNotZero.art1,sum)
@@ -1567,6 +1606,12 @@ p.leaf<-pie(numbers.pie.leaf,labels =lables.pie.leaf, col = c("chartreuse4","yel
                                            "yellow1","orchid4","maroon2","darkcyan","plum2",
                                            "cyan1", "goldenrod","tomato2") , main = "Leaf", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+#without lables
+p.leaf<-pie(numbers.pie.leaf,labels ="", col = c("chartreuse4","yellowgreen","dodgerblue2",
+                                                              "yellow1","orchid4","maroon2","darkcyan","plum2",
+                                                              "cyan1", "goldenrod","tomato2") , main = "Leaf (b)", 
+            cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
 #######################
 #Twig OTU pie chart 
 Twig.pie.otu<- subset(selected.otu.count.organ, selected.otu.count.organ$organ=="Branch")
@@ -1583,6 +1628,11 @@ p.twig<-pie(numbers.pie.Twig,labels =lables.pie.Twig, col = c("chartreuse4","yel
                                                       "orchid4","darkcyan","plum2","cyan1","slategray",
                                                       "goldenrod","tomato2") , main = "Twig", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+#without the labs
+p.twig<-pie(numbers.pie.Twig,labels ="", col = c("chartreuse4","yellowgreen","dodgerblue2","yellow1",
+                                                              "orchid4","darkcyan","plum2","cyan1","slategray",
+                                                              "goldenrod","tomato2") , main = "Twig (c)", 
+            cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
 #######################
 #Root OTU pie chart
@@ -1600,12 +1650,18 @@ p.root<-pie(numbers.pie.Root,labels =lables.pie.Root, col = c("chartreuse4","Vio
                                                       "yellowgreen","plum4","yellow1","cyan1","darkorange",
                                                       "goldenrod","tomato2") , main = "Root", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+#without the labs
+p.root<-pie(numbers.pie.Root,labels ="", col = c("chartreuse4","Violetred4","darkturquoise",
+                                                              "yellowgreen","plum4","yellow1","cyan1","darkorange",
+                                                              "goldenrod","tomato2") , main = "Root (d)", 
+            cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+
 ##############
 # Orders pie chart
 p.order<-pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
                                                     "plum2","blue","orchid4","yellow","tomato2",
-                                                    "goldenrod", "aquamarine4") , main = "Orders frequency", 
-             cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
+                                                    "goldenrod", "aquamarine4") , main = "Taxonomic Orders (a)", 
+             cex=1.2,border = NA,cex.main= 1.1, radius = 0.9)
 
 ### host otu barplot
 otu.sum.Host<-aggregate(.~MetaRich.ART1$HOST,AbundNotZero.art1,sum)
@@ -1623,6 +1679,175 @@ total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
 host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
 otu.cols<-c("plum4","orchid4","yellowgreen","yellow1","maroon2","darkcyan","slategray","dodgerblue2",
 "goldenrod","chartreuse4","darkturquoise","tomato2",'darkorange',"plum2","cyan1","Violetred4")
+<<<<<<< HEAD
+
+#barplot
+host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
+  geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species (e)")+ ylab("Proportional frequency")+
+  labs(fill = "OTU")+ scale_fill_manual(values=otu.cols)+
+  theme(legend.position="top",legend.text=element_text(size=16),
+        legend.title=element_text(size=16),axis.text=element_text(size=14,face = "italic"),
+        axis.title=element_text(size=14,face="bold"))
+
+
+#########################
+#### Fig 2- article
+#########################
+# barplot
+ggplot(data = interact.data,aes(x=Organ,y=value, fill= Index))+
+  geom_bar(stat="identity",position="dodge",width=0.5)+
+  facet_wrap(~Soil)+ theme_bw()+ ylab("Mean value")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),
+        strip.text = element_text(size = 12))+ guides(fill=guide_legend(""))
+
+
+
+#############################
+##Fig 3- article
+#############################
+dev.off()
+# NMDS Hosts
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5), cex.axis = 1.5, cex.lab = 1.5)
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.8)
+ordiellipse(nmds.art2, MetaRich.ART1$HOST,cex=1,alpha = 200, 
+            draw="polygon", col= 1:8,border=1:8,lwd=3, kind="se", conf=0.95)
+
+legend("bottomright", c("A.pers" ,"A.sieb", "H.ammo" ,"L.acun" ,"P.step" ,"S.inca", "S.rosm" ,"T.hisp"), 
+       fill= 1:8,border="white", bty="n",title = "a", cex = 1.5)
+
+#NMDS ORGAN:
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5), cex.axis = 1.5, cex.lab = 1.5)
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.7)
+ordiellipse(nmds.art2, MetaRich.ART1$TISSUE,cex=1,
+            draw="polygon", col= c("blue","green","red"),border=c("blue","green","red"),lwd=3,alpha = 200, kind="se", conf=0.95)
+
+legend("bottomright", c("Branch","Leaf","Root" ), 
+       fill= c("blue","green","red"),border="white", bty="n",title = "b", cex = 1.5)
+
+#NMDS sampling sites:
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5), cex.axis = 1.5, cex.lab = 1.5)
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.7)
+ordiellipse(nmds.art2, MetaRich.ART1$SITE,cex=1,alpha = 200, 
+            draw="polygon", col= 1:5,border= 1:5,lwd=3, kind="se", conf=0.95)
+
+legend("bottomright", c("Haj Ali Gholi Lake","Hoze Soltan Lake","Maranjab Desert","Rig-Boland Desert"), 
+       fill= 1:5, border="white", bty="n", title = "c", cex = 1.5)
+
+# NMDS soil:
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5), cex.axis = 1.5, cex.lab = 1.5)
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.7)
+ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,alpha = 200, 
+            draw="polygon", col= "red",lwd = 3,border="red",
+            kind="se", conf=0.95,show.groups=(c("Arid soil")))
+ordiellipse(nmds.art2, MetaRich.ART1$SOIL,cex=1,lwd = 3,alpha = 200, 
+            draw="polygon", col= "Blue",border="Blue",
+            kind="se", conf=0.95,show.groups=(c("Saline Soil")))
+legend("bottomright", c("Saline soil","Arid soil"), 
+       fill=c("blue","red"),
+       border="white", bty="n",title = "d", cex = 1.5)
+#NMDS time
+NM.pl<-ordiplot(nmds.art2,type = "none", xlim = c(-5,5),ylim = c(-5,5), cex.axis = 1.5, cex.lab = 1.5)
+p.spe<-points(NM.pl,"species",pch = 2, col= "grey20", cex= 0.7)
+ordiellipse(nmds.art2, MetaRich.ART1$season,cex=1,
+            draw="polygon", col= c("red","blue"),border=c("red","blue"),lwd=3,alpha = 200, kind="se", conf=0.95)
+
+legend("bottomright", c("Summer","Winter"), 
+       fill= c("red","blue"),border="white", bty="n",title = "e", cex = 1.5)
+dev.off()
+#################
+
+#######################################
+# Fig 5
+
+ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
+  geom_bar(stat="identity", width = 0.5) + facet_wrap(~Soil) + theme_bw()+
+  xlab("Organ")+ ylab("Frequency")+ theme(legend.position="top",axis.text=element_text(size=12),
+                                          axis.title=element_text(size=14),legend.text=element_text(size=12),
+                                          strip.text = element_text(size = 12))+
+  guides(fill=guide_legend(title=NULL))
+
+
+###########################################
+#Fig 6
+# pca plot
+
+#coloring:
+soilfactor<-factor(MetaRich.ART1$SOIL)
+colvec <-  c("red","blue")
+cols<-colvec[soilfactor]
+
+rda.art1 %>% plot(type="n", corr=TRUE) %>% 
+  points("sites", pch=(16:17)[soilfactor], col=colvec[soilfactor]) %>% 
+  text( "biplot", arrows=TRUE, col= "black", lwd=2, cex=1.2, xpd=TRUE, len=0.05)
+legend("topleft", c("Dry soil","Saline soil"), 
+       col=c("red","blue"),
+       pch = c(16,17), border="white", bty="n",cex = 1.2)
+# varpart
+plot(var.part7,Xnames = c("Host","Site","Soil*Organ"),
+     bg=c("green","blue","red"),alpha=150)
+
+##############################
+#Fig 7
+par(mfrow=c(1,4))
+
+# total biomass
+ggplot(GH.data, aes(x=Drought,y=Biomass, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Biomass (g)")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# Chlorophyll concentration
+ggplot(GH.data, aes(x=Drought,y=Photosyntesis, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Chlorophyll concentration (%)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        strip.text = element_text(size = 12))
+
+###################
+# Fig S1
+# shoot lenght
+ggplot(GH.data, aes(x=Drought,y=Lshoot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Shoot lenght (cm)")+
+  theme(legend.position="top",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# shoot wet weight
+ggplot(GH.data, aes(x=Drought,y=Wshoot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Shoot wet weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# shoot dry weight
+ggplot(GH.data, aes(x=Drought,y=DWshoot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Shoot dry weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# root lenght
+ggplot(GH.data, aes(x=Drought,y=Lroot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+ylab("Root lenght (cm)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+# root wet weight
+ggplot(GH.data, aes(x=Drought,y=Wroot, fill=Salinity)) + 
+  facet_wrap(~Fungi)+geom_boxplot(position = "dodge", width=0.5)+theme_bw()+
+  ylab("Root wet weight (g)")+
+  theme(legend.position="none",axis.text=element_text(size=12),
+        axis.title=element_text(size=14),legend.text=element_text(size=12),legend.title = element_text(size=12),
+        strip.text = element_text(size = 12))
+
+
+
+
+
+
+
+=======
 
 #barplot
 host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
