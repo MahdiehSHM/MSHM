@@ -1238,6 +1238,7 @@ total.obs.Host<-aggregate(IR~HOST,MetaRich.ART1,sum)
 host.otu.data<-read.csv("selected.otu.host.csv", header = TRUE)
 otu.cols<-c("plum4","orchid4","yellowgreen","yellow1","maroon2","darkcyan","slategray","dodgerblue2",
 "goldenrod","chartreuse4","darkturquoise","tomato2",'darkorange',"plum2","cyan1","Violetred4")
+<<<<<<< HEAD
 
 #barplot
 host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
@@ -1405,3 +1406,21 @@ ggplot(GH.data, aes(x=Drought,y=Wroot, fill=Salinity)) +
 
 
 
+=======
+
+#barplot
+host.barplot<-ggplot(host.otu.data,aes(x = Host, y = Frequency,fill = OTU)) + 
+  geom_bar(position = "fill",stat = "identity", width = 0.5)+ theme_bw()+scale_y_continuous(labels = percent_format())+
+  xlab("Host plant species")+ ylab("Proportional frequency")+
+  labs(fill = "OTU")+ scale_fill_manual(values=otu.cols)+theme(legend.position="top")
+### export all of the plots together  
+margin1<-matrix(c(0,2,0,0,2,0,1,3,5,1,3,5,0,4,0,0,4,0))  
+layout(margin1)
+dev.off()
+par(mfrow=c(3,2))
+p.leaf
+p.twig
+p.root
+p.order
+host.barplot
+>>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
