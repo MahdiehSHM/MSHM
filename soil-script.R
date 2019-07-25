@@ -8,11 +8,9 @@ library(MASS)
 library(ggplot2)
 library(ggtree)
 library(tidyverse)
-<<<<<<< HEAD
 library(tidytree)
 library(gtable)
 library(grid)
-=======
 library(magrittr)
 library(scales)
 library(reshape)
@@ -1251,74 +1249,63 @@ tree.p<-ggtree(treeDP1)
 # p + geom_tiplab()+ geom_nodepoint() 
 
 
+#############################################################
+#Fig 4- article 
+#############################################################
+
 ############# THE TREE!
+library(ggplot2)
+library(ggtree)
+library(gtable)
+library(grid)
+library(tidytree)
 
-
-
-# modified data import
-
-# Treedata.final <- read.csv("finalTREEdata.csv")
-# 
-# View(Treedata.final)
-
-# import the tree
-
-#tree1 <- read.tree("FinalTree.tree")
-
+# import the tree 
 treetmu<-read.tree("BeforeEdit.tree")
 ############
 #get the tip lables from the tree
-d = fortify(treetmu)
+# d = fortify(treetmu)
+# d = subset(d, isTip)
+# d2<-with(d, label[order(y, decreasing=T)])
+# #extract and use in data for ploting
+# write.csv(d2, file = "tiplabtmu.csv")
+# dev.off()
 
-d = subset(d, isTip)
-
-d2<-with(d, label[order(y, decreasing=T)])
-
-#extract and use in data for ploting
-
-write.csv(d2, file = "tiplabtmu.csv")
-dev.off()
-#new data for ploting
+# data import for ploting
 Treedata.tmu<- read.csv("tiplabtmu.csv")
 View(Treedata.tmu)
-#plot with soil data
+
+####plotig the tree
+
 tree.tmua<-ggtree(treetmu,branch.length= "none")
+tree.tmu1<-tree.tmua + geom_tiplab()
 
-tree.tmu1<-tree.tmua + geom_tiplab()+ geom_nodepoint()
 # now plot toghether with soil data
-
-tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(0.0009), panel='Dry soil', data=Treedata.tmu, geom=geom_point, 
-                    
+tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(50), panel='Dry soil', data=Treedata.tmu, geom=geom_point, 
                     aes(x=0, size=Dry), color='blue')
 
-tree.tmu3<-facet_plot(tree.tmu2, panel='Saline soil', data=Treedata.tmu, geom=geom_point, 
-                    
+tree.tmu3<-facet_plot(tree.tmu2, panel='Saline soil', data=Treedata.tmu, geom=geom_point,
                     aes(x=0, size=Saline), color='blue')+ theme(legend.position="right",legend.title = element_blank())
-
-
-
-gtree(treeDP, branch.length="none")
-
-library(gtable)
-library(grid)
-#panel 2
-gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
-
-gtree1$layout$l[grep("panel-2",gtree1$layout$name)]
-gtree1$widths[7]=0.3*gtree1$widths[7]
-grid.draw(gtree1)
-
+# fixig the pael size for better visualization
 #panel 1
 gtree1$layout$l[grep("panel-1",gtree1$layout$name)]
 gtree1$widths[5]=2.5*gtree1$widths[5]
 grid.draw(gtree1)
+#panel 2
+gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
+gtree1$layout$l[grep("panel-2",gtree1$layout$name)]
+gtree1$widths[7]=0.3*gtree1$widths[7]
+grid.draw(gtree1)
 #panel 3
 gtree1$layout$l[grep("panel-3",gtree1$layout$name)]
 gtree1$widths[9]=0.3*gtree1$widths[9]
-#final tree without lables
+##########################################
+####plot final tree with lables
 grid.draw(gtree1)
-
-
+# export file
+png("tree-Fig 4.png", height = 3000, width = 2500, res= 300)
+grid.draw(gtree1)
+dev.off()
 
 ####################################
 
