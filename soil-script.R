@@ -1271,7 +1271,7 @@ treetmu<-read.tree("BeforeEdit.tree")
 
 # data import for ploting
 Treedata.tmu<- read.csv("tiplabtmu.csv")
-View(Treedata.tmu)
+#View(Treedata.tmu)
 
 ####plotig the tree
 
@@ -1284,13 +1284,16 @@ tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(50), panel='Dry soil', data=Treedata.t
 
 tree.tmu3<-facet_plot(tree.tmu2, panel='Saline soil', data=Treedata.tmu, geom=geom_point,
                     aes(x=0, size=Saline), color='blue')+ theme(legend.position="right",legend.title = element_blank())
+
+                                                                
 # fixig the pael size for better visualization
+gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
 #panel 1
 gtree1$layout$l[grep("panel-1",gtree1$layout$name)]
 gtree1$widths[5]=2.5*gtree1$widths[5]
 grid.draw(gtree1)
 #panel 2
-gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
+
 gtree1$layout$l[grep("panel-2",gtree1$layout$name)]
 gtree1$widths[7]=0.3*gtree1$widths[7]
 grid.draw(gtree1)
