@@ -1270,7 +1270,7 @@ treetmu<-read.tree("BeforeEdit.tree")
 
 # data import for ploting
 Treedata.tmu<- read.csv("tiplabtmu.csv")
-View(Treedata.tmu)
+#View(Treedata.tmu)
 
 ####plotig the tree
 
@@ -1283,13 +1283,16 @@ tree.tmu2<-facet_plot(tree.tmu1+xlim_tree(50), panel='Dry soil', data=Treedata.t
 
 tree.tmu3<-facet_plot(tree.tmu2, panel='Saline soil', data=Treedata.tmu, geom=geom_point,
                     aes(x=0, size=Saline), color='blue')+ theme(legend.position="right",legend.title = element_blank())
+
+                                                                
 # fixig the pael size for better visualization
+gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
 #panel 1
 gtree1$layout$l[grep("panel-1",gtree1$layout$name)]
 gtree1$widths[5]=2.5*gtree1$widths[5]
 grid.draw(gtree1)
 #panel 2
-gtree1<-ggplot_gtable(ggplot_build(tree.tmu3))
+
 gtree1$layout$l[grep("panel-2",gtree1$layout$name)]
 gtree1$widths[7]=0.3*gtree1$widths[7]
 grid.draw(gtree1)
@@ -1304,7 +1307,22 @@ png("tree-Fig 4.png", height = 3000, width = 2500, res= 300)
 grid.draw(gtree1)
 dev.off()
 
+# try to change the colors of different branch based on soils: saline:yellowe, Dry: red, both: green
+#new data set for coloring of tiplabs
+color.tiplab<-read.csv("tiplabsoils.csv")
 
+tree.tmua %<+% color.tiplab + 
+  geom_tiplab(aes(fill = factor(soilfactor)) , color = "black", # color for label font
+              geom = "label",  # labels not text
+              label.padding = unit(0.08, "lines"), # amount of padding around the labels
+              label.size = 0) + # size of label border
+  theme(legend.position = "right", 
+        legend.title = element_blank(), # no title
+        legend.key = element_blank()) # no keys
+?geom_tiplab()
+?`ggtree-package`
+?geom_cladelabel
+?geom_hilight
 # label and color for every branch
 # ggtree(s) + geom_cladelabel(node=17, label="APEsh6", color="blue")
 # 
