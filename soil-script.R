@@ -16,7 +16,7 @@ library(scales)
 library(reshape)
 library (lattice)
 
->>>>>>> c271edb1cb5f4adfc063c1c1864518a99de3425a
+
 #################################################
 #### Article 1
 #################################################
@@ -44,7 +44,6 @@ library (lattice)
 
 
 ####### new subset : remove GARMSAR data from Article1Meta&Article1OTU
-
 
 # subset OTU abundance data FIRST
 levels(Article1Meta$SITE)
