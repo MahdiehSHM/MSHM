@@ -688,16 +688,14 @@ plot(var.part7,Xnames = c("Host","Site","Soil*Organ"),
 ##############################################
 ##############################################
 # data input
-env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
-
-
+#env.data<-read.csv("MataDataMergSoil.csv", header = T, row.names = 1)
 #subset for this article:
-env.data.ar1<- subset (env.data, MetaData$HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
+#env.data.ar1<- subset (env.data, MetaData$HOST%in%c("Alhagi persarum","Artemisia sieberi", "Haloxylon ammodendron", 
 
                                                                                                          "Launaea acunthodes",
                                                      "Prosopis stephaniana","Salsola incanescens","Seidlitzia rosmarinus",
                                                      "Tamrix hispida"))
-write.csv(env.data.ar1,file = "soildatagarmsar.csv")
+#write.csv(env.data.ar1,file = "soildatagarmsar.csv")
 
 # removed garmsar from file nd then read the new file
 env.data.art1<-read.csv("soil.data.art1.csv",header = T)
@@ -1873,3 +1871,12 @@ p.twig
 p.root
 p.order
 host.barplot
+
+
+#####################################
+#permanova for soil data
+soil.permanova<-adonis(formula=tran.abund.notzero~Ece+EC+pHe+Cle+pH.1.5+OM+OC+Nt+P+P2O5+M+SP+M.SP,
+                       data =env.Rich.ART1,permutations = 999, method = "bray",by=NULL)
+
+# soil properties and other fctors in the same model!!
+
