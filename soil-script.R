@@ -51,7 +51,7 @@ levels(Article1Meta$SITE)
 Article1OTU.n = subset (Article1OTU, Article1Meta$SITE!="Garmsar")
 Article1OTU<-Article1OTU.n[, colSums(Article1OTU.n != 0) > 0]
 #export the abundance data of article 1:
-write.csv(Article1OTU,file = "art1.abundance.cav")
+write.csv(Article1OTU,file = "art1.abundance.csv")
 #this is the abundance data for article 1 :art1.abundance.cav
 #SUBSET METADATA
 Article1data <- subset(Article1Meta, Article1Meta$SITE!="Garmsar")
