@@ -16,7 +16,7 @@ library(scales)
 library(reshape)
 library (lattice)
 
->>>>>>> c271edb1cb5f4adfc063c1c1864518a99de3425a
+
 #################################################
 #### Article 1
 #################################################
@@ -45,11 +45,11 @@ library (lattice)
 
 ####### new subset : remove GARMSAR data from Article1Meta&Article1OTU
 
-
 # subset OTU abundance data FIRST
 levels(Article1Meta$SITE)
 Article1OTU.n = subset (Article1OTU, Article1Meta$SITE!="Garmsar")
 Article1OTU<-Article1OTU.n[, colSums(Article1OTU.n != 0) > 0]
+
 #export the abundance data of article 1:
 write.csv(Article1OTU,file = "art1.abundance.csv")
 #this is the abundance data for article 1 :art1.abundance.cav
@@ -370,7 +370,7 @@ TPEsh28$OTU<-c("TPEsh28.Humicola.fuscoatra")
 
 # a new dataframe for ploting
 SOILTISSUE<-rbind (TPEsh28,LAEse5)
-<<<<<<< HEAD
+
 View(SOILTISSUE )
 write.csv(SOILTISSUE, file = "H.csv")
 dev.off()
@@ -380,7 +380,7 @@ read.csv ("H.csv")
 ggplot(SOILTISSUE, aes(x=TISSUE, y=value, fill=OTU)) + xlab("Tissue")+ ylab("Frequency")+
   labs(fill = "OTU") + geom_bar(stat="identity") + facet_wrap(~SOIL) + theme_bw()
 
-=======
+
 # View(SOILTISSUE )
 # write.csv(SOILTISSUE, file = "SOILTISSUE.csv")
 # read.csv("SOILTISSUE.csv")
@@ -393,8 +393,7 @@ ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
   xlab("Organ")+ ylab("Frequency")+ theme(legend.position="top",axis.text=element_text(size=12),
                                           axis.title=element_text(size=14),legend.text=element_text(size=12),
                                           strip.text = element_text(size = 12))+
-  guides(fill=guide_legend(title=NULL))
->>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
+guides(fill=guide_legend(title=NULL))
 
 ########################################
 ########################################
@@ -403,7 +402,7 @@ ggplot(ST, aes(x=Organ, y=Frequency, fill=OTU)) +
 OTU.colsum<-colSums(AbundNotZero.art1)
 # اعداد درصد ها رو از آبجکت بگیر و مثل این مثال اول وارد کن برای همه
 OTU.slic<- c(866,352,303,589,434,348,535,877,500,394,301, 4603)  #get the valus from OTU.colsum
-<<<<<<< HEAD
+
 OTU.lbls<- c(expression(italic("Rosellinia sp.")),expression(italic("Acrocalymma vagum")),
                          expression(italic("Dimorphosporicola tragani")),
                          expression(italic("Raffaelea montetyi")),expression(italic("Paracamarosporium hawaiiense")),
@@ -959,7 +958,7 @@ order.lbls<- c("Eurotiales (0.5%)","Ophiostomatales (5.83%)","Boletales (2.98%)"
                "Hypocreales (4.39%)"," Pleosporales (47.16%)",
                "Saccharomycetales (0.87%)","Sordariales (17.18%) ", "Amphisphaeriales (0.88%)","Unknown (7.34%)")
 
-<<<<<<< HEAD
+
 order.Percent<-round(order.slic/sum(order.slic)*100, digits=2)
 order.lbls <- paste(order.lbls, order.Percent)
 order.lbls<-paste(order.lbls,"%",sep="")
@@ -967,13 +966,12 @@ pie(order.slic,labels =order.lbls, col = c("red","skyblue1","magenta",
                                            "deeppink1","mediumblue","royalblue1","orchid1","cyan",
                                            "yellow", "springgreen2") , main = "Order", cex=0.2,border = NA,cex.main= 0.3, radius = 0.7)
 dev.off()
-=======
+
 pie(order.slic,labels =order.lbls, col = c("red","yellowgreen","dodgerblue",
                                            "plum2","blue","orchid4","yellow","tomato2",
                                            "goldenrod", "aquamarine4") , main = "Orders frequency", 
     cex=0.8,border = NA,cex.main= 1.1, radius = 0.9)
 
->>>>>>> 7b58a5ad70b6ff45745f15e9d3f15190be98c65c
 
 ##############################################
 ################################################

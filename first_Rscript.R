@@ -229,7 +229,7 @@ colnames(Article1OTU)
 
 ### chosen OTU for other experiments:LREwh64..Neocamarosporium.chichastianum
 # isolated from?
-aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$SOIL, Article1OTU, sum)
+
 aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$HOST, Article1OTU, sum)
 aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TISSUE, Article1OTU, sum)
 aggregate(LREwh64..Neocamarosporium.chichastianum ~ Article1Meta$TIME, Article1OTU, sum)
